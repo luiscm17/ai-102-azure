@@ -60,7 +60,8 @@ Let's start monitoring by defining an alert rule so you can detect activity in y
 
     The command returns a list of the keys for your Azure AI services resource.
 
-    > **Note** If you haven't logged into Azure CLI, you may need to run `az login` before the list keys command will work.
+    > [!NOTE]
+    > If you haven't logged into Azure CLI, you may need to run `az login` before the list keys command will work.
 
 12. Switch back to the browser containing the Azure portal, and refresh your **Alerts page**. You should see a **Sev 4** alert listed in the table (if not, wait up to five minutes and refresh again).
 13. Select the alert to see its details.

@@ -21,7 +21,8 @@ You'll develop your code using Visual Studio Code. The code files for your app h
 3. When the repository has been cloned, open the folder in Visual Studio Code.
 4. Wait while additional files are installed to support the C# code projects in the repo, if necessary
 
-    > **Note**: If you are prompted to add required assets to build and debug, select **Not Now**.
+    > [!NOTE]
+    > If you are prompted to add required assets to build and debug, select **Not Now**.
 
 5. Expand the `Labfiles/04-use-a-container` folder.
 
