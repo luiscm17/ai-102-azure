@@ -1,0 +1,250 @@
+{
+    "caption": {
+        "text": "a man walking a dog on a leash on a street",
+        "confidence": 0.8207229971885681
+    },
+    "dense_captions": [
+        {
+            "text": "a man walking a dog on a leash on a street",
+            "confidence": 0.8207229971885681
+        },
+        {
+            "text": "a man walking on a street",
+            "confidence": 0.6902371048927307
+        },
+        {
+            "text": "a yellow car on the street",
+            "confidence": 0.7822127938270569
+        },
+        {
+            "text": "a black dog walking on the street",
+            "confidence": 0.7532556653022766
+        },
+        {
+            "text": "a blurry image of a blue car",
+            "confidence": 0.820106565952301
+        },
+        {
+            "text": "a yellow taxi cab on the street",
+            "confidence": 0.724352240562439
+        }
+    ],
+    "tags": [
+        {
+            "name": "outdoor",
+            "confidence": 0.9987088441848755
+        },
+        {
+            "name": "land vehicle",
+            "confidence": 0.9902223348617554
+        },
+        {
+            "name": "vehicle",
+            "confidence": 0.9888722896575928
+        },
+        {
+            "name": "building",
+            "confidence": 0.9854651093482971
+        },
+        {
+            "name": "road",
+            "confidence": 0.9597858786582947
+        },
+        {
+            "name": "wheel",
+            "confidence": 0.9513674974441528
+        },
+        {
+            "name": "street",
+            "confidence": 0.9470841884613037
+        },
+        {
+            "name": "person",
+            "confidence": 0.9301482439041138
+        },
+        {
+            "name": "clothing",
+            "confidence": 0.9119230508804321
+        },
+        {
+            "name": "taxi",
+            "confidence": 0.9095327854156494
+        },
+        {
+            "name": "car",
+            "confidence": 0.8400686979293823
+        },
+        {
+            "name": "dog",
+            "confidence": 0.8268381953239441
+        },
+        {
+            "name": "yellow",
+            "confidence": 0.770806610584259
+        },
+        {
+            "name": "walking",
+            "confidence": 0.741096556186676
+        },
+        {
+            "name": "city",
+            "confidence": 0.6479684114456177
+        },
+        {
+            "name": "woman",
+            "confidence": 0.5752814412117004
+        }
+    ],
+    "objects": [
+        {
+            "name": "car",
+            "confidence": 0.724,
+            "bounding_box": {
+                "x": 0,
+                "y": 212,
+                "width": 282,
+                "height": 149
+            }
+        },
+        {
+            "name": "taxi",
+            "confidence": 0.77,
+            "bounding_box": {
+                "x": 408,
+                "y": 231,
+                "width": 242,
+                "height": 102
+            }
+        },
+        {
+            "name": "person",
+            "confidence": 0.781,
+            "bounding_box": {
+                "x": 245,
+                "y": 133,
+                "width": 143,
+                "height": 355
+            }
+        },
+        {
+            "name": "dog",
+            "confidence": 0.544,
+            "bounding_box": {
+                "x": 363,
+                "y": 326,
+                "width": 90,
+                "height": 192
+            }
+        }
+    ],
+    "people": [
+        {
+            "confidence": 0.9498757123947144,
+            "bounding_box": {
+                "x": 241,
+                "y": 109,
+                "width": 155,
+                "height": 399
+            }
+        },
+        {
+            "confidence": 0.24925367534160614,
+            "bounding_box": {
+                "x": 396,
+                "y": 264,
+                "width": 23,
+                "height": 58
+            }
+        },
+        {
+            "confidence": 0.22452928125858307,
+            "bounding_box": {
+                "x": 699,
+                "y": 262,
+                "width": 20,
+                "height": 33
+            }
+        },
+        {
+            "confidence": 0.06960226595401764,
+            "bounding_box": {
+                "x": 138,
+                "y": 230,
+                "width": 28,
+                "height": 31
+            }
+        },
+        {
+            "confidence": 0.010913374833762646,
+            "bounding_box": {
+                "x": 129,
+                "y": 188,
+                "width": 15,
+                "height": 26
+            }
+        },
+        {
+            "confidence": 0.01024781446903944,
+            "bounding_box": {
+                "x": 146,
+                "y": 188,
+                "width": 16,
+                "height": 25
+            }
+        },
+        {
+            "confidence": 0.009595599956810474,
+            "bounding_box": {
+                "x": 405,
+                "y": 263,
+                "width": 15,
+                "height": 28
+            }
+        },
+        {
+            "confidence": 0.008438891731202602,
+            "bounding_box": {
+                "x": 164,
+                "y": 187,
+                "width": 17,
+                "height": 25
+            }
+        },
+        {
+            "confidence": 0.004477222915738821,
+            "bounding_box": {
+                "x": 176,
+                "y": 187,
+                "width": 13,
+                "height": 25
+            }
+        },
+        {
+            "confidence": 0.0019122643861919641,
+            "bounding_box": {
+                "x": 139,
+                "y": 186,
+                "width": 42,
+                "height": 29
+            }
+        },
+        {
+            "confidence": 0.0012213165173307061,
+            "bounding_box": {
+                "x": 510,
+                "y": 262,
+                "width": 17,
+                "height": 10
+            }
+        },
+        {
+            "confidence": 0.001094880630262196,
+            "bounding_box": {
+                "x": 247,
+                "y": 247,
+                "width": 141,
+                "height": 121
+            }
+        }
+    ]
+}

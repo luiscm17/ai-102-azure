@@ -1,0 +1,102 @@
+{
+    "caption": {
+        "text": "a man in a suit",
+        "confidence": 0.7855921387672424
+    },
+    "dense_captions": [
+        {
+            "text": "a man in a suit",
+            "confidence": 0.7854384779930115
+        },
+        {
+            "text": "a man in a suit giving a thumbs up",
+            "confidence": 0.809113621711731
+        }
+    ],
+    "tags": [
+        {
+            "name": "clothing",
+            "confidence": 0.9972387552261353
+        },
+        {
+            "name": "person",
+            "confidence": 0.9933469295501709
+        },
+        {
+            "name": "human face",
+            "confidence": 0.9889142513275146
+        },
+        {
+            "name": "man",
+            "confidence": 0.9457528591156006
+        },
+        {
+            "name": "orator",
+            "confidence": 0.9041755199432373
+        },
+        {
+            "name": "glasses",
+            "confidence": 0.8957206010818481
+        },
+        {
+            "name": "speech",
+            "confidence": 0.8932870626449585
+        },
+        {
+            "name": "spokesperson",
+            "confidence": 0.8881990909576416
+        },
+        {
+            "name": "public speaking",
+            "confidence": 0.8586181998252869
+        },
+        {
+            "name": "shirt",
+            "confidence": 0.852083683013916
+        },
+        {
+            "name": "gentleman",
+            "confidence": 0.8501646518707275
+        },
+        {
+            "name": "suit",
+            "confidence": 0.8460372686386108
+        },
+        {
+            "name": "healthcare",
+            "confidence": 0.4177853465080261
+        }
+    ],
+    "objects": [
+        {
+            "name": "person",
+            "confidence": 0.875,
+            "bounding_box": {
+                "x": 79,
+                "y": 123,
+                "width": 525,
+                "height": 404
+            }
+        }
+    ],
+    "people": [
+        {
+            "confidence": 0.9716072678565979,
+            "bounding_box": {
+                "x": 69,
+                "y": 113,
+                "width": 539,
+                "height": 418
+            }
+        },
+        {
+            "confidence": 0.0051535312086343765,
+            "bounding_box": {
+                "x": 215,
+                "y": 189,
+                "width": 284,
+                "height": 257
+            }
+        }
+    ]
+}

@@ -16,13 +16,15 @@ If you have already cloned **mslearn-ai-vision** code repository to the environm
 3. When the repository has been cloned, open the folder in Visual Studio Code.
 4. Wait while additional files are installed to support the C# code projects in the repo.
 
-    > **Note**: If you are prompted to add required assets to build and debug, select **Not Now**.
+    > [!NOTE]
+    > If you are prompted to add required assets to build and debug, select **Not Now**.
 
 ## Create Custom Vision resources
 
 If you already have **Custom Vision** resources for training and prediction in your Azure subscription, you can use them or an existing multi-service account in this exercise. If not, use the following instructions to create them.
 
-> **Note**: If you use a multi-service account, the key and endpoint will be the same for both your training and prediction.
+> [!NOTE]
+> If you use a multi-service account, the key and endpoint will be the same for both your training and prediction.
 
 1. In a new browser tab, open the Azure portal at `https://portal.azure.com`, and sign in using the Microsoft account associated with your Azure subscription.
 2. Select the **&#65291;Create a resource** button, search for *custom vision*, and create a **Custom Vision** resource with the following settings:

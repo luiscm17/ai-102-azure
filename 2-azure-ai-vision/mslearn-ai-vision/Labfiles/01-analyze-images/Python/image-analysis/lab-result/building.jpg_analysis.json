@@ -1,0 +1,380 @@
+{
+    "caption": {
+        "text": "a large white building with a dome and a large lawn with United States Capitol in the background",
+        "confidence": 0.6458536982536316
+    },
+    "dense_captions": [
+        {
+            "text": "a large white building with a dome and a large lawn",
+            "confidence": 0.6458536982536316
+        }
+    ],
+    "tags": [
+        {
+            "name": "outdoor",
+            "confidence": 0.9992884993553162
+        },
+        {
+            "name": "cloud",
+            "confidence": 0.9979295134544373
+        },
+        {
+            "name": "grass",
+            "confidence": 0.9976171255111694
+        },
+        {
+            "name": "tree",
+            "confidence": 0.9909225702285767
+        },
+        {
+            "name": "sky",
+            "confidence": 0.9894590377807617
+        },
+        {
+            "name": "building",
+            "confidence": 0.9614964127540588
+        },
+        {
+            "name": "dome",
+            "confidence": 0.9138234853744507
+        },
+        {
+            "name": "presidential palace",
+            "confidence": 0.9103108048439026
+        },
+        {
+            "name": "landmark",
+            "confidence": 0.8998420238494873
+        },
+        {
+            "name": "palace",
+            "confidence": 0.8962665796279907
+        },
+        {
+            "name": "plant",
+            "confidence": 0.887656033039093
+        },
+        {
+            "name": "courthouse",
+            "confidence": 0.8478222489356995
+        },
+        {
+            "name": "field",
+            "confidence": 0.8263549208641052
+        },
+        {
+            "name": "city",
+            "confidence": 0.761134147644043
+        },
+        {
+            "name": "large",
+            "confidence": 0.6872788071632385
+        },
+        {
+            "name": "park",
+            "confidence": 0.542438805103302
+        }
+    ],
+    "objects": [
+        {
+            "name": "building",
+            "confidence": 0.623,
+            "bounding_box": {
+                "x": 183,
+                "y": 43,
+                "width": 535,
+                "height": 369
+            }
+        }
+    ],
+    "people": [
+        {
+            "confidence": 0.8563942313194275,
+            "bounding_box": {
+                "x": 585,
+                "y": 410,
+                "width": 20,
+                "height": 38
+            }
+        },
+        {
+            "confidence": 0.8459219336509705,
+            "bounding_box": {
+                "x": 733,
+                "y": 400,
+                "width": 16,
+                "height": 48
+            }
+        },
+        {
+            "confidence": 0.8285666704177856,
+            "bounding_box": {
+                "x": 681,
+                "y": 411,
+                "width": 14,
+                "height": 37
+            }
+        },
+        {
+            "confidence": 0.09519059211015701,
+            "bounding_box": {
+                "x": 548,
+                "y": 384,
+                "width": 6,
+                "height": 8
+            }
+        },
+        {
+            "confidence": 0.08211962133646011,
+            "bounding_box": {
+                "x": 530,
+                "y": 384,
+                "width": 6,
+                "height": 8
+            }
+        },
+        {
+            "confidence": 0.06448143720626831,
+            "bounding_box": {
+                "x": 456,
+                "y": 385,
+                "width": 7,
+                "height": 7
+            }
+        },
+        {
+            "confidence": 0.04234597831964493,
+            "bounding_box": {
+                "x": 535,
+                "y": 384,
+                "width": 8,
+                "height": 8
+            }
+        },
+        {
+            "confidence": 0.03963920846581459,
+            "bounding_box": {
+                "x": 410,
+                "y": 220,
+                "width": 11,
+                "height": 23
+            }
+        },
+        {
+            "confidence": 0.0382981114089489,
+            "bounding_box": {
+                "x": 530,
+                "y": 384,
+                "width": 24,
+                "height": 8
+            }
+        },
+        {
+            "confidence": 0.013185670599341393,
+            "bounding_box": {
+                "x": 769,
+                "y": 383,
+                "width": 6,
+                "height": 16
+            }
+        },
+        {
+            "confidence": 0.011141818016767502,
+            "bounding_box": {
+                "x": 310,
+                "y": 385,
+                "width": 6,
+                "height": 9
+            }
+        },
+        {
+            "confidence": 0.008355542086064816,
+            "bounding_box": {
+                "x": 555,
+                "y": 385,
+                "width": 8,
+                "height": 8
+            }
+        },
+        {
+            "confidence": 0.005585067439824343,
+            "bounding_box": {
+                "x": 269,
+                "y": 386,
+                "width": 6,
+                "height": 9
+            }
+        },
+        {
+            "confidence": 0.004924517124891281,
+            "bounding_box": {
+                "x": 528,
+                "y": 384,
+                "width": 6,
+                "height": 8
+            }
+        },
+        {
+            "confidence": 0.004599606618285179,
+            "bounding_box": {
+                "x": 351,
+                "y": 384,
+                "width": 7,
+                "height": 11
+            }
+        },
+        {
+            "confidence": 0.004468956496566534,
+            "bounding_box": {
+                "x": 568,
+                "y": 385,
+                "width": 7,
+                "height": 11
+            }
+        },
+        {
+            "confidence": 0.00392138073220849,
+            "bounding_box": {
+                "x": 253,
+                "y": 386,
+                "width": 6,
+                "height": 8
+            }
+        },
+        {
+            "confidence": 0.00377024058252573,
+            "bounding_box": {
+                "x": 188,
+                "y": 385,
+                "width": 6,
+                "height": 9
+            }
+        },
+        {
+            "confidence": 0.003722752444446087,
+            "bounding_box": {
+                "x": 426,
+                "y": 381,
+                "width": 6,
+                "height": 11
+            }
+        },
+        {
+            "confidence": 0.00354989105835557,
+            "bounding_box": {
+                "x": 443,
+                "y": 384,
+                "width": 9,
+                "height": 8
+            }
+        },
+        {
+            "confidence": 0.0032707101199775934,
+            "bounding_box": {
+                "x": 0,
+                "y": 392,
+                "width": 6,
+                "height": 19
+            }
+        },
+        {
+            "confidence": 0.0030201671179383993,
+            "bounding_box": {
+                "x": 662,
+                "y": 392,
+                "width": 7,
+                "height": 8
+            }
+        },
+        {
+            "confidence": 0.0029797733295708895,
+            "bounding_box": {
+                "x": 742,
+                "y": 388,
+                "width": 7,
+                "height": 12
+            }
+        },
+        {
+            "confidence": 0.002680805278941989,
+            "bounding_box": {
+                "x": 328,
+                "y": 382,
+                "width": 7,
+                "height": 10
+            }
+        },
+        {
+            "confidence": 0.0023052997421473265,
+            "bounding_box": {
+                "x": 298,
+                "y": 384,
+                "width": 6,
+                "height": 9
+            }
+        },
+        {
+            "confidence": 0.0014611007645726204,
+            "bounding_box": {
+                "x": 146,
+                "y": 391,
+                "width": 7,
+                "height": 11
+            }
+        },
+        {
+            "confidence": 0.0013798732543364167,
+            "bounding_box": {
+                "x": 736,
+                "y": 390,
+                "width": 11,
+                "height": 15
+            }
+        },
+        {
+            "confidence": 0.0013624317944049835,
+            "bounding_box": {
+                "x": 337,
+                "y": 377,
+                "width": 7,
+                "height": 15
+            }
+        },
+        {
+            "confidence": 0.0013313301606103778,
+            "bounding_box": {
+                "x": 203,
+                "y": 387,
+                "width": 6,
+                "height": 9
+            }
+        },
+        {
+            "confidence": 0.0012417802354320884,
+            "bounding_box": {
+                "x": 544,
+                "y": 394,
+                "width": 225,
+                "height": 68
+            }
+        },
+        {
+            "confidence": 0.0011525178560987115,
+            "bounding_box": {
+                "x": 328,
+                "y": 379,
+                "width": 14,
+                "height": 14
+            }
+        },
+        {
+            "confidence": 0.001113531063310802,
+            "bounding_box": {
+                "x": 434,
+                "y": 383,
+                "width": 9,
+                "height": 9
+            }
+        }
+    ]
+}
