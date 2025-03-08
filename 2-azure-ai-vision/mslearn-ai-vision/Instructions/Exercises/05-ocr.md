@@ -17,7 +17,8 @@ If you haven't already done so, you must clone the code repository for this cour
 3. When the repository has been cloned, open the folder in Visual Studio Code.
 4. Wait while additional files are installed to support the C# code projects in the repo.
 
-    > **Note**: If you are prompted to add required assets to build and debug, select **Not Now**. If you are prompted with the Message *Detected an Azure Function Project in folder*, you can safely close that message.
+    > [!NOTE]
+    > If you are prompted to add required assets to build and debug, select **Not Now**. If you are prompted with the Message *Detected an Azure Function Project in folder*, you can safely close that message.
 
 ## Provision an Azure AI Services resource
 
@@ -41,7 +42,8 @@ If you don't already have one in your subscription, you'll need to provision an 
 
 In this exercise, you'll complete a partially implemented client application that uses the Azure AI Vision SDK to read text.
 
-> **Note**: You can choose to use the SDK for either **C#** or **Python**. In the following steps, perform the actions appropriate for your preferred language.
+> [!NOTE]
+> You can choose to use the SDK for either **C#** or **Python**. In the following steps, perform the actions appropriate for your preferred language.
 
 1. In Visual Studio Code, in the **Explorer** pane, browse to the **Labfiles\05-ocr** folder and expand the **C-Sharp** or **Python** folder depending on your language preference.
 2. Right-click the **read-text** folder and open an integrated terminal. Then install the Azure AI Vision SDK package by running the appropriate command for your language preference:
@@ -52,7 +54,8 @@ In this exercise, you'll complete a partially implemented client application tha
     dotnet add package Azure.AI.Vision.ImageAnalysis -v 1.0.0-beta.3
     ```
 
-    > **Note**: If you are prompted to install dev kit extensions, you can safely close the message.
+    > [!NOTE]
+    > If you are prompted to install dev kit extensions, you can safely close the message.
 
     **Python**
     

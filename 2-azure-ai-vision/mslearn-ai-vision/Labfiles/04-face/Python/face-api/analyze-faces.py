@@ -3,7 +3,10 @@ import os
 from PIL import Image, ImageDraw
 from matplotlib import pyplot as plt
 
-# Import namespaces
+# Import namespaces (REALIZADO)
+from azure.ai.vision.face import FaceClient
+from azure.ai.vision.face.models import FaceDetectionModel, FaceRecognitionModel, FaceAttributeTypeDetection03
+from azure.core.credentials import AzureKeyCredential
 
 
 def main():
@@ -16,7 +19,11 @@ def main():
         cog_endpoint = os.getenv('AI_SERVICE_ENDPOINT')
         cog_key = os.getenv('AI_SERVICE_KEY')
 
-        # Authenticate Face client
+        # Authenticate Face client (REALIZADO)
+        face_client = FaceClient(
+            endpoint=cog_endpoint,
+            credential=AzureKeyCredential(cog_key)
+        )
 
 
         # Menu for face functions
@@ -28,13 +35,91 @@ def main():
     except Exception as ex:
         print(ex)
 
+import json
+# ...existing code...
+
 def DetectFaces(image_file):
     print('Detecting faces in', image_file)
 
-    # Specify facial features to be retrieved
+    # Specify facial features to be retrieved (REALIZADO)
+    features = [
+        FaceAttributeTypeDetection03.HEAD_POSE,
+        FaceAttributeTypeDetection03.BLUR,
+        FaceAttributeTypeDetection03.MASK
+    ]
 
+    # Get faces (REALIZADO)
+    with open(image_file, mode="rb") as image_data:
+        detected_faces = face_client.detect(
+            image_content=image_data.read(),
+            detection_model=FaceDetectionModel.DETECTION03,
+            recognition_model=FaceRecognitionModel.RECOGNITION04,
+            return_face_id=False,
+            return_face_attributes=features,
+        )
 
-    # Get faces
+        if len(detected_faces) > 0:
+            print(len(detected_faces), 'faces detected.')
+
+            # Prepare image for drawing
+            fig = plt.figure(figsize=(8, 6))
+            plt.axis('off')
+            image = Image.open(image_file)
+            draw = ImageDraw.Draw(image)
+            color = 'lightgreen'
+            face_count = 0
+
+            # Create a list to store face data
+            face_data = []
+
+            # Draw and annotate each face
+            for face in detected_faces:
+
+                # Get face properties
+                face_count += 1
+                print('\nFace number {}'.format(face_count))
+
+                head_pose = {
+                    'yaw': face.face_attributes.head_pose.yaw,
+                    'pitch': face.face_attributes.head_pose.pitch,
+                    'roll': face.face_attributes.head_pose.roll
+                }
+                blur = face.face_attributes.blur.blur_level
+                mask = face.face_attributes.mask.type
+
+                print(' - Head Pose (Yaw): {}'.format(head_pose['yaw']))
+                print(' - Head Pose (Pitch): {}'.format(head_pose['pitch']))
+                print(' - Head Pose (Roll): {}'.format(head_pose['roll']))
+                print(' - Blur: {}'.format(blur))
+                print(' - Mask: {}'.format(mask))
+
+                # Add face data to the list
+                face_data.append({
+                    'face_number': face_count,
+                    'head_pose': head_pose,
+                    'blur': blur,
+                    'mask': mask
+                })
+
+                # Draw and annotate face
+                r = face.face_rectangle
+                bounding_box = ((r.left, r.top), (r.left + r.width, r.top + r.height))
+                draw = ImageDraw.Draw(image)
+                draw.rectangle(bounding_box, outline=color, width=5)
+                annotation = 'Face number {}'.format(face_count)
+                plt.annotate(annotation, (r.left, r.top), backgroundcolor=color)
+
+            # Save annotated image
+            plt.imshow(image)
+            outputfile = 'detected_faces.jpg'
+            fig.savefig(outputfile)
+            print('\nResults saved in', outputfile)
+
+            # Save face data to a JSON file
+            json_outputfile = 'detected_faces.json'
+            with open(json_outputfile, 'w') as json_file:
+                json.dump(face_data, json_file, indent=4)
+            print('Face data saved in', json_outputfile)
 
 
 if __name__ == "__main__":

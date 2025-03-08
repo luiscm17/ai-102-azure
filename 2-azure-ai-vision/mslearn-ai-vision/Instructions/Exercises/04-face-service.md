@@ -8,9 +8,11 @@ lab:
 
 The ability to detect and analyze human faces is a core AI capability. In this exercise, you'll explore two Azure AI Services that you can use to work with faces in images: the **Azure AI Vision** service, and the **Face** service.
 
-> **Important**: This lab can be completed without requesting any additional access to restricted features.
+> [!IMPORTANT]
+> This lab can be completed without requesting any additional access to restricted features.
 
-> **Note**: From June 21st 2022, capabilities of Azure AI services that return personally identifiable information are restricted to customers who have been granted [limited access](https://docs.microsoft.com/azure/cognitive-services/cognitive-services-limited-access). Additionally, capabilities that infer emotional state are no longer available. For more details about the changes Microsoft has made, and why - see [Responsible AI investments and safeguards for facial recognition](https://azure.microsoft.com/blog/responsible-ai-investments-and-safeguards-for-facial-recognition/).
+> [!NOTE]
+> From June 21st 2022, capabilities of Azure AI services that return personally identifiable information are restricted to customers who have been granted [limited access](https://docs.microsoft.com/azure/cognitive-services/cognitive-services-limited-access). Additionally, capabilities that infer emotional state are no longer available. For more details about the changes Microsoft has made, and why - see [Responsible AI investments and safeguards for facial recognition](https://azure.microsoft.com/blog/responsible-ai-investments-and-safeguards-for-facial-recognition/).
 
 ## Clone the repository for this course
 
@@ -21,7 +23,8 @@ If you have not already done so, you must clone the code repository for this cou
 3. When the repository has been cloned, open the folder in Visual Studio Code.
 4. Wait while additional files are installed to support the C# code projects in the repo.
 
-    > **Note**: If you are prompted to add required assets to build and debug, select **Not Now**.
+    > [!NOTE]
+    > If you are prompted to add required assets to build and debug, select **Not Now**.
 
 ## Provision an Azure AI Services resource
 

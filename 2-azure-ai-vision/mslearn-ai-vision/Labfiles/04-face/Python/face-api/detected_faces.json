@@ -1,0 +1,22 @@
+[
+    {
+        "face_number": 1,
+        "head_pose": {
+            "yaw": -8.1,
+            "pitch": -13.2,
+            "roll": -4.3
+        },
+        "blur": "low",
+        "mask": "noMask"
+    },
+    {
+        "face_number": 2,
+        "head_pose": {
+            "yaw": 3.3,
+            "pitch": -18.0,
+            "roll": -9.2
+        },
+        "blur": "medium",
+        "mask": "noMask"
+    }
+]

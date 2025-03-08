@@ -62,7 +62,8 @@ We also need a storage account to store the training images.
 1. Enable public access on the storage account. In the left pane, navigate to **Configuration** in the **Settings** group, and enable *Allow Blob anonymous access*. Select **Save**
 1. In the left pane, in **Data storage**, select **Containers** and create a new container named `fruit`, and set **Anonymous access level** to *Container (anonymous read access for containers and blobs)*.
 
-    > **Note**: If the **Anonymous access level** is disabled, refresh the browser page.
+    > [!NOTE]
+    > If the **Anonymous access level** is disabled, refresh the browser page.
 
 1. Navigate to `fruit`, select **Upload**, and upload the images (and the one JSON file) in **Labfiles/02-image-classification/training-images** to that container.
 
