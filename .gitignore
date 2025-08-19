@@ -1,1 +1,13 @@
 ai-env
+
+**/.env
+__pycache__/
+.vscode/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
