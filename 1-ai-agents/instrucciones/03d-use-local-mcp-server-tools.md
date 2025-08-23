@@ -1,302 +1,388 @@
----
-
-lab: 
-    title: 'Conectar agentes de IA a herramientas usando el Protocolo de Contexto de Modelo (MCP) local'
-    description: 'Aprende a ejecutar un servidor local del Protocolo de Contexto de Modelo (MCP) para el desarrollo de agentes de IA'
-
----
-
 # Conectar agentes de IA a herramientas usando el Protocolo de Contexto de Modelo (MCP)
 
-En este ejercicio, crearás una solución de agente de IA que se conecta a un servidor local de MCP. Esto es útil para el desarrollo, ya que te permite trabajar con funciones personalizadas localmente antes de implementarlas en la nube. Construirás un agente simple de evaluación de inventario para un minorista de cosméticos. Usando el servidor MCP, el agente podrá recuperar información sobre el inventario y hacer sugerencias de reabastecimiento o liquidación.
+En este ejercicio, crearás un agente que puede conectarse a un servidor MCP y descubrir automáticamente funciones invocables.
 
-> **Sugerencia**: El código utilizado en este ejercicio se basa en los SDK para Python de Azure AI Foundry y MCP. Puedes desarrollar soluciones similares usando los SDK para Microsoft .NET. Consulta [Bibliotecas cliente del SDK de Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) y [MCP C\# SDK](https://modelcontextprotocol.github.io/csharp-sdk/api/ModelContextProtocol.html) para más detalles.
+Construirás un agente simple de evaluación de inventario para un minorista de cosméticos. Usando el servidor MCP, el agente podrá recuperar información sobre el inventario y hacer sugerencias de reabastecimiento o liquidación.
+
+> **Tip**: El código utilizado en este ejercicio se basa en los SDKs de Azure AI Foundry y MCP para Python. Puedes desarrollar soluciones similares usando los SDKs para Microsoft .NET. Consulta [Bibliotecas cliente del SDK de Azure AI Foundry](https://learn.microsoft.com/es-es/azure/ai-foundry/how-to/develop/sdk-overview) y [SDK de MCP para C#](https://modelcontextprotocol.github.io/csharp-sdk/api/ModelContextProtocol.html) para más detalles.
 
 Este ejercicio debería tomar aproximadamente **30** minutos en completarse.
 
-> **Nota**: Algunas de las tecnologías utilizadas en este ejercicio están en versión preliminar o en desarrollo activo. Es posible que experimentes un comportamiento inesperado, advertencias o errores.
+> **Nota**: Algunas de las tecnologías utilizadas en este ejercicio están en vista previa o en desarrollo activo. Puedes experimentar algún comportamiento inesperado, advertencias o errores.
 
 ## Crear un proyecto de Azure AI Foundry
 
 Comencemos creando un proyecto de Azure AI Foundry.
 
-1. En un navegador web, abre el [portal de Azure AI Foundry](https://ai.azure.com) en `https://ai.azure.com` e inicia sesión con tus credenciales de Azure. Cierra cualquier sugerencia o panel de inicio rápido que se abra la primera vez que inicies sesión, y si es necesario usa el logo de **Azure AI Foundry** en la parte superior izquierda para navegar a la página de inicio, que se ve similar a la siguiente imagen (cierra el panel de **Help** si está abierto):
+1. En un navegador web, abre el [portal de Azure AI Foundry](https://ai.azure.com) en `https://ai.azure.com` e inicia sesión usando tus credenciales de Azure. Cierra cualquier panel de consejos o inicio rápido que se abra la primera vez que inicies sesión y, si es necesario, usa el logotipo de **Azure AI Foundry** en la parte superior izquierda para navegar a la página de inicio, que se ve similar a la siguiente imagen (cierra el panel **Help** si está abierto):
 
-2. En la página de inicio, selecciona **Create an agent**.
+    ![Captura de pantalla del portal de Azure AI Foundry.](./Media/ai-foundry-home.png)
 
-3. Cuando se te pida que crees un proyecto, introduce un nombre válido para tu proyecto y expande **Advanced options**.
+1. En la página de inicio, selecciona **Create an agent**.
+1. Cuando se te solicite crear un proyecto, ingresa un nombre válido para tu proyecto y expande **Advanced options**.
+1. Confirma la siguiente configuración para tu proyecto:
+    - **Azure AI Foundry resource**: *Un nombre válido para tu recurso de Azure AI Foundry*
+    - **Subscription**: *Tu suscripción de Azure*
+    - **Resource group**: *Crea o selecciona un grupo de recursos*
+    - **Region**: *Selecciona cualquier **ubicación admitida para AI Services***\*
 
-4. Confirma las siguientes configuraciones para tu proyecto:
+    > \* Algunos recursos de Azure AI están limitados por cuotas regionales de modelos. En caso de que se exceda un límite de cuota más adelante en el ejercicio, existe la posibilidad de que necesites crear otro recurso en una región diferente.
 
-      - **Azure AI Foundry resource**: *Un nombre válido para tu recurso de Azure AI Foundry*
-      - **Subscription**: *Tu suscripción de Azure*
-      - **Resource group**: *Crea o selecciona un grupo de recursos*
-      - **Region**: *Selecciona cualquier **AI Services supported location***\*
+1. Selecciona **Create** y espera a que se cree tu proyecto.
+1. Si se te solicita, implementa un modelo **gpt-4o** usando la opción de implementación *Global Standard* o *Standard* (dependiendo de la disponibilidad de tu cuota).
 
-    > \* Algunos recursos de Azure AI están restringidos por cuotas de modelo regionales. En caso de que se supere un límite de cuota más adelante en el ejercicio, existe la posibilidad de que necesites crear otro recurso en una región diferente.
+    >**Nota**: Si hay cuota disponible, un modelo base GPT-4o puede implementarse automáticamente al crear tu Agente y proyecto.
 
-5. Selecciona **Create** y espera a que se cree tu proyecto.
+1. Cuando se cree tu proyecto, se abrirá el **Agents playground**.
 
-6. Si se te solicita, implementa un modelo **gpt-4o** usando la opción de implementación *Global Standard* o *Standard* (dependiendo de la disponibilidad de tu cuota).
+1. En el panel de navegación de la izquierda, selecciona **Overview** para ver la página principal de tu proyecto; que se ve así:
 
-    > **Nota**: Si la cuota está disponible, un modelo base GPT-4o puede implementarse automáticamente al crear tu Agente y proyecto.
+    ![Captura de pantalla de la página de overview de un proyecto de Azure AI Foundry.](./Media/ai-foundry-project.png)
 
-7. Cuando tu proyecto se haya creado, el playground de Agentes se abrirá.
+1. Copia el valor del **Azure AI Foundry project endpoint** a un bloc de notas, ya que lo usarás para conectarte a tu proyecto en una aplicación cliente.
 
-8. En el panel de navegación de la izquierda, selecciona **Overview** para ver la página principal de tu proyecto; que se ve así:
+## Desarrollar un agente que utilice herramientas de función MCP
 
-9. Copia los valores de **Azure AI Foundry project endpoint** en un bloc de notas, ya que los usarás para conectarte a tu proyecto en una aplicación cliente.
+Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación que integre un agente de IA con un servidor MCP.
 
-## Crear una aplicación cliente para agente de IA
+### Clonar el repositorio que contiene el código de la aplicación
 
-Ahora estás listo para crear una aplicación cliente que defina el agente y las instrucciones. Se te ha proporcionado algo de código en un repositorio de GitHub.
-
-### Preparar el entorno
-
-1. Abre una nueva pestaña del navegador (manteniendo el portal de Azure AI Foundry abierto en la pestaña existente). Luego en la nueva pestaña, navega al [portal de Azure](https://portal.azure.com) en `https://portal.azure.com`; iniciando sesión con tus credenciales de Azure si se te solicita.
+1. Abre una nueva pestaña del navegador (manteniendo el portal de Azure AI Foundry abierto en la pestaña existente). Luego, en la nueva pestaña, navega al [portal de Azure](https://portal.azure.com) en `https://portal.azure.com`; inicia sesión con tus credenciales de Azure si se te solicita.
 
     Cierra cualquier notificación de bienvenida para ver la página de inicio del portal de Azure.
 
-2. Usa el botón **[\>\_]** a la derecha de la barra de búsqueda en la parte superior de la página para crear un nuevo Cloud Shell en el portal de Azure, seleccionando un entorno ***PowerShell*** sin almacenamiento en tu suscripción.
+1. Usa el botón **[\>_]** a la derecha de la barra de búsqueda en la parte superior de la página para crear un nuevo Cloud Shell en el portal de Azure, seleccionando un entorno de ***PowerShell*** sin almacenamiento en tu suscripción.
 
-    El cloud shell proporciona una interfaz de línea de comandos en un panel en la parte inferior del portal de Azure. Puedes cambiar el tamaño o maximizar este panel para que sea más fácil trabajar en él.
+    El cloud shell proporciona una interfaz de línea de comandos en un panel en la parte inferior del portal de Azure. Puedes redimensionar o maximizar este panel para que sea más fácil trabajar en él.
 
-    > **Nota**: Si has creado previamente un cloud shell que usa un entorno *Bash*, cámbialo a ***PowerShell***.
+    > **Nota**: Si anteriormente creaste un cloud shell que usa un entorno *Bash*, cámbialo a ***PowerShell***.
 
-3. En la barra de herramientas del cloud shell, en el menú **Settings**, selecciona **Go to Classic version** (esto es necesario para usar el editor de código).
+1. En la barra de herramientas del cloud shell, en el menú **Settings**, selecciona **Go to Classic version** (esto es necesario para usar el editor de código).
 
-    **\<font color="red"\>Asegúrate de haber cambiado a la versión clásica del cloud shell antes de continuar.\</font\>**
+    **<font color="red">Asegúrate de haber cambiado a la versión clásica del cloud shell antes de continuar.</font>**
 
-4. En el panel del cloud shell, ingresa los siguientes comandos para clonar el repositorio de GitHub que contiene los archivos de código para este ejercicio (escribe el comando, o cópialo al portapapeles y luego haz clic derecho en la línea de comandos y pégalo como texto sin formato):
+1. En el panel del cloud shell, ingresa los siguientes comandos para clonar el repositorio de GitHub que contiene los archivos de código para este ejercicio (escribe el comando, o cópialo al portapapeles y luego haz clic derecho en la línea de comandos y pega como texto sin formato):
 
     ```bash
-    rm -r ai-agents -f
-    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
+   rm -r ai-agents -f
+   git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
 
-    > **Sugerencia**: A medida que ingresas comandos en el cloud shell, la salida puede ocupar una gran cantidad del búfer de la pantalla y el cursor en la línea actual puede quedar oscurecido. Puedes limpiar la pantalla ingresando el comando `cls` para que sea más fácil concentrarse en cada tarea.
+    > **Tip**: A medida que ingreses comandos en el cloudshell, la salida puede ocupar una gran parte del búfer de pantalla y el cursor en la línea actual puede quedar oculto. Puedes limpiar la pantalla ingresando el comando `cls` para que sea más fácil enfocarse en cada tarea.
 
-5. Cuando el repositorio haya sido clonado, ingresa el siguiente comando para cambiar el directorio de trabajo a la carpeta que contiene los archivos de código y listarlos todos.
+1. Ingresa el siguiente comando para cambiar el directorio de trabajo a la carpeta que contiene los archivos de código y listarlos todos.
 
     ```bash
-    cd ai-agents/Labfiles/03d-use-local-mcp-server-tools/Python
-    ls -a -l
+   cd ai-agents/Labfiles/03d-use-agent-tools-with-mcp/Python
+   ls -a -l
     ```
 
-    Los archivos proporcionados incluyen código de la aplicación y un archivo para las configuraciones.
+    Los archivos proporcionados incluyen el código de la aplicación cliente y servidor. El Protocolo de Contexto de Modelo proporciona una forma estandarizada de conectar modelos de IA a diferentes fuentes de datos y herramientas. Separamos `client.py` y `server.py` para mantener la lógica del agente y las definiciones de herramientas modulares y simular una arquitectura del mundo real.
 
-### Configurar las configuraciones de la aplicación
+    `server.py` define las herramientas que el agente puede usar, simulando servicios backend o lógica de negocio.
+    `client.py` maneja la configuración del agente de IA, los prompts del usuario y la invocación de las herramientas cuando sea necesario.
 
-1. En el panel de línea de comandos del cloud shell, ingresa el siguiente comando para instalar las librerías que usarás:
+### Configurar los ajustes de la aplicación
+
+1. En el panel de la línea de comandos del cloud shell, ingresa el siguiente comando para instalar las bibliotecas que usarás:
 
     ```bash
-    python -m venv labenv
-    ./labenv/bin/Activate.ps1
-    pip install -r requirements.txt
+   python -m venv labenv
+   ./labenv/bin/Activate.ps1
+   pip install -r requirements.txt azure-ai-projects mcp
     ```
 
-2. Ingresa el siguiente comando para editar el archivo de configuración que se ha proporcionado:
+    >**Nota:** Puedes ignorar cualquier mensaje de advertencia o error mostrado durante la instalación de la biblioteca.
+
+1. Ingresa el siguiente comando para editar el archito de configuración que se ha proporcionado:
 
     ```bash
-    code .env
+   code .env
     ```
 
     El archivo se abre en un editor de código.
 
-3. En el archivo de código, reemplaza el marcador de posición **your\_project\_endpoint** con el endpoint de tu proyecto (copiado de la página **Overview** del proyecto en el portal de Azure AI Foundry), y el marcador de posición **your\_model\_deployment** con el nombre que asignaste a tu implementación de modelo gpt-4o (que por defecto es `gpt-4o`).
+1. En el archivo de código, reemplaza el marcador de posición **your_project_endpoint** con el endpoint de tu proyecto (copiado de la página **Overview** del proyecto en el portal de Azure AI Foundry) y asegúrate de que la variable MODEL_DEPLOYMENT_NAME esté configurada con el nombre de tu implementación de modelo (que debería ser *gpt-4o*).
 
-4. Después de reemplazar los marcadores de posición, usa el comando **CTRL+S** para guardar tus cambios y luego usa el comando **CTRL+Q** para cerrar el editor de código mientras mantienes la línea de comandos del cloud shell abierta.
+1. Después de haber reemplazado el marcador de posición, usa el comando **CTRL+S** para guardar tus cambios y luego usa el comando **CTRL+Q** para cerrar el editor de código mientras mantienes abierta la línea de comandos del cloud shell.
 
-### Crear un servidor MCP y un agente de IA
+### Implementar un Servidor MCP
 
-Ahora estás listo para crear el agente para tu solución.
+Un Servidor del Protocolo de Contexto de Modelo (MCP) es un componente que aloja herramientas invocables. Estas herramientas son funciones de Python que pueden ser expuestas a agentes de IA. Cuando las herramientas se anotan con `@mcp.tool()`, se vuelven descubribles para el cliente, permitiendo que un agente de IA las llame dinámicamente durante una conversación o tarea. En esta tarea, agregarás algunas herramientas que permitirán al agente realizar verificaciones de inventario.
 
-1. En el panel de línea de comandos del cloud shell, ingresa el siguiente comando para editar el archivo **mcp\_server.py**:
+1. Ingresa el siguiente comando para editar el archivo de código que se ha proporcionado para tu código de función:
 
     ```bash
-    code mcp_server.py
+   code server.py
     ```
 
-2. Revisa el código que ya existe en el archivo. Define una clase **InventoryManager** con algunas funciones que recuperan el inventario, identifican artículos que necesitan ser reabastecidos o liquidados y calculan las ventas promedio.
+    En este archivo de código, definirás las herramientas que el agente puede usar para simular un servicio backend para la tienda minorista. Observa el código de configuración del servidor en la parte superior del archivo. Utiliza `FastMCP` para levantar rápidamente una instancia de servidor MCP llamada "Inventory". Este servidor alojará las herramientas que defines y las hará accesibles al agente durante el laboratorio.
 
-3. Encuentra el comentario **Create an MCP server** y agrega el siguiente código para inicializar un servidor MCP, registrar la clase **InventoryManager** para que sus métodos puedan ser llamados por un cliente MCP, y luego iniciar el servidor para que esté esperando solicitudes entrantes.
+1. Encuentra el comentario **Add an inventory check tool** y agrega el siguiente código:
 
     ```python
-    # Create an MCP server
-    mcp_server = ModelContextProtocolServer(host="localhost", port=8000)
-    mcp_server.register(InventoryManager)
-    mcp_server.start()
+   # Add an inventory check tool
+   @mcp.tool()
+   def get_inventory_levels() -> dict:
+        """Returns current inventory for all products."""
+        return {
+            "Moisturizer": 6,
+            "Shampoo": 8,
+            "Body Spray": 28,
+            "Hair Gel": 5, 
+            "Lip Balm": 12,
+            "Skin Serum": 9,
+            "Cleanser": 30,
+            "Conditioner": 3,
+            "Setting Powder": 17,
+            "Dry Shampoo": 45
+        }
     ```
 
-4. Ahora estás listo para crear tu agente de IA. En una nueva pestaña de Cloud Shell (manten el Cloud Shell existente abierto), ingresa el siguiente comando para clonar el repositorio:
+    Este diccionario representa un inventario de ejemplo. La anotación `@mcp.tool()` permitirá que el LLM descubra tu función.
 
-    ```bash
-    rm -r ai-agents -f
-    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
-    ```
-
-    > **Sugerencia**: A medida que ingresas comandos en el cloud shell, la salida puede ocupar una gran cantidad del búfer de la pantalla y el cursor en la línea actual puede quedar oscurecido. Puedes limpiar la pantalla ingresando el comando `cls` para que sea más fácil concentrarse en cada tarea.
-
-5. Cambia al directorio de trabajo correcto:
-
-    ```bash
-    cd ai-agents/Labfiles/03d-use-local-mcp-server-tools/Python
-    ```
-
-6. Ingresa el siguiente comando para instalar las librerías que usarás:
-
-    ```bash
-    python -m venv labenv
-    ./labenv/bin/Activate.ps1
-    pip install -r requirements.txt
-    ```
-
-7. Ingresa el siguiente comando para editar el archivo de configuración que se ha proporcionado:
-
-    ```bash
-    code .env
-    ```
-
-8. En el archivo de código, reemplaza el marcador de posición **your\_project\_endpoint** con el endpoint de tu proyecto (copiado de la página **Overview** del proyecto en el portal de Azure AI Foundry), y el marcador de posición **your\_model\_deployment** con el nombre que asignaste a tu implementación de modelo gpt-4o (que por defecto es `gpt-4o`).
-
-9. Usa el comando **CTRL+S** para guardar tus cambios y luego usa el comando **CTRL+Q** para cerrar el editor de código.
-
-10. Ingresa el siguiente comando para editar el archivo **client.py**:
-
-    ```bash
-    code client.py
-    ```
-
-11. Revisa el código en el archivo, notando que contiene strings para el nombre del agente y las instrucciones, así como un bucle simple para permitir un chat con el agente.
-
-12. Encuentra el comentario **Add references** y agrega el siguiente código para importar las clases que necesitarás:
+1. Encuentra el comentario **Add a weekly sales tool** y agrega el siguiente código:
 
     ```python
-    # Add references
-    from azure.ai.agents import AgentsClient
-    from azure.ai.agents.models import Tool, ListSortOrder, MessageRole, ToolSource, Tools
-    from azure.identity import DefaultAzureCredential
+   # Add a weekly sales tool
+   @mcp.tool()
+   def get_weekly_sales() -> dict:
+        """Returns number of units sold last week."""
+        return {
+            "Moisturizer": 22,
+            "Shampoo": 18,
+            "Body Spray": 3,
+            "Hair Gel": 2,
+            "Lip Balm": 14,
+            "Skin Serum": 19,
+            "Cleanser": 4,
+            "Conditioner": 1,
+            "Setting Powder": 13,
+            "Dry Shampoo": 17
+        }
     ```
 
-13. Ten en cuenta que se ha proporcionado código para cargar el endpoint del proyecto y el nombre del modelo desde tus variables de entorno.
+1. Guarda el archivo (*CTRL+S*).
 
-14. Encuentra el comentario **Connect to the agents client**, y agrega el siguiente código para crear un AgentsClient conectado a tu proyecto:
+### Implementar un Cliente MCP
+
+Un cliente MCP es el componente que se conecta al servidor MCP para descubrir e invocar herramientas. Puedes pensarlo como el puente entre el agente y las funciones alojadas en el servidor, permitiendo el uso dinámico de herramientas en respuesta a prompts de usuario.
+
+1. Ingresa el siguiente comando para comenzar a editar el código del cliente.
+
+    ```bash
+   code client.py
+    ```
+
+    > **Tip**: A medida que agregues código al archivo de código, asegúrate de mantener la indentación correcta.
+
+1. Encuentra el comentario **Add references** y agrega el siguiente código para importar las clases:
 
     ```python
-    # Connect to the agents client
-    agents_client = AgentsClient(
+   # Add references
+   from mcp import ClientSession, StdioServerParameters
+   from mcp.client.stdio import stdio_client
+   from azure.ai.agents import AgentsClient
+   from azure.ai.agents.models import FunctionTool, MessageRole, ListSortOrder
+   from azure.identity import DefaultAzureCredential
+    ```
+
+1. Encuentra el comentario **Start the MCP server** y agrega el siguiente código:
+
+    ```python
+   # Start the MCP server
+   stdio_transport = await exit_stack.enter_async_context(stdio_client(server_params))
+   stdio, write = stdio_transport
+    ```
+
+    En una configuración de producción estándar, el servidor se ejecutaría por separado del cliente. Pero por el bien de este laboratorio, el cliente es responsable de iniciar el servidor usando transporte de entrada/salida estándar. Esto crea un canal de comunicación ligero entre los dos componentes y simplifica la configuración de desarrollo local.
+
+1. Encuentra el comentario **Create an MCP client session** y agrega el siguiente código:
+
+    ```python
+   # Create an MCP client session
+   session = await exit_stack.enter_async_context(ClientSession(stdio, write))
+   await session.initialize()
+    ```
+
+    Esto crea una nueva sesión de cliente usando los flujos de entrada y salida del paso anterior. Llamar a `session.initialize` prepara la sesión para descubrir e invocar herramientas que están registradas en el servidor MCP.
+
+1. Debajo del comentario **List available tools**, agrega el siguiente código para verificar que el cliente se haya conectado al servidor:
+
+    ```python
+   # List available tools
+   response = await session.list_tools()
+   tools = response.tools
+   print("\nConnected to server with tools:", [tool.name for tool in tools]) 
+    ```
+
+    Ahora tu sesión de cliente está lista para usar con tu Agente de Azure AI.
+
+### Conectar las herramientas MCP a tu agente
+
+En esta tarea, prepararás el agente de IA, aceptarás prompts de usuario e invocarás las herramientas de función.
+
+1. Encuentra el comentario **Connect to the agents client** y agrega el siguiente código para conectarte al proyecto de Azure AI usando las credenciales actuales de Azure.
+
+    ```python
+   # Connect to the agents client
+   agents_client = AgentsClient(
         endpoint=project_endpoint,
         credential=DefaultAzureCredential(
             exclude_environment_credential=True,
             exclude_managed_identity_credential=True
-        ),
-    )
-    ```
-
-15. Ahora necesitas crear una conexión de herramienta que el agente pueda usar para conectarse a tu servidor MCP local. Encuentra el comentario **Create an MCP toolset** y agrega el siguiente código para conectarte a tu servidor local de MCP:
-
-    ```python
-    # Create an MCP toolset
-    mcp_tools = Tools(source=ToolSource(uri="http://localhost:8000"))
-    ```
-
-    > **Nota**: El servidor MCP local aún no se está ejecutando, pero el código de tu agente necesitará el nombre de host y el número de puerto para conectarse a él cuando se inicie.
-
-16. Ahora puedes crear tu agente de IA y conectarlo a las herramientas MCP que acabas de definir. Encuentra el comentario **Create an agent and an agent thread** y agrega el siguiente código:
-
-    ```python
-    # Create an agent and an agent thread
-    with agents_client:
-        agent = agents_client.create_agent(
-            model=model_deployment,
-            name=agent_name,
-            instructions=agent_instructions,
-            tools=mcp_tools
         )
-        thread = agents_client.threads.create()
-        print(f"You're chatting with: {agent.name} ({agent.id})")
+   )
     ```
 
-17. Ahora es el momento de agregar el código para enviar un prompt a tu agente. Encuentra el comentario **Send a prompt to the agent** y agrega el siguiente código:
+1. Debajo del comentario **List tools available on the server**, agrega el siguiente código:
 
     ```python
-    # Send a prompt to the agent
-    print("Sending message to agent. Please wait...")
-    message = agents_client.messages.create(
+   # List tools available on the server
+   response = await session.list_tools()
+   tools = response.tools
+    ```
+
+1. Debajo del comentario **Build a function for each tool** y agrega el siguiente código:
+
+    ```python
+   # Build a function for each tool
+   def make_tool_func(tool_name):
+        async def tool_func(**kwargs):
+            result = await session.call_tool(tool_name, kwargs)
+            return result
+        
+        tool_func.__name__ = tool_name
+        return tool_func
+
+   functions_dict = {tool.name: make_tool_func(tool.name) for tool in tools}
+   mcp_function_tool = FunctionTool(functions=list(functions_dict.values()))
+    ```
+
+    Este código envuelve dinámicamente las herramientas disponibles en el servidor MCP para que puedan ser llamadas por el agente de IA. Cada herramienta se convierte en una función async y luego se agrupa en un `FunctionTool` para que el agente la use.
+
+1. Encuentra el comentario **Create the agent** y agrega el siguiente código:
+
+    ```python
+   # Create the agent
+   agent = agents_client.create_agent(
+        model=model_deployment,
+        name="inventory-agent",
+        instructions="""
+        Eres un asistente de inventario. Aquí hay algunas pautas generales:
+        - Recomienda reabastecer si el inventario del artículo < 10 y las ventas semanales > 15
+        - Recomienda liquidación si el inventario del artículo > 20 y las ventas semanales < 5
+        """,
+        tools=mcp_function_tool.definitions
+   )
+    ```
+
+1. Encuentra el comentario **Enable auto function calling** y agrega el siguiente código:
+
+    ```python
+   # Enable auto function calling
+   agents_client.enable_auto_function_calls(tools=mcp_function_tool)
+    ```
+
+1. Debajo del comentario **Create a thread for the chat session**, agrega el siguiente código:
+
+    ```python
+   # Create a thread for the chat session
+   thread = agents_client.threads.create()
+    ```
+
+1. Localiza el comentario **Invoke the prompt** y agrega el siguiente código:
+
+    ```python
+   # Invoke the prompt
+   message = agents_client.messages.create(
         thread_id=thread.id,
         role=MessageRole.USER,
-        content=user_prompt,
-    )
-
-    run = agents_client.runs.create_and_process(
-        thread_id=thread.id,
-        agent_id=agent.id,
-    )
-
-    if run.status == "failed":
-        print(f"Run failed: {run.last_error}")
+        content=user_input,
+   )
+   run = agents_client.runs.create(thread_id=thread.id, agent_id=agent.id)
     ```
 
-18. Una vez que la ejecución esté completa, puedes obtener y mostrar la respuesta. Encuentra el comentario **Fetch and display the conversation history** y agrega el siguiente código:
+1. Localiza el comentario **Retrieve the matching function tool** y agrega el siguiente código:
 
     ```python
-    # Fetch and display the conversation history
-    messages = agents_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
-    for message in messages:
+   # Retrieve the matching function tool
+   function_name = tool_call.function.name
+   args_json = tool_call.function.arguments
+   kwargs = json.loads(args_json)
+   required_function = functions_dict.get(function_name)
+
+   # Invoke the function
+   output = await required_function(**kwargs)
+    ```
+
+    Este código utiliza la información de la llamada a herramienta del hilo del agente. El nombre de la función y los argumentos se recuperan y se usan para invocar la función coincidente.
+
+1. Debajo del comentario **Append the output text**, agrega el siguiente código:
+
+    ```python
+   # Append the output text
+   tool_outputs.append({
+        "tool_call_id": tool_call.id,
+        "output": output.content[0].text,
+   })
+    ```
+
+1. Debajo del comentario **Submit the tool call output**, agrega el siguiente código:
+
+    ```python
+   # Submit the tool call output
+   agents_client.runs.submit_tool_outputs(thread_id=thread.id, run_id=run.id, tool_outputs=tool_outputs)
+    ```
+
+    Este código señalará al hilo del agente que la acción requerida está completa y actualizará las salidas de la llamada a herramienta.
+
+1. Encuentra el comentario **Display the response** y agrega el siguiente código:
+
+    ```python
+   # Display the response
+   messages = agents_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
+   for message in messages:
         if message.text_messages:
             last_msg = message.text_messages[-1]
-            print(f"{message.role}: {last_msg.text.value}\n")
+            print(f"{message.role}:\n{last_msg.text.value}\n")
     ```
 
-19. Finalmente, necesitas limpiar el agente para evitar costos continuos. Encuentra el comentario **Clean up** y agrega el siguiente código:
-
-    ```python
-    # Clean up
-    agents_client.delete_agent(agent.id)
-    print("Deleted agent")
-    ```
-
-20. Usa el comando **CTRL+S** para guardar tus cambios en el archivo de código. Puedes mantenerlo abierto (en caso de que necesites editar el código para corregir cualquier error) o usar el comando **CTRL+Q** para cerrar el editor de código.
+1. Guarda el archivo de código (*CTRL+S*) cuando hayas terminado. También puedes cerrar el editor de código (*CTRL+Q*); aunque quizás quieras mantenerlo abierto en caso de que necesites hacer alguna edición al código que agregaste. En cualquier caso, mantén abierto el panel de la línea de comandos del cloud shell.
 
 ### Iniciar sesión en Azure y ejecutar la aplicación
 
-Ahora estás listo para ejecutar tu código y ver cómo tu agente de IA usa la herramienta MCP para encontrar información relevante.
-
-1. En el panel de línea de comandos del cloud shell que contiene el servidor MCP, ingresa el siguiente comando para ejecutar el servidor.
+1. En el panel de la línea de comandos del cloud shell, ingresa el siguiente comando para iniciar sesión en Azure.
 
     ```bash
-    python mcp_server.py
+   az login
     ```
 
-    > **Sugerencia**: El servidor MCP se ejecutará hasta que presiones `Ctrl+C`.
+    **<font color="red">Debes iniciar sesión en Azure, incluso though la sesión del cloud shell ya está autenticada.</font>**
 
-2. En el otro panel de línea de comandos del cloud shell, ingresa el siguiente comando para iniciar sesión en Azure.
+    > **Nota**: En la mayoría de los escenarios, solo usar *az login* será suficiente. Sin embargo, si tienes suscripciones en múltiples inquilinos, es posible que necesites especificar el inquilino usando el parámetro *--tenant*. Consulta [Iniciar sesión en Azure interactivamente usando la CLI de Azure](https://learn.microsoft.com/es-es/cli/azure/authenticate-azure-cli-interactively) para más detalles.
+
+1. Cuando se te solicite, sigue las instrucciones para abrir la página de inicio de sesión en una nueva pestaña e ingresa el código de autenticación proporcionado y tus credenciales de Azure. Luego completa el proceso de inicio de sesión en la línea de comandos, seleccionando la suscripción que contiene tu hub de Azure AI Foundry si se te solicita.
+
+1. Después de haber iniciado sesión, ingresa el siguiente comando para ejecutar la aplicación:
 
     ```bash
-    az login
+   python client.py
     ```
 
-    **\<font color="red"\>Debes iniciar sesión en Azure, incluso si la sesión del cloud shell ya está autenticada.\</font\>**
-
-    > **Nota**: En la mayoría de los escenarios, solo usar *az login* será suficiente. Sin embargo, si tienes suscripciones en múltiples tenants, es posible que necesites especificar el tenant usando el parámetro *--tenant*. Consulta [Iniciar sesión en Azure de forma interactiva usando la CLI de Azure](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) para obtener más detalles.
-
-3. Cuando se te solicite, sigue las instrucciones para abrir la página de inicio de sesión en una nueva pestaña e ingresa el código de autenticación proporcionado y tus credenciales de Azure. Luego completa el proceso de inicio de sesión en la línea de comandos, seleccionando la suscripción que contiene tu hub de Azure AI Foundry si se te solicita.
-
-4. Después de haber iniciado sesión, ingresa el siguiente comando para ejecutar la aplicación:
+1. Cuando se te solicite, ingresa una consulta como:
 
     ```bash
-    python client.py
+   ¿Cuáles son los niveles de inventario actuales?
     ```
 
-5. Ingresa un prompt para el agente, como `What are the current inventory levels?`
-
-    > **Sugerencia**: Si la aplicación falla porque se excede el rate limit. Espera unos segundos e inténtalo de nuevo. Si no hay suficiente cuota disponible en tu suscripción, el modelo puede no ser capaz de responder.
+    > **Tip**: Si la aplicación falla porque se excede el límite de tasa. Espera unos segundos e intenta nuevamente. Si no hay suficiente cuota disponible en tu suscripción, el modelo podría no poder responder.
 
     Deberías ver una salida similar a la siguiente:
 
-    ```yaml
+    ```yml
     MessageRole.AGENT:
-    Here are the current inventory levels:
+    Aquí están los niveles de inventario actuales:
 
     - Moisturizer: 6
     - Shampoo: 8
@@ -310,28 +396,28 @@ Ahora estás listo para ejecutar tu código y ver cómo tu agente de IA usa la h
     - Dry Shampoo: 45
     ```
 
-6. Puedes continuar la conversación si lo deseas. El thread es *stateful*, por lo que retiene el historial de la conversación, lo que significa que el agente tiene el contexto completo para cada respuesta.
+1. Puedes continuar la conversación si lo deseas. El hilo es *con estado*, por lo que retiene el historial de la conversación, lo que significa que el agente tiene el contexto completo para cada respuesta.
 
     Intenta ingresar prompts como:
 
-    ```yaml
-    Are there any products that should be restocked?
+    ```yml
+   ¿Hay algún producto que deba reabastecerse?
     ```
 
-    ```yaml
-    Which products would you recommend for clearance?
+    ```yml
+   ¿Qué productos recomendarías para liquidación?
     ```
 
-    ```yaml
-    What are the best sellers this week?
+    ```yml
+   ¿Cuáles son los mejores vendedores esta semana?
     ```
 
     Ingresa `quit` cuando hayas terminado.
 
 ## Limpieza
 
-Ahora que has terminado el ejercicio, debes eliminar los recursos en la nube que has creado para evitar un uso innecesario de recursos.
+Ahora que has terminado el ejercicio, debes eliminar los recursos en la nube que creaste para evitar un uso innecesario de recursos.
 
-1. Abre el [portal de Azure](https://portal.azure.com) en `https://portal.azure.com` y visualiza el contenido del resource group donde implementaste los recursos del hub utilizados en este ejercicio.
-2. En la barra de herramientas, selecciona **Delete resource group**.
-3. Ingresa el nombre del resource group y confirma que quieres eliminarlo.
+1. Abre el [portal de Azure](https://portal.azure.com) en `https://portal.azure.com` y visualiza el contenido del grupo de recursos donde desplegaste los recursos del hub utilizados en este ejercicio.
+1. En la barra de herramientas, selecciona **Delete resource group**.
+1. Ingresa el nombre del grupo de recursos y confirma que deseas eliminarlo.

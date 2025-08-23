@@ -14,8 +14,6 @@ Este ejercicio debería tomar aproximadamente **30** minutos en completarse.
 
 > **Nota**: Algunas de las tecnologías utilizadas en este ejercicio están en versión preliminar o en desarrollo activo. Es posible que experimentes un comportamiento inesperado, advertencias o errores.
 
----
-
 ## Crear un proyecto de Azure AI Foundry
 
 Comencemos creando un proyecto de Azure AI Foundry.
@@ -45,9 +43,9 @@ Comencemos creando un proyecto de Azure AI Foundry.
 
 8. En el panel de navegación de la izquierda, selecciona **Overview** para ver la página principal de tu proyecto; que se ve así:
 
-9. Copia los valores de **Azure AI Foundry project endpoint** en un bloc de notas, ya que los usarás para conectarte a tu proyecto en una aplicación cliente.
+    ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
 
----
+9. Copia los valores de **Azure AI Foundry project endpoint** en un bloc de notas, ya que los usarás para conectarte a tu proyecto en una aplicación cliente.
 
 ## Crear una aplicación cliente de agente
 
@@ -59,7 +57,7 @@ Ahora estás listo para crear una aplicación cliente que use un agente. Se te h
 
     Cierra cualquier notificación de bienvenida para ver la página de inicio del portal de Azure.
 
-2. Usa el botón **[\>\_]** a la derecha de la barra de búsqueda en la parte superior de la página para crear un nuevo Cloud Shell en el portal de Azure, seleccionando un entorno **_PowerShell_** sin almacenamiento en tu suscripción.
+2. Usa el botón **[\>_]** a la derecha de la barra de búsqueda en la parte superior de la página para crear un nuevo Cloud Shell en el portal de Azure, seleccionando un entorno **_PowerShell_** sin almacenamiento en tu suscripción.
 
     El cloud shell proporciona una interfaz de línea de comandos en un panel en la parte inferior del portal de Azure. Puedes cambiar el tamaño o maximizar este panel para que sea más fácil trabajar en él.
 
@@ -67,7 +65,7 @@ Ahora estás listo para crear una aplicación cliente que use un agente. Se te h
 
 3. En la barra de herramientas del cloud shell, en el menú **Settings**, selecciona **Go to Classic version** (esto es necesario para usar el editor de código).
 
-    **\<font color="red"\>Asegúrate de haber cambiado a la versión clásica del cloud shell antes de continuar.\</font\>**
+    **<font color="red">Asegúrate de haber cambiado a la versión clásica del cloud shell antes de continuar.</font>**
 
 4. En el panel del cloud shell, ingresa los siguientes comandos para clonar el repositorio de GitHub que contiene los archivos de código para este ejercicio (escribe el comando, o cópialo al portapapeles y luego haz clic derecho en la línea de comandos y pégalo como texto sin formato):
 
@@ -85,7 +83,7 @@ Ahora estás listo para crear una aplicación cliente que use un agente. Se te h
     ls -a -l
     ```
 
-Los archivos proporcionados incluyen código de la aplicación, configuraciones y datos.
+    Los archivos proporcionados incluyen código de la aplicación, configuraciones y datos.
 
 ### Configurar las configuraciones de la aplicación
 
@@ -135,7 +133,6 @@ El archivo se abre en un editor de código.
 
     ```python
     # Connect to the Agent client
-
     agent_client = AgentsClient(
         endpoint=project_endpoint,
         credential=DefaultAzureCredential
@@ -151,7 +148,6 @@ El archivo se abre en un editor de código.
 
     ```python
     # Upload the data file and create a CodeInterpreterTool
-
     file = agent_client.files.upload_and_poll(
         file_path=file_path, purpose=FilePurpose.AGENTS
     )
@@ -164,7 +160,6 @@ El archivo se abre en un editor de código.
 
     ```python
     # Define an agent that uses the CodeInterpreterTool
-
     agent = agent_client.create_agent(
     model=model_deployment,
     name="data-agent",
@@ -187,9 +182,7 @@ El archivo se abre en un editor de código.
 1. Encuentra el comentario **Send a prompt to the agent** y agrega el siguiente código para añadir un mensaje de usuario al prompt (junto con los datos del archivo que se cargó previamente), y luego ejecuta el thread con el agente.
 
     ```python
-
     # Send a prompt to the agent
-
     message = agent_client.messages.create(
     thread_id=thread.id,
     role="user",
@@ -203,7 +196,6 @@ El archivo se abre en un editor de código.
 
     ```python
     # Check the run status for failures
-
     if run.status == "failed":
         print(f"Run failed: {run.last_error}")
     ```
@@ -212,7 +204,6 @@ El archivo se abre en un editor de código.
 
     ```python
     # Show the latest response from the agent
-
     last_msg = agent_client.messages.get_last_message_text_by_role(
         thread_id=thread.id,
         role=MessageRole.AGENT,
@@ -225,7 +216,6 @@ El archivo se abre en un editor de código.
 
     ```python
     # Get the conversation history
-
     print("\\nConversation Log:\\n")
     messages = agent_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
     for message in messages:
@@ -262,7 +252,7 @@ El archivo se abre en un editor de código.
     az login
     ```
 
-    **\<font color="red"\>Debes iniciar sesión en Azure, incluso si la sesión del cloud shell ya está autenticada.\</font\>**
+    **<font color="red">Debes iniciar sesión en Azure, incluso si la sesión del cloud shell ya está autenticada.</font>**
 
     > **Nota**: En la mayoría de los escenarios, solo usar _az login_ será suficiente. Sin embargo, si tienes suscripciones en múltiples tenants, es posible que necesites especificar el tenant usando el parámetro _--tenant_. Consulta [Iniciar sesión en Azure de forma interactiva usando la CLI de Azure](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) para obtener más detalles.
 
@@ -278,7 +268,7 @@ El archivo se abre en un editor de código.
 
 4. Cuando se te solicite, visualiza los datos que la aplicación ha cargado del archivo de texto _data.txt_. Luego ingresa un prompt como:
 
-    ```bash
+    ```yml
     What's the category with the highest cost?
     ```
 
@@ -286,13 +276,13 @@ El archivo se abre en un editor de código.
 
 5. Visualiza la respuesta. Luego ingresa otro prompt, esta vez solicitando una visualización:
 
-    ```prompt
+    ```yml
     Create a text-based bar chart showing cost by category
     ```
 
 6. Visualiza la respuesta. Luego ingresa otro prompt, esta vez solicitando una métrica estadística:
 
-    ```prompt
+    ```yml
     What's the standard deviation of cost?
     ```
 

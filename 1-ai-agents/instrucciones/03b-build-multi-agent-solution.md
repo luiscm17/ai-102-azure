@@ -20,6 +20,8 @@ Comencemos creando un proyecto de Azure AI Foundry.
 
 1. En un navegador web, abre el [portal de Azure AI Foundry](https://ai.azure.com) en `https://ai.azure.com` e inicia sesión con tus credenciales de Azure. Cierra cualquier sugerencia o panel de inicio rápido que se abra la primera vez que inicies sesión, y si es necesario usa el logo de **Azure AI Foundry** en la parte superior izquierda para navegar a la página de inicio, que se ve similar a la siguiente imagen (cierra el panel de **Help** si está abierto):
 
+    ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
+
 2. En la página de inicio, selecciona **Create an agent**.
 
 3. Cuando se te pida que crees un proyecto, introduce un nombre válido para tu proyecto y expande **Advanced options**.
@@ -43,6 +45,8 @@ Comencemos creando un proyecto de Azure AI Foundry.
 
 8. En el panel de navegación de la izquierda, selecciona **Overview** para ver la página principal de tu proyecto; que se ve así:
 
+    ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
+
 9. Copia los valores de **Azure AI Foundry project endpoint** en un bloc de notas, ya que los usarás para conectarte a tu proyecto en una aplicación cliente.
 
 ## Crear una aplicación cliente de agente de IA
@@ -55,7 +59,7 @@ Ahora estás listo para crear una aplicación cliente que defina los agentes y l
 
     Cierra cualquier notificación de bienvenida para ver la página de inicio del portal de Azure.
 
-2. Usa el botón **[\>\_]** a la derecha de la barra de búsqueda en la parte superior de la página para crear un nuevo Cloud Shell en el portal de Azure, seleccionando un entorno ***PowerShell*** sin almacenamiento en tu suscripción.
+2. Usa el botón **[\>_]** a la derecha de la barra de búsqueda en la parte superior de la página para crear un nuevo Cloud Shell en el portal de Azure, seleccionando un entorno ***PowerShell*** sin almacenamiento en tu suscripción.
 
     El cloud shell proporciona una interfaz de línea de comandos en un panel en la parte inferior del portal de Azure. Puedes cambiar el tamaño o maximizar este panel para que sea más fácil trabajar en él.
 
@@ -63,7 +67,7 @@ Ahora estás listo para crear una aplicación cliente que defina los agentes y l
 
 3. En la barra de herramientas del cloud shell, en el menú **Settings**, selecciona **Go to Classic version** (esto es necesario para usar el editor de código).
 
-    **\<font color="red"\>Asegúrate de haber cambiado a la versión clásica del cloud shell antes de continuar.\</font\>**
+    **<font color="red">Asegúrate de haber cambiado a la versión clásica del cloud shell antes de continuar.</font>**
 
 4. En el panel del cloud shell, ingresa los siguientes comandos para clonar el repositorio de GitHub que contiene los archivos de código para este ejercicio (escribe el comando, o cópialo al portapapeles y luego haz clic derecho en la línea de comandos y pégalo como texto sin formato):
 
@@ -296,7 +300,6 @@ Ahora estás listo para crear una aplicación cliente que defina los agentes y l
         if message.text_messages:
             last_msg = message.text_messages[-1]
             print(f"{message.role}:\n{last_msg.text.value}\n")
-
     ```
 
 12. Encuentra el comentario **Clean up**, e ingresa el siguiente código para eliminar los agentes cuando ya no sean necesarios:
@@ -326,7 +329,7 @@ Ahora estás listo para ejecutar tu código y ver cómo tus agentes de IA colabo
     az login
     ```
 
-    **\<font color="red"\>Debes iniciar sesión en Azure, incluso si la sesión del cloud shell ya está autenticada.\</font\>**
+    **<font color="red">Debes iniciar sesión en Azure, incluso si la sesión del cloud shell ya está autenticada.</font>**
 
     > **Nota**: En la mayoría de los escenarios, solo usar *az login* será suficiente. Sin embargo, si tienes suscripciones en múltiples tenants, es posible que necesites especificar el tenant usando el parámetro *--tenant*. Consulta [Iniciar sesión en Azure de forma interactiva usando la CLI de Azure](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) para obtener más detalles.
 

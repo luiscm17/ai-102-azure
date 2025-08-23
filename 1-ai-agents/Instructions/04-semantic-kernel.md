@@ -62,7 +62,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
 
-    ```
+    ```bash
    rm -r ai-agents -f
    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
@@ -71,7 +71,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. When the repo has been cloned, enter the following command to change the working directory to the folder containing the code files and list them all.
 
-    ```
+    ```bash
    cd ai-agents/Labfiles/04-semantic-kernel/python
    ls -a -l
     ```
@@ -82,7 +82,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
-    ```
+    ```bash
    python -m venv labenv
    ./labenv/bin/Activate.ps1
    pip install python-dotenv azure-identity semantic-kernel --upgrade 
@@ -92,8 +92,8 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. Enter the following command to edit the configuration file that has been provided:
 
-    ```
-   code .env
+    ```bash
+    code .env
     ```
 
     The file is opened in a code editor.
@@ -107,8 +107,8 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. Enter the following command to edit the agent code file that has been provided:
 
-    ```
-   code semantic-kernel.py
+    ```bash
+    code semantic-kernel.py
     ```
 
 1. Review the code in the file. It contains:
@@ -233,27 +233,27 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. In the cloud shell command-line pane beneath the code editor, enter the following command to sign into Azure.
 
-    ```
+    ```bash
     az login
     ```
 
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-    
+
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
 1. After you have signed in, enter the following command to run the application:
 
+    ```bash
+    python semantic-kernel.py
     ```
-   python semantic-kernel.py
-    ```
-    
+
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
 
 1. When asked what to do with the expenses data, enter the following prompt:
 
-    ```
-   Submit an expense claim
+    ```bash
+    Submit an expense claim
     ```
 
 1. When the application has finished, review the output. The agent should have composed an email for an expenses claim based on the data that was provided.

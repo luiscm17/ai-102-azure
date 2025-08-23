@@ -23,8 +23,11 @@ Let's start by creating an Azure AI Foundry project.
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
 1. In the home page, select **Create an agent**.
+
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
+
 1. Confirm the following settings for your project:
+
     - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
@@ -33,6 +36,7 @@ Let's start by creating an Azure AI Foundry project.
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
+
 1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
     >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
@@ -67,7 +71,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
 1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
 
-    ```
+    ```bash
    rm -r ai-agents -f
    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
@@ -76,13 +80,14 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
-    ```
-   cd ai-agents/Labfiles/06-build-remote-agents-with-a2a/python
-   ls -a -l
+    ```bash
+    cd ai-agents/Labfiles/06-build-remote-agents-with-a2a/python
+    ls -a -l
     ```
 
     The provided files include:
-    ```output
+
+    ```yml
     python
     ├── outline_agent/
     │   ├── agent.py
@@ -93,7 +98,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     │   └── server.py
     ├── title_agent/
     │   ├── agent.py
-    |   ├── agent_executor.py
+    │   ├── agent_executor.py
     │   └── server.py
     ├── client.py
     └── run_all.py
@@ -105,7 +110,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
 1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
-    ```
+    ```bash
    python -m venv labenv
    ./labenv/bin/Activate.ps1
    pip install -r requirements.txt azure-ai-projects a2a-sdk
@@ -113,13 +118,14 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
 1. Enter the following command to edit the configuration file that has been provided:
 
-    ```
+    ```bash
    code .env
     ```
 
     The file is opened in a code editor.
 
 1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Azure AI Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
+
 1. After you've replaced the placeholder, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
 ### Create a discoverable agent
@@ -128,15 +134,15 @@ In this task, you create the title agent that helps writers create trendy headli
 
 1. Navigate to the `title_agent` directory:
 
-    ```
+    ```bash
    cd title_agent
     ```
 
-> **Tip**: As you add code, be sure to maintain the correct indentation. Use the comment indentation levels as a guide.
+    > **Tip**: As you add code, be sure to maintain the correct indentation. Use the comment indentation levels as a guide.
 
 1. Enter the following command to edit the code file that has been provided:
 
-    ```
+    ```bash
    code agent.py
     ```
 
@@ -190,13 +196,13 @@ In this task, you create the title agent that helps writers create trendy headli
    run = self.client.runs.create_and_process(thread_id=thread.id, agent_id=self.agent.id)
     ```
 
-    The code provided in the rest of the file will process and return the agent's response. 
+    The code provided in the rest of the file will process and return the agent's response.
 
-1. Save the code file (*CTRL+S*). Now you're ready to share the agent's skills and card with the A2A protocol. 
+1. Save the code file (*CTRL+S*). Now you're ready to share the agent's skills and card with the A2A protocol.
 
 1. Enter the following command to edit the title agent's `server.py` file  
 
-    ```
+    ```bash
    code server.py
     ```
 
@@ -260,7 +266,7 @@ In this task, you create the title agent that helps writers create trendy headli
        agent_card=agent_card, http_handler=request_handler
    )
     ```
-    
+
     This code creates an A2A server that will share the title agent's information and handle incoming requests for this agent using the title agent executor.
 
 1. Save the code file (*CTRL+S*) when you have finished.
@@ -271,13 +277,13 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
 
 1. Navigate to the `routing_agent` directory:
 
-    ```
+    ```bash
    cd ../routing_agent
     ```
 
 1. Enter the following command to edit the code file that has been provided:
 
-    ```
+    ```bash
    code agent.py
     ```
 
@@ -327,18 +333,17 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
    send_response: SendMessageResponse = await client.send_message(message_request=message_request)
     ```
 
-
 1. Save the code file (*CTRL+S*) when you have finished. Now the routing agent is able to discover and send messages to the title agent. Let's create the agent executor code to handle those incoming messages from the routing agent.
 
 1. Navigate to the `title_agent` directory:
 
-    ```
-   cd ../title_agent
+    ```bash
+    cd ../title_agent
     ```
 
 1. Enter the following command to edit the code file that has been provided:
 
-    ```
+    ```bash
    code agent_executor.py
     ```
 
@@ -402,34 +407,35 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
 
 1. In the cloud shell command-line pane, enter the following command to sign into Azure.
 
-    ```
+    ```bash
     az login
     ```
 
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-    
+
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+
 1. After you have signed in, enter the following command to run the application:
 
-    ```
+    ```bash
     cd ..
     python run_all.py
     ```
-    
+
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent. You should see some output from each server as it starts.
 
 1. Wait until the prompt for input appears, then enter a prompt such as:
 
-    ```
-   Create a title and outline for an article about React programming.
+    ```yml
+    Create a title and outline for an article about React programming.
     ```
 
     After a few moments, you should see a response from the agent with the results.
 
 1. Enter `quit` to exit the program and stop the servers.
-    
+
 ## Summary
 
 In this exercise, you used the Azure AI Agent Service SDK and the A2A Python SDK to create a remote multi-agent solution. You created a discoverable A2A-compatible agent and set up a routing agent to access the agent's skills. You also implemented an agent executor to process incoming A2A messages and manage tasks. Great work!

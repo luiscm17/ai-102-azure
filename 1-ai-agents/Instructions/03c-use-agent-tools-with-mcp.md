@@ -23,8 +23,11 @@ Let's start by creating an Azure AI Foundry project.
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
 1. In the home page, select **Create an agent**.
+
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
+
 1. Confirm the following settings for your project:
+
     - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
@@ -39,6 +42,7 @@ Let's start by creating an Azure AI Foundry project.
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
+
 1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
     >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.

@@ -23,8 +23,11 @@ Let's start by creating an Azure AI Foundry project.
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
 1. In the home page, select **Create an agent**.
+
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
+
 1. Confirm the following settings for your project:
+
     - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
@@ -33,6 +36,7 @@ Let's start by creating an Azure AI Foundry project.
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
+
 1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
     >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
@@ -104,6 +108,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     The file is opened in a code editor.
 
 1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Azure AI Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
+
 1. After you've replaced the placeholder, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
 ### Define a custom function
@@ -152,6 +157,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     > **Tip**: As you add code to the code file, be sure to maintain the correct indentation.
 
 1. Review the existing code, which retrieves the application configuration settings and sets up a loop in which the user can enter prompts for the agent. The rest of the file includes comments where you'll add the necessary code to implement your technical support agent.
+
 1. Find the comment **Add references** and add the following code to import the classes you'll need to build an Azure AI agent that uses your function code as a tool:
 
     ```python
@@ -200,7 +206,6 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
         thread = agent_client.threads.create()
         print(f"You're chatting with: {agent.name} ({agent.id})")
-
     ```
 
 1. Find the comment **Send a prompt to the agent** and add the following code to add the user's prompt as a message and run the thread.
@@ -258,6 +263,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     ```
 
 1. Review the code, using the comments to understand how it:
+
     - Adds your set of custom functions to a toolset
     - Creates an agent that uses the toolset.
     - Runs a thread with a prompt message from the user.
@@ -281,6 +287,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
 
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+
 1. After you have signed in, enter the following command to run the application:
 
     ```bash
@@ -291,8 +298,8 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. When prompted, enter a prompt such as:
 
-    ```bash
-   I have a technical problem
+    ```yml
+    I have a technical problem
     ```
 
     > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
@@ -302,11 +309,14 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     When it has enough information, the agent should choose to use your function as required.
 
 1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. Enter `quit` when you're done.
+
 1. Review the conversation messages that were retrieved from the thread, and the tickets that were generated.
+
 1. The tool should have saved support tickets in the app folder. You can use the `ls` command to check, and then use the `cat` command to view the file contents, like this:
 
     ```bash
-   cat ticket-<ticket_num>.txt
+    ls
+    cat ticket-<ticket_num>.txt
     ```
 
 ## Clean up

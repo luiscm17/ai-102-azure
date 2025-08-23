@@ -29,9 +29,13 @@ Let's start by deploying a model in an Azure AI Foundry project.
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
 1. In the home page, in the **Explore models and capabilities** section, search for the `gpt-4o` model; which we'll use in our project.
+
 1. In the search results, select the **gpt-4o** model to see its details, and then at the top of the page for the model, select **Use this model**.
+
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
+
 1. Confirm the following settings for your project:
+
     - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
@@ -46,6 +50,7 @@ Let's start by deploying a model in an Azure AI Foundry project.
 1. In the navigation pane on the left, select **Models and endpoints** and select your **gpt-4o** deployment.
 
 1. In the **Setup** pane, note the name of your model deployment; which should be **gpt-4o**. You can confirm this by viewing the deployment in the **Models and endpoints** page (just open that page in the navigation pane on the left).
+
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
 
     ![Screenshot of a Azure AI project details in Azure AI Foundry portal.](./Media/ai-foundry-project.png)
@@ -72,7 +77,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
 
-    ```
+    ```bash
    rm -r ai-agents -f
    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
@@ -81,9 +86,9 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. When the repo has been cloned, enter the following command to change the working directory to the folder containing the code files and list them all.
 
-    ```
-   cd ai-agents/Labfiles/05-agent-orchestration/Python
-   ls -a -l
+    ```bash
+    cd ai-agents/Labfiles/05-agent-orchestration/Python
+    ls -a -l
     ```
 
     The provided files include application code and a file for configuration settings.
@@ -92,18 +97,18 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
-    ```
-   python -m venv labenv
-   ./labenv/bin/Activate.ps1
-   pip install python-dotenv azure-identity semantic-kernel --upgrade
+    ```bash
+    python -m venv labenv
+    ./labenv/bin/Activate.ps1
+    pip install python-dotenv azure-identity semantic-kernel --upgrade
     ```
 
     > **Note**: Installing *semantic-kernel* automatically installs a semantic kernel-compatible version of *azure-ai-projects*.
 
 1. Enter the following command to edit the configuration file that is provided:
 
-    ```
-   code .env
+    ```bash
+    code .env
     ```
 
     The file is opened in a code editor.
@@ -118,8 +123,8 @@ Now you're ready to create the  agents for your multi-agent solution! Let's get 
 
 1. Enter the following command to edit the **agents.py** file:
 
-    ```
-   code agents.py
+    ```bash
+    code agents.py
     ```
 
 1. At the top of the file under the comment **Add references**, and add the following code to reference the namespaces in the libraries you'll need to implement your agent:
@@ -132,7 +137,6 @@ Now you're ready to create the  agents for your multi-agent solution! Let's get 
    from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
    from semantic_kernel.contents import ChatMessageContent
     ```
-
 
 1. In the **get_agents** function, add the following code under the comment **Create a summarizer agent**:
 
@@ -192,7 +196,7 @@ Now you're ready to create the  agents for your multi-agent solution! Let's get 
 ## Create a sequential orchestration
 
 1. In the **main** function, find the comment **Initialize the input task** and add the following code:
-    
+
     ```python
    # Initialize the input task
    task="""
@@ -260,8 +264,8 @@ Now you're ready to run your code and watch your AI agents collaborate.
 
 1. In the cloud shell command-line pane, enter the following command to sign into Azure.
 
-    ```
-   az login
+    ```bash
+    az login
     ```
 
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
@@ -272,8 +276,8 @@ Now you're ready to run your code and watch your AI agents collaborate.
 
 1. After you have signed in, enter the following command to run the application:
 
-    ```
-   python agents.py
+    ```bash
+    python agents.py
     ```
 
     You should see some output similar to the following:
@@ -300,6 +304,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
     ```output
     I use the dashboard every day to monitor metrics, and it works well overall. But when I'm working late at night, the bright screen is really harsh on my eyes. If you added a dark mode option, it would make the experience much more comfortable.
     ```
+
     ```output
     I reached out to your customer support yesterday because I couldn't access my account. The representative responded almost immediately, was polite and professional, and fixed the issue within minutes. Honestly, it was one of the best support experiences I've ever had.
     ```

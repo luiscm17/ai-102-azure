@@ -34,6 +34,7 @@ Let's start by creating an Azure AI Foundry project.
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
+
 1. If prompted, deploy a **gpt-4o** model using either the _Global Standard_ or _Standard_ deployment option (depending on your quota availability).
 
     > **Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
@@ -116,6 +117,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```
 
 1. Review the existing code, which retrieves the application configuration settings and loads data from _data.txt_ to be analyzed. The rest of the file includes comments where you'll add the necessary code to implement your data analysis agent.
+
 1. Find the comment **Add references** and add the following code to import the classes you'll need to build an Azure AI agent that uses the built-in code interpreter tool:
 
     ```python
@@ -255,6 +257,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     > **Note**: In most scenarios, just using _az login_ will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the _--tenant_ parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
 
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+
 1. After you have signed in, enter the following command to run the application:
 
     ```bash
@@ -265,7 +268,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
 1. When prompted, view the data that the app has loaded from the _data.txt_ text file. Then enter a prompt such as:
 
-    ```prompt
+    ```yml
     What's the category with the highest cost?
     ```
 
@@ -273,19 +276,20 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
 1. View the response. Then enter another prompt, this time requesting a visualization:
 
-    ```prompt
+    ```yml
     Create a text-based bar chart showing cost by category
     ```
 
 1. View the response. Then enter another prompt, this time requesting a statistical metric:
 
-    ```prompt
+    ```yml
     What's the standard deviation of cost?
     ```
 
     View the response.
 
 1. You can continue the conversation if you like. The thread is _stateful_, so it retains the conversation history - meaning that the agent has the full context for each response. Enter `quit` when you're done.
+
 1. Review the conversation messages that were retrieved from the thread - which may include messages the agent generated to explain its steps when using the code interpreter tool.
 
 ## Summary

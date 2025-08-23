@@ -23,8 +23,11 @@ Let's start by creating an Azure AI Foundry project.
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
 1. In the home page, select **Create an agent**.
+
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
+
 1. Confirm the following settings for your project:
+
     - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
@@ -33,6 +36,7 @@ Let's start by creating an Azure AI Foundry project.
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
+
 1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
     >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
@@ -67,7 +71,7 @@ Now you're ready to create a client app that defines the agents and instructions
 
 1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
 
-    ```
+    ```bash
    rm -r ai-agents -f
    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
@@ -76,7 +80,7 @@ Now you're ready to create a client app that defines the agents and instructions
 
 1. When the repo has been cloned, enter the following command to change the working directory to the folder containing the code files and list them all.
 
-    ```
+    ```bash
    cd ai-agents/Labfiles/03b-build-multi-agent-solution/Python
    ls -a -l
     ```
@@ -87,7 +91,7 @@ Now you're ready to create a client app that defines the agents and instructions
 
 1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
-    ```
+    ```bash
    python -m venv labenv
    ./labenv/bin/Activate.ps1
    pip install -r requirements.txt azure-ai-projects
@@ -95,7 +99,7 @@ Now you're ready to create a client app that defines the agents and instructions
 
 1. Enter the following command to edit the configuration file that is provided:
 
-    ```
+    ```bash
    code .env
     ```
 
@@ -296,7 +300,6 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
         if message.text_messages:
             last_msg = message.text_messages[-1]
             print(f"{message.role}:\n{last_msg.text.value}\n")
-   
     ```
 
 1. Find the comment **Clean up**, and enter the following code to delete the agents when they are no longer required:
@@ -342,7 +345,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 
     After the agents process the prompt, you should see some output similar to the following:
 
-    ```output
+    ```yml
     Creating agent thread.
     Processing agent thread. Please wait.
 

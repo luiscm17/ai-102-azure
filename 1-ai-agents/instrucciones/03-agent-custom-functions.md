@@ -1,8 +1,7 @@
 ---
-
 lab: 
-title: 'Usar una función personalizada en un agente de IA' 
-description: 'Aprende a usar funciones para agregar capacidades personalizadas a tus agentes.'
+    title: 'Usar una función personalizada en un agente de IA' 
+    description: 'Aprende a usar funciones para agregar capacidades personalizadas a tus agentes.'
 ---
 
 # Usar una función personalizada en un agente de IA
@@ -20,6 +19,8 @@ Este ejercicio debería tomar aproximadamente **30** minutos en completarse.
 Comencemos creando un proyecto de Azure AI Foundry.
 
 1. En un navegador web, abre el [portal de Azure AI Foundry](https://ai.azure.com) en `https://ai.azure.com` e inicia sesión con tus credenciales de Azure. Cierra cualquier sugerencia o panel de inicio rápido que se abra la primera vez que inicies sesión, y si es necesario usa el logo de **Azure AI Foundry** en la parte superior izquierda para navegar a la página de inicio, que se ve similar a la siguiente imagen (cierra el panel de **Help** si está abierto):
+
+    ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
 2. En la página de inicio, selecciona **Create an agent**.
 
@@ -44,6 +45,8 @@ Comencemos creando un proyecto de Azure AI Foundry.
 
 8. En el panel de navegación de la izquierda, selecciona **Overview** para ver la página principal de tu proyecto; que se ve así:
 
+    ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
+
 9. Copia los valores de **Azure AI Foundry project endpoint** en un bloc de notas, ya que los usarás para conectarte a tu proyecto en una aplicación cliente.
 
 ## Desarrollar un agente que use herramientas de función
@@ -56,7 +59,7 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 
     Cierra cualquier notificación de bienvenida para ver la página de inicio del portal de Azure.
 
-2. Usa el botón **[\>\_]** a la derecha de la barra de búsqueda en la parte superior de la página para crear un nuevo Cloud Shell en el portal de Azure, seleccionando un entorno **_PowerShell_** sin almacenamiento en tu suscripción.
+2. Usa el botón **[\>_]** a la derecha de la barra de búsqueda en la parte superior de la página para crear un nuevo Cloud Shell en el portal de Azure, seleccionando un entorno **_PowerShell_** sin almacenamiento en tu suscripción.
 
     El cloud shell proporciona una interfaz de línea de comandos en un panel en la parte inferior del portal de Azure. Puedes cambiar el tamaño o maximizar este panel para que sea más fácil trabajar en él.
 
@@ -64,7 +67,7 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 
 3. En la barra de herramientas del cloud shell, en el menú **Settings**, selecciona **Go to Classic version** (esto es necesario para usar el editor de código).
 
-    **\<font color="red"\>Asegúrate de haber cambiado a la versión clásica del cloud shell antes de continuar.\</font\>**
+    **<font color="red">Asegúrate de haber cambiado a la versión clásica del cloud shell antes de continuar.</font>**
 
 4. En el panel del cloud shell, ingresa los siguientes comandos para clonar el repositorio de GitHub que contiene los archivos de código para este ejercicio (escribe el comando, o cópialo al portapapeles y luego haz clic derecho en la línea de comandos y pégalo como texto sin formato):
 
@@ -120,13 +123,12 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 
     ```python
     # Create a function to submit a support ticket
-
     def submit_support_ticket(email_address: str, description: str) -> str:
         script_dir = Path(**file**).parent # Get the directory of the script
         ticket_number = str(uuid.uuid4()).replace['-', ''](:6)
         file_name = f"ticket-{ticket_number}.txt"
         file_path = script_dir / file_name
-        text = f"Support ticket: {ticket_number}\\nSubmitted by: {email_address}\\nDescription:\\n{description}"
+        text = f"Support ticket: {ticket_number}\nSubmitted by: {email_address}\nDescription:\n{description}"
         file_path.write_text(text)
 
         message_json = json.dumps({"message": f"Support ticket {ticket_number} submitted. The ticket file is saved as {file_name}"})
@@ -137,7 +139,6 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 
     ```python
     # Define a set of callable functions
-
     user_functions: Set[Callable[..., Any]] = {
         submit_support_ticket
     }
@@ -160,8 +161,7 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 3. Encuentra el comentario **Add references** y agrega el siguiente código para importar las clases que necesitarás para construir un agente de Azure AI que use tu código de función como una herramienta:
 
     ```python
-    # Add references
-
+    # Add reference
     from azure.identity import DefaultAzureCredential
     from azure.ai.agents import AgentsClient
     from azure.ai.agents.models import FunctionTool, ToolSet, ListSortOrder, MessageRole
@@ -174,7 +174,6 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 
     ```python
     # Connect to the Agent client
-
     agent_client = AgentsClient(
         endpoint=project_endpoint,
         credential=DefaultAzureCredential
@@ -187,7 +186,6 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 
     ```python
     # Define an agent that can use the custom functions
-
     with agent_client:
 
         functions = FunctionTool(user_functions)
@@ -196,25 +194,24 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
         agent_client.enable_auto_function_calls(toolset)
 
         agent = agent_client.create_agent(
-        model=model_deployment,
-        name="support-agent",
-        instructions="""You are a technical support agent.
+            model=model_deployment,
+            name="support-agent",
+            instructions="""You are a technical support agent.
                         When a user has a technical issue, you get their email address and a description of the issue.
                         Then you use those values to submit a support ticket using the function available to you.
                         If a file is saved, tell the user the file name.
                      """,
-        toolset=toolset
-    )
+            toolset=toolset
+        )
 
-    thread = agent_client.threads.create()
-    print(f"You're chatting with: {agent.name} ({agent.id})")
+        thread = agent_client.threads.create()
+        print(f"You're chatting with: {agent.name} ({agent.id})")
     ```
 
 6. Encuentra el comentario **Send a prompt to the agent** y agrega el siguiente código para agregar el prompt del usuario como un mensaje y ejecutar el thread.
 
     ```python
     # Send a prompt to the agent
-
     message = agent_client.messages.create(
         thread_id=thread.id,
         role="user",
@@ -229,7 +226,6 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 
     ```python
     # Check the run status for failures
-
     if run.status == "failed":
         print(f"Run failed: {run.last_error}")
     ```
@@ -238,7 +234,6 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 
     ```python
     # Show the latest response from the agent
-
     last_msg = agent_client.messages.get_last_message_text_by_role(
         thread_id=thread.id,
         role=MessageRole.AGENT,
@@ -251,20 +246,18 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 
     ```python
     # Get the conversation history
-
-    print("\\nConversation Log:\\n")
+    print("\nConversation Log:\n")
     messages = agent_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
     for message in messages:
         if message.text_messages:
             last_msg = message.text_messages[-1]
-            print(f"{message.role}: {last_msg.text.value}\\n")
+            print(f"{message.role}: {last_msg.text.value}\n")
     ```
 
 10. Encuentra el comentario **Clean up** y agrega el siguiente código para eliminar el agente y el thread cuando ya no sean necesarios.
 
     ```python
     # Clean up
-
     agent_client.delete_agent(agent.id)
     print("Deleted agent")
     ```
@@ -279,17 +272,7 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
     - Muestra el historial de conversación.
     - Elimina el agente y el thread cuando ya no son necesarios.
 
-12. Revisa el código, usando los comentarios para entender cómo:
-
-    - Agrega tu conjunto de funciones personalizadas a un toolset.
-    - Crea un agente que usa el toolset.
-    - Ejecuta un thread con un mensaje de prompt del usuario.
-    - Verifica el estado de la ejecución en caso de que haya una falla.
-    - Recupera los mensajes del thread completado y muestra el último enviado por el agente.
-    - Muestra el historial de conversación.
-    - Elimina el agente y el thread cuando ya no son necesarios.
-
-13. Guarda el archivo de código (_CTRL+S_) cuando hayas terminado. También puedes cerrar el editor de código (_CTRL+Q_); aunque es posible que desees mantenerlo abierto en caso de que necesites hacer alguna edición al código que agregaste. En cualquier caso, mantén el panel de línea de comandos del cloud shell abierto.
+12. Guarda el archivo de código (_CTRL+S_) cuando hayas terminado. También puedes cerrar el editor de código (_CTRL+Q_); aunque es posible que desees mantenerlo abierto en caso de que necesites hacer alguna edición al código que agregaste. En cualquier caso, mantén el panel de línea de comandos del cloud shell abierto.
 
 ### Iniciar sesión en Azure y ejecutar la aplicación
 
@@ -299,7 +282,7 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
     az login
     ```
 
-    **\<font color="red"\>Debes iniciar sesión en Azure, incluso si la sesión del cloud shell ya está autenticada.\</font\>**
+    **<font color="red">Debes iniciar sesión en Azure, incluso si la sesión del cloud shell ya está autenticada.</font>**
 
     > **Nota**: En la mayoría de los escenarios, solo usar _az login_ será suficiente. Sin embargo, si tienes suscripciones en múltiples tenants, es posible que necesites especificar el tenant usando el parámetro _--tenant_. Consulta [Iniciar sesión en Azure de forma interactiva usando la CLI de Azure](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) para obtener más detalles.
 
@@ -315,7 +298,7 @@ Ahora que has creado tu proyecto en AI Foundry, desarrollemos una aplicación qu
 
 4. Cuando se te solicite, ingresa un prompt como:
 
-    ```bash
+    ```yml
     I have a technical problem
     ```
 
