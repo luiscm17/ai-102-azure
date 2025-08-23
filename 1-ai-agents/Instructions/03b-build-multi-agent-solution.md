@@ -111,7 +111,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
 1. Enter the following command to edit the **agent_triage.py** file:
 
-    ```
+    ```bash
    code agent_triage.py
     ```
 
@@ -313,7 +313,6 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    agents_client.delete_agent(effort_agent.id)
    print("Deleted effort agent.")
     ```
-    
 
 1. Use the **CTRL+S** command to save your changes to the code file. You can keep it open (in case you need to edit the code to fix any errors) or use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
@@ -323,7 +322,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 
 1. In the cloud shell command-line pane, enter the following command to sign into Azure.
 
-    ```
+    ```bash
    az login
     ```
 
@@ -335,7 +334,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 
 1. After you have signed in, enter the following command to run the application:
 
-    ```
+    ```bash
    python agent_triage.py
     ```
 

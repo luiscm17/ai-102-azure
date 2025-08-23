@@ -67,7 +67,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
 
-    ```
+    ```bash
    rm -r ai-agents -f
    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
@@ -76,7 +76,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
-    ```
+    ```bash
    cd ai-agents/Labfiles/03-ai-agent-functions/Python
    ls -a -l
     ```
@@ -87,7 +87,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
-    ```
+    ```bash
    python -m venv labenv
    ./labenv/bin/Activate.ps1
    pip install -r requirements.txt azure-ai-projects
@@ -97,7 +97,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. Enter the following command to edit the configuration file that has been provided:
 
-    ```
+    ```bash
    code .env
     ```
 
@@ -110,7 +110,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. Enter the following command to edit the code file that has been provided for your function code:
 
-    ```
+    ```bash
    code user_functions.py
     ```
 
@@ -138,13 +138,14 @@ Now that you've created your project in AI Foundry, let's develop an app that im
         submit_support_ticket
     }
     ```
+
 1. Save the file (*CTRL+S*).
 
 ### Write code to implement an agent that can use your function
 
 1. Enter the following command to begin editing the agent code.
 
-    ```
+    ```bash
     code agent.py
     ```
 
@@ -174,7 +175,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
             exclude_managed_identity_credential=True)
    )
     ```
-    
+
 1. Find the comment **Define an agent that can use the custom functions** section, and add the following code to add your function code to a toolset, and then create an agent that can use the toolset and a thread on which to run the chat session.
 
     ```python
@@ -271,26 +272,26 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. In the cloud shell command-line pane, enter the following command to sign into Azure.
 
-    ```
+    ```bash
     az login
     ```
 
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-    
+
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
 1. After you have signed in, enter the following command to run the application:
 
-    ```
+    ```bash
    python agent.py
     ```
-    
+
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
 
 1. When prompted, enter a prompt such as:
 
-    ```
+    ```bash
    I have a technical problem
     ```
 
@@ -304,7 +305,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 1. Review the conversation messages that were retrieved from the thread, and the tickets that were generated.
 1. The tool should have saved support tickets in the app folder. You can use the `ls` command to check, and then use the `cat` command to view the file contents, like this:
 
-    ```
+    ```bash
    cat ticket-<ticket_num>.txt
     ```
 
