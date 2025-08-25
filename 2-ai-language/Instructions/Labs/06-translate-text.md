@@ -46,41 +46,41 @@ To test the text translation capabilities of Azure AI Translator, you'll develop
 
 1. In the PowerShell pane, enter the following commands to clone the GitHub repo for this exercise:
 
-    ```
-   rm -r mslearn-ai-language -f
-   git clone https://github.com/microsoftlearning/mslearn-ai-language
+    ```bash
+    rm -r mslearn-ai-language -f
+    git clone https://github.com/microsoftlearning/mslearn-ai-language
     ```
 
     > **Tip**: As you enter commands into the cloudshell, the ouput may take up a large amount of the screen buffer. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
 
 1. After the repo has been cloned, navigate to the folder containing the application code files:  
 
-    ```
-   cd mslearn-ai-language/Labfiles/06-translator-sdk/Python/translate-text
+    ```bash
+    cd mslearn-ai-language/Labfiles/06-translator-sdk/Python/translate-text
     ```
 
 ## Configure your application
 
 1. In the command line pane, run the following command to view the code files in the **translate-text** folder:
 
-    ```
-   ls -a -l
+    ```bash
+    ls -a -l
     ```
 
     The files include a configuration file (**.env**) and a code file (**translate.py**).
 
 1. Create a Python virtual environment and install the Azure AI Translation SDK package and other required packages by running the following command:
 
-    ```
-   python -m venv labenv
-   ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-translation-text==1.0.1
+    ```bash
+    python -m venv labenv
+    ./labenv/bin/Activate.ps1
+    pip install -r requirements.txt azure-ai-translation-text==1.0.1
     ```
 
 1. Enter the following command to edit the application configuration file:
 
-    ```
-   code .env
+    ```bash
+    code .env
     ```
 
     The file is opened in a code editor.
@@ -95,8 +95,8 @@ To test the text translation capabilities of Azure AI Translator, you'll develop
 
 1. Enter the following command to edit the application code file:
 
-    ```
-   code translate.py
+    ```bash
+    code translate.py
     ```
 
 1. Review the existing code. You will add code to work with the Azure AI Translation SDK.
@@ -158,8 +158,8 @@ To test the text translation capabilities of Azure AI Translator, you'll develop
 
 1. Save your changes (CTRL+S), then enter the following command to run the program (you maximize the cloud shell pane and resize the panels to see more text in the command line pane):
 
-    ```
-   python translate.py
+    ```bash
+    python translate.py
     ```
 
 1. When prompted, enter a valid target language from the list displayed.

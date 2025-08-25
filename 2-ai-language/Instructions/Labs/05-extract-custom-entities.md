@@ -118,11 +118,11 @@ Now that your project is created, you need to label your data to train your mode
 
 1. If the **Data labeling** page is not already open, in the pane on the left, select **Data labeling**. You'll see a list of the files you uploaded to your storage account.
 1. On the right side, in the **Activity** pane, select **Add entity** and add a new entity named `ItemForSale`.
-1.  Repeat the previous step to create the following entities:
+1. Repeat the previous step to create the following entities:
     - `Price`
     - `Location`
 1. After you've created your three entities, select **Ad 1.txt** so you can read it.
-1. In *Ad 1.txt*: 
+1. In *Ad 1.txt*:
     1. Highlight the text *face cord of firewood* and select the **ItemForSale** entity.
     1. Highlight the text *Denver, CO* and select the **Location** entity.
     1. Highlight the text *$90* and select the **Price** entity.
@@ -173,17 +173,16 @@ To test the custom entity extraction capabilities of the Azure AI Language servi
 
 1. In the PowerShell pane, enter the following commands to clone the GitHub repo for this exercise:
 
-    ```
-   rm -r mslearn-ai-language -f
-   git clone https://github.com/microsoftlearning/mslearn-ai-language
+    ```bash
+    rm -r mslearn-ai-language -f
+    git clone https://github.com/microsoftlearning/mslearn-ai-language
     ```
 
     > **Tip**: As you paste commands into the cloudshell, the ouput may take up a large amount of the screen buffer. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
-    ```
 
 1. After the repo has been cloned, navigate to the folder containing the application code files:  
 
-    ```
+    ```bash
     cd mslearn-ai-language/Labfiles/05-custom-entity-recognition/Python/custom-entities
     ```
 
@@ -191,24 +190,24 @@ To test the custom entity extraction capabilities of the Azure AI Language servi
 
 1. In the command line pane, run the following command to view the code files in the **custom-entities** folder:
 
-    ```
-   ls -a -l
+    ```bash
+    ls -a -l
     ```
 
     The files include a configuration file (**.env**) and a code file (**custom-entities.py**). The text your application will analyze is in the **ads** subfolder.
 
 1. Create a Python virtual environment and install the Azure AI Language Text Analytics SDK package and other required packages by running the following command:
 
-    ```
-   python -m venv labenv
-   ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-textanalytics==5.3.0
+    ```bash
+    python -m venv labenv
+    ./labenv/bin/Activate.ps1
+    pip install -r requirements.txt azure-ai-textanalytics==5.3.0
     ```
 
 1. Enter the following command to edit the application configuration file:
 
-    ```
-   code .env
+    ```bash
+    code .env
     ```
 
     The file is opened in a code editor.
@@ -220,7 +219,7 @@ To test the custom entity extraction capabilities of the Azure AI Language servi
 
 1. Enter the following command to edit the application code file:
 
-    ```
+    ```bash
     code custom-entities.py
     ```
 
@@ -274,8 +273,8 @@ To test the custom entity extraction capabilities of the Azure AI Language servi
 
 1. Save your changes (CTRL+S), then enter the following command to run the program (you maximize the cloud shell pane and resize the panels to see more text in the command line pane):
 
-    ```
-   python custom-entities.py
+    ```bash
+    python custom-entities.py
     ```
 
 1. Observe the output. The application should list details of the entities found in each text file.

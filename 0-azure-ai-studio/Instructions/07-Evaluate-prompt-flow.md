@@ -142,8 +142,8 @@ Automated evaluation is an approach that attempts to address these shortcomings 
 
 When you finish exploring the Azure AI Foundry, you should delete the resources you’ve created to avoid unnecessary Azure costs.
 
--   Navigate to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`.
--   In the Azure portal, on the **Home** page, select **Resource groups**.
--   Select the resource group that you created for this exercise.
--   At the top of the **Overview** page for your resource group, select **Delete resource group**.
--   Enter the resource group name to confirm you want to delete it, and select **Delete**.
+- Navigate to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`.
+- In the Azure portal, on the **Home** page, select **Resource groups**.
+- Select the resource group that you created for this exercise.
+- At the top of the **Overview** page for your resource group, select **Delete resource group**.
+- Enter the resource group name to confirm you want to delete it, and select **Delete**.

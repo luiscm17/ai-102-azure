@@ -113,7 +113,7 @@ To help the model predict which intent a user is requesting, you must label each
     - `tell me the time`
 
     > **NOTE**
-    > To add a new utterance, write the utterance in the textbox next to the intent and then press ENTER. 
+    > To add a new utterance, write the utterance in the textbox next to the intent and then press ENTER.
 
 1. Select the **GetDay** intent and add the following utterances as example input for that intent:
     - `what day is it?`
@@ -334,40 +334,41 @@ You'll develop your language understanding app using Cloud Shell in the Azure po
 
 1. In the PowerShell pane, enter the following commands to clone the GitHub repo for this exercise:
 
-    ```
-   rm -r mslearn-ai-language -f
-   git clone https://github.com/microsoftlearning/mslearn-ai-language
+    ```bash
+    rm -r mslearn-ai-language -f
+    git clone https://github.com/microsoftlearning/mslearn-ai-language
     ```
 
     > **Tip**: As you paste commands into the cloudshell, the ouput may take up a large amount of the screen buffer. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
 
 1. After the repo has been cloned, navigate to the folder containing the application code files:  
 
-    ```
-   cd mslearn-ai-language/Labfiles/03-language/Python/clock-client
+    ```bash
+    cd mslearn-ai-language/Labfiles/03-language/Python/clock-client
     ```
 
 ### Configure your application
 
 1. In the command line pane, run the following command to view the code files in the **clock-client** folder:
 
-    ```
-   ls -a -l
+    ```bash
+    ls -a -l
     ```
 
     The files include a configuration file (**.env**) and a code file (**clock-client.py**).
 
 1. Create a Python virtual environment and install the Azure AI Language Conversations SDK package and other required packages by running the following command:
 
-    ```
-   python -m venv labenv
+    ```bash
+    python -m venv labenv
     ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-language-conversations==1.1.0
+    pip install -r requirements.txt azure-ai-language-conversations==1.1.0
     ```
+
 1. Enter the following command to edit the configuration file:
 
-    ```
-   code .env
+    ```bash
+    code .env
     ```
 
     The file is opened in a code editor.
@@ -379,8 +380,8 @@ You'll develop your language understanding app using Cloud Shell in the Azure po
 
 1. Enter the following command to edit the application code file:
 
-    ```
-   code clock-client.py
+    ```bash
+    code clock-client.py
     ```
 
 1. Review the existing code. You will add code to work with the AI Language Conversations SDK.
@@ -499,8 +500,8 @@ You'll develop your language understanding app using Cloud Shell in the Azure po
 
 1. Save your changes (CTRL+S), then enter the following command to run the program (you maximize the cloud shell pane and resize the panels to see more text in the command line pane):
 
-    ```
-   python clock-client.py
+    ```bash
+    python clock-client.py
     ```
 
 1. When prompted, enter utterances to test the application. For example, try:
@@ -520,9 +521,9 @@ You'll develop your language understanding app using Cloud Shell in the Azure po
     *What day is 01/01/2025?*
 
     > **Note**: The logic in the application is deliberately simple, and has a number of limitations. For example, when getting the time, only a restricted set of cities is supported and daylight savings time is ignored. The goal is to see an example of a typical pattern for using Language Service in which your application must:
-    >   1. Connect to a prediction endpoint.
-    >   2. Submit an utterance to get a prediction.
-    >   3. Implement logic to respond appropriately to the predicted intent and entities.
+    > 1. Connect to a prediction endpoint.
+    > 2. Submit an utterance to get a prediction.
+    > 3. Implement logic to respond appropriately to the predicted intent and entities.
 
 1. When you have finished testing, enter *quit*.
 

@@ -51,7 +51,7 @@ You'll develop your code using Cloud Shell from the Azure Portal. The code files
 
 1. In the PowerShell pane, enter the following commands to clone the GitHub repo for this exercise:
 
-    ```
+    ```bash
     rm -r mslearn-ai-language -f
     git clone https://github.com/microsoftlearning/mslearn-ai-language
     ```
@@ -60,7 +60,7 @@ You'll develop your code using Cloud Shell from the Azure Portal. The code files
 
 1. After the repo has been cloned, navigate to the folder containing the application code files:  
 
-    ```
+    ```bash
     cd mslearn-ai-language/Labfiles/01-analyze-text/Python/text-analysis
     ```
 
@@ -68,15 +68,15 @@ You'll develop your code using Cloud Shell from the Azure Portal. The code files
 
 1. In the command line pane, run the following command to view the code files in the **text-analysis** folder:
 
-    ```
-   ls -a -l
+    ```bash
+    ls -a -l
     ```
 
     The files include a configuration file (**.env**) and a code file (**text-analysis.py**). The text your application will analyze is in the **reviews** subfolder.
 
 1. Create a Python virtual environment and install the Azure AI Language Text Analytics SDK package and other required packages by running the following command:
 
-    ```
+    ```bash
     python -m venv labenv
     ./labenv/bin/Activate.ps1
     pip install -r requirements.txt azure-ai-textanalytics==5.3.0
@@ -84,8 +84,8 @@ You'll develop your code using Cloud Shell from the Azure Portal. The code files
 
 1. Enter the following command to edit the application configuration file:
 
-    ```
-   code .env
+    ```bash
+    code .env
     ```
 
     The file is opened in a code editor.
@@ -97,7 +97,7 @@ You'll develop your code using Cloud Shell from the Azure Portal. The code files
 
 1. Enter the following command to edit the application code file:
 
-    ```
+    ```bash
     code text-analysis.py
     ```
 
@@ -123,8 +123,8 @@ You'll develop your code using Cloud Shell from the Azure Portal. The code files
 
 1. Save your changes (CTRL+S), then enter the following command to run the program (you maximize the cloud shell pane and resize the panels to see more text in the command line pane):
 
-    ```
-   python text-analysis.py
+    ```bash
+    python text-analysis.py
     ```
 
 1. Observe the output as the code should run without error, displaying the contents of each review text file in the **reviews** folder. The application successfully creates a client for the Text Analytics API but doesn't make use of it. We'll fix that in the next section.

@@ -137,7 +137,7 @@ You'll develop your question answering app using Cloud Shell in the Azure portal
 
 1. In the PowerShell pane, enter the following commands to clone the GitHub repo for this exercise:
 
-    ```
+    ```bash
     rm -r mslearn-ai-language -f
     git clone https://github.com/microsoftlearning/mslearn-ai-language
     ```
@@ -146,7 +146,7 @@ You'll develop your question answering app using Cloud Shell in the Azure portal
 
 1. After the repo has been cloned, navigate to the folder containing the application code files:  
 
-    ```
+    ```bash
     cd mslearn-ai-language/Labfiles/02-qna/Python/qna-app
     ```
 
@@ -154,23 +154,23 @@ You'll develop your question answering app using Cloud Shell in the Azure portal
 
 1. In the command line pane, run the following command to view the code files in the **qna-app** folder:
 
-    ```
-   ls -a -l
+    ```bash
+    ls -a -l
     ```
 
     The files include a configuration file (**.env**) and a code file (**qna-app.py**).
 
 1. Create a Python virtual environment and install the Azure AI Language Question Answering SDK package and other required packages by running the following command:
 
-    ```
-   python -m venv labenv
-   ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-language-questionanswering
+    ```bash
+    python -m venv labenv
+    ./labenv/bin/Activate.ps1
+    pip install -r requirements.txt azure-ai-language-questionanswering
     ```
 
 1. Enter the following command to edit the configuration file:
 
-    ```
+    ```bash
     code .env
     ```
 
@@ -183,7 +183,7 @@ You'll develop your question answering app using Cloud Shell in the Azure portal
 
 1. Enter the following command to edit the application code file:
 
-    ```
+    ```bash
     code qna-app.py
     ```
 
@@ -227,8 +227,8 @@ You'll develop your question answering app using Cloud Shell in the Azure portal
 
 1. Save your changes (CTRL+S), then enter the following command to run the program (you maximize the cloud shell pane and resize the panels to see more text in the command line pane):
 
-    ```
-   python qna-app.py
+    ```bash
+    python qna-app.py
     ```
 
 1. When prompted, enter a question to be submitted to your question answering project; for example `What is a learning path?`.

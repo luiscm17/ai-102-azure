@@ -50,7 +50,7 @@ If you don't already have one in your subscription, you'll need to provision an 
 
 1. Select **Review + create,** then select **Create** to provision the resource.
 1. Wait for deployment to complete, and then go to the resource group.
-1. Find the storage account you created, select it, and verify the _Account kind_ is **StorageV2**. If it's v1, upgrade your storage account kind on that resource page.
+1. Find the storage account you created, select it, and verify the *Account kind* is **StorageV2**. If it's v1, upgrade your storage account kind on that resource page.
 
 ## Configure role-based access for your user
 
@@ -195,41 +195,41 @@ To test the custom text classification capabilities of the Azure AI Language ser
 
 1. In the PowerShell pane, enter the following commands to clone the GitHub repo for this exercise:
 
-    ```
-   rm -r mslearn-ai-language -f
-   git clone https://github.com/microsoftlearning/mslearn-ai-language
+    ```bash
+    rm -r mslearn-ai-language -f
+    git clone https://github.com/microsoftlearning/mslearn-ai-language
     ```
 
     > **Tip**: As you paste commands into the cloudshell, the ouput may take up a large amount of the screen buffer. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
 
 1. After the repo has been cloned, navigate to the folder containing the application code files:  
 
-    ```
-   cd mslearn-ai-language/Labfiles/04-text-classification/Python/classify-text
+    ```bash
+    cd mslearn-ai-language/Labfiles/04-text-classification/Python/classify-text
     ```
 
 ## Configure your application
 
 1. In the command line pane, run the following command to view the code files in the **classify-text** folder:
 
-    ```
-   ls -a -l
+    ```bash
+    ls -a -l
     ```
 
     The files include a configuration file (**.env**) and a code file (**classify-text.py**). The text your application will analyze is in the **articles** subfolder.
 
 1. Create a Python virtual environment and install the Azure AI Language Text Analytics SDK package and other required packages by running the following command:
 
-    ```
-   python -m venv labenv
-   ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-textanalytics==5.3.0
+    ```bash
+    python -m venv labenv
+    ./labenv/bin/Activate.ps1
+    pip install -r requirements.txt azure-ai-textanalytics==5.3.0
     ```
 
 1. Enter the following command to edit the application configuration file:
 
-    ```
-   code .env
+    ```bash
+    code .env
     ```
 
     The file is opened in a code editor.
@@ -241,7 +241,7 @@ To test the custom text classification capabilities of the Azure AI Language ser
 
 1. Enter the following command to edit the application code file:
 
-    ```
+    ```bash
     code classify-text.py
     ```
 
@@ -291,8 +291,8 @@ To test the custom text classification capabilities of the Azure AI Language ser
 
 1. Save your changes (CTRL+S), then enter the following command to run the program (you maximize the cloud shell pane and resize the panels to see more text in the command line pane):
 
-    ```
-   python classify-text.py
+    ```bash
+    python classify-text.py
     ```
 
 1. Observe the output. The application should list a classification and confidence score for each text file.
