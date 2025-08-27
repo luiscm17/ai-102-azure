@@ -94,13 +94,13 @@ Ahora que tiene una implementación de modelo, puede usar el playground para pro
 
 1. En la ventana de chat, ingrese la siguiente consulta:
 
-    ```
+    ```yml
     Tengo un zorro, una gallina y un saco de grano que necesito llevar al otro lado de un río en un bote. Solo puedo llevar una cosa a la vez. Si dejo a la gallina y el grano sin supervisión, la gallina se comerá el grano. Si dejo al zorro y la gallina sin supervisión, el zorro se comerá la gallina. ¿Cómo puedo llevar las tres cosas al otro lado del río sin que ninguna sea comida?
     ```
 
 1. Vea la respuesta. Luego, ingrese la siguiente consulta de seguimiento:
 
-    ```
+    ```yml
     Explica tu razonamiento.
     ```
 
@@ -127,13 +127,13 @@ Ahora chateemos con el nuevo modelo en el playground.
 1. En el playground de chat, en el panel **Setup**, asegúrese de que su modelo **Phi-4-mini-instruct** esté seleccionado y en el cuadro de chat, proporcione la primera línea como `System message: You are an AI assistant that helps solve problems.` (el mismo prompt del sistema que usó para probar el modelo gpt-4o, pero como no hay configuración de mensaje del sistema, lo proporcionamos en el primer chat para contexto).
 1. En una nueva línea en la ventana de chat (debajo de su mensaje del sistema), ingrese la siguiente consulta:
 
-    ```
+    ```yml
     Tengo un zorro, una gallina y un saco de grano que necesito llevar al otro lado de un río en un bote. Solo puedo llevar una cosa a la vez. Si dejo a la gallina y el grano sin supervisión, la gallina se comerá el grano. Si dejo al zorro y la gallina sin supervisión, el zorro se comerá la gallina. ¿Cómo puedo llevar las tres cosas al otro lado del río sin que ninguna sea comida?
     ```
 
 1. Vea la respuesta. Luego, ingrese la siguiente consulta de seguimiento:
 
-    ```
+    ```yml
     Explica tu razonamiento.
     ```
 
@@ -141,7 +141,7 @@ Ahora chateemos con el nuevo modelo en el playground.
 
 1. Use la lista desplegable en el panel **Setup** para cambiar entre sus modelos, probando ambos modelos con el siguiente acertijo (la respuesta correcta es 40!):
 
-    ```
+    ```yml
     Tengo 53 calcetines en mi cajón: 21 azules idénticos, 15 negros idénticos y 17 rojos idénticos. Las luces están apagadas y está completamente oscuro. ¿Cuántos calcetines debo sacar para estar 100% seguro de que tengo al menos un par de calcetines negros?
     ```
 

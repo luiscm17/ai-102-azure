@@ -12,9 +12,9 @@ En este ejercicio, utilizará el SDK de Python de Azure AI Foundry para crear un
 
 Aunque este ejercicio se basa en el SDK de Python de Azure AI Foundry, puede desarrollar aplicaciones de chat de IA utilizando múltiples SDK específicos de lenguaje, incluyendo:
 
--   [Azure AI Projects para Python](https://pypi.org/project/azure-ai-projects)
--   [Azure AI Projects para Microsoft .NET](https://www.nuget.org/packages/Azure.AI.Projects)
--   [Azure AI Projects para JavaScript](https://www.npmjs.com/package/@azure/ai-projects)
+- [Azure AI Projects para Python](https://pypi.org/project/azure-ai-projects)
+- [Azure AI Projects para Microsoft .NET](https://www.nuget.org/packages/Azure.AI.Projects)
+- [Azure AI Projects para JavaScript](https://www.npmjs.com/package/@azure/ai-projects)
 
 Este ejercicio toma aproximadamente **40** minutos.
 

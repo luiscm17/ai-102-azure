@@ -1,64 +1,109 @@
-# Manual de la CLI de Azure para Desarrollo de IA
+# Manual de la CLI de Azure para Desarrollo de IA (AI-102)
+
+Este manual está diseñado para preparar la certificación **AI-102: Designing and Implementing a Microsoft Azure AI Solution**, cubriendo todos los temas del [syllabus del curso AI-102](https://learn.microsoft.com/es-es/training/courses/ai-102t00#course-syllabus). Se enfoca en el uso de la **Azure CLI** para gestionar recursos de Azure relacionados con inteligencia artificial, eliminando la dependencia de interfaces gráficas como Azure AI Foundry. El manual abarca desde tareas básicas (instalación, autenticación, gestión de recursos) hasta temas avanzados como **Retrieval-Augmented Generation (RAG)**, agentes de IA, sistemas multi-agente, visión computacional, procesamiento de lenguaje natural (NLP), minería de conocimiento, IA conversacional, y prácticas de IA responsable. Cada sección incluye explicaciones didácticas, comandos actualizados según la [documentación oficial de Azure CLI](https://learn.microsoft.com/en-us/cli/azure/reference-docs-index?view=azure-cli-latest), y enlaces directos a la documentación correspondiente.
 
 ## Tabla de Contenidos
 
-- [Instalación y Configuración](#instalación-y-configuración)
-- [Gestión de Recursos Básicos](#gestión-de-recursos-básicos)
-- [Azure AI Services](#azure-ai-services)
-  - [Azure AI Foundry](#azure-ai-foundry)
-  - [Servicios de IA Individuales](#servicios-de-ia-individuales)
-  - [Modelos de IA](#modelos-de-ia)
-  - [RAG (Retrieval Augmented Generation)](#rag-retrieval-augmented-generation)
-- [Azure Machine Learning](#azure-machine-learning)
-- [Bases de Datos](#bases-de-datos)
-- [Redes y Seguridad](#redes-y-seguridad)
-- [Automatización y Scripts](#automatización-y-scripts)
-- [Sistemas Multi-Agente](#sistemas-multi-agente)
-- [Escenarios Avanzados](#escenarios-avanzados)
-- [Solución de Problemas](#solución-de-problemas)
-- [Recursos Adicionales](#recursos-adicionales)
-- [Computer Vision Solutions](#computer-vision-solutions)
-- [Procesamiento de Lenguaje Natural (NLP)](#procesamiento-de-lenguaje-natural-nlp)
-- [IA Responsable](#ia-responsable)
+1. [Introducción](#1-introducción)
+2. [Instalación y Configuración](#2-instalación-y-configuración)
+   1. [Instalación](#21-instalación)
+   2. [Configuración Inicial](#22-configuración-inicial)
+3. [Gestión de Recursos Básicos](#3-gestión-de-recursos-básicos)
+   1. [Grupos de Recursos](#31-grupos-de-recursos)
+   2. [Recursos Generales](#32-recursos-generales)
+   3. [Azure AI Foundry](#33-azure-ai-foundry)
+4. [Azure AI Services](#4-azure-ai-services)
+   1. [Azure AI Language](#41-azure-ai-language)
+   2. [Azure AI Vision](#42-azure-ai-vision)
+   3. [Azure OpenAI Service](#43-azure-openai-service)
+   4. [Azure AI Search](#44-azure-ai-search)
+   5. [Azure Bot Service](#45-azure-bot-service)
+5. [Retrieval-Augmented Generation (RAG)](#5-retrieval-augmented-generation-rag)
+6. [Azure Machine Learning](#6-azure-machine-learning)
+   1. [Crear un Espacio de Trabajo](#61-crear-un-espacio-de-trabajo)
+   2. [Desplegar un Modelo](#62-desplegar-un-modelo)
+7. [Bases de Datos para IA](#7-bases-de-datos-para-ia)
+   1. [Azure Cosmos DB](#71-azure-cosmos-db)
+   2. [Azure Database for PostgreSQL](#72-azure-database-for-postgresql)
+   3. [Azure Database for MySQL](#73-azure-database-for-mysql)
+   4. [Azure SQL Database](#74-azure-sql-database)
+8. [Redes y Seguridad](#8-redes-y-seguridad)
+   1. [Redes Virtuales](#81-redes-virtuales)
+   2. [Identidades Administradas](#82-identidades-administradas)
+   3. [Puntos de Conexión Privados](#83-puntos-de-conexión-privados)
+9. [Sistemas Multi-Agente](#9-sistemas-multi-agente)
+10. [Automatización y Scripts](#10-automatización-y-scripts)
+11. [Computer Vision Solutions](#11-computer-vision-solutions)
+    1. [Análisis de Imágenes](#111-análisis-de-imágenes)
+    2. [Modelos de Visión Personalizados](#112-modelos-de-visión-personalizados)
+12. [Procesamiento de Lenguaje Natural (NLP)](#12-procesamiento-de-lenguaje-natural-nlp)
+    1. [Análisis de Texto](#121-análisis-de-texto)
+    2. [Procesamiento de Voz](#122-procesamiento-de-voz)
+    3. [Modelos de Lenguaje Personalizados](#123-modelos-de-lenguaje-personalizados)
+13. [IA Responsable](#13-ia-responsable)
+    1. [Moderación de Contenido](#131-moderación-de-contenido)
+    2. [Configuración de IA Responsable](#132-configuración-de-ia-responsable)
+14. [Solución de Problemas](#14-solución-de-problemas)
+15. [Recursos Adicionales](#15-recursos-adicionales)
 
-## Instalación y Configuración
+## 1. Introducción
 
-### Instalación
+La **Azure CLI** es una herramienta de línea de comandos que permite gestionar recursos de Azure de forma eficiente, ideal para automatización y preparación para la certificación AI-102. Este manual cubre todos los módulos del curso AI-102:
+
+1. **Planificación y gestión de soluciones de IA**: Crear y administrar recursos de Azure AI.
+2. **Soluciones de visión computacional**: Implementar Azure AI Vision y Custom Vision.
+3. **Procesamiento de lenguaje natural (NLP)**: Configurar Azure AI Language, Speech Services y LUIS.
+4. **Minería de conocimiento**: Usar Azure AI Search y RAG.
+5. **IA conversacional**: Crear bots con Azure Bot Service.
+6. **IA responsable**: Implementar moderación de contenido y límites de seguridad.
+
+Cada sección incluye comandos prácticos, explicaciones de parámetros y enlaces a la documentación oficial.
+
+## 2. Instalación y Configuración
+
+### 2.1. Instalación
+
+La Azure CLI es compatible con Windows, macOS y Linux. Instala la versión más reciente según tu sistema operativo.
 
 #### Windows
 
-```powershell
+```bash
 # Instalar con winget
 winget install -e --id Microsoft.AzureCLI
-
-# O descargar e instalar manualmente
-# https://learn.microsoft.com/cli/azure/install-azure-cli-windows
 ```
+
+**Explicación**: Usa `winget`, el administrador de paquetes de Windows. La opción `-e` asegura una coincidencia exacta con el ID del paquete.
+
+**Documentación**: [Instalar Azure CLI en Windows](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?view=azure-cli-latest)
 
 #### macOS (Homebrew)
 
 ```bash
 # Instalar con Homebrew
 brew update && brew install azure-cli
-
-# O con curl
-# https://learn.microsoft.com/cli/azure/install-azure-cli-macos
 ```
+
+**Explicación**: `brew update` actualiza Homebrew, y `brew install azure-cli` instala la CLI.
+
+**Documentación**: [Instalar Azure CLI en macOS](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-macos?view=azure-cli-latest)
 
 #### Linux (Ubuntu/Debian)
 
 ```bash
 # Instalación en Ubuntu/Debian
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
-# Para otras distribuciones:
-# https://learn.microsoft.com/cli/azure/install-azure-cli-linux
 ```
 
-### Configuración Inicial
+**Explicación**: Descarga y ejecuta el script de instalación oficial con permisos de administrador.
+
+**Documentación**: [Instalar Azure CLI en Linux](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?view=azure-cli-latest)
+
+### 2.2. Configuración Inicial
+
+Configura tu entorno autenticándote y estableciendo valores predeterminados.
 
 ```bash
-# Iniciar sesión interactivo
+# Iniciar sesión interactiva
 az login
 
 # Listar suscripciones disponibles
@@ -67,35 +112,60 @@ az account list --output table
 # Establecer suscripción por defecto
 az account set --subscription "<subscription-name-or-id>"
 
-# Configurar parámetros por defecto
-az config set defaults.group=<resource-group-name>
-az config set defaults.location=<location>
+# Configurar grupo de recursos y región por defecto
+az config set defaults.group=<resource-group-name> defaults.location=<location>
 ```
 
-## Gestión de Recursos Básicos
+**Explicación**:
 
-### Grupos de Recursos
+1. `az login`: Abre un navegador para autenticarte en Azure.
+2. `az account list`: Muestra tus suscripciones en formato tabla.
+3. `az account set`: Selecciona una suscripción activa usando su nombre o ID.
+4. `az config set`: Establece valores predeterminados para el grupo de recursos (`defaults.group`) y la región (`defaults.location`, ej., `eastus`).
+
+**Documentación**:
+
+- [az login](https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest#az-login)
+- [az account list](https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list)
+- [az account set](https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-set)
+- [az config set](https://learn.microsoft.com/en-us/cli/azure/config?view=azure-cli-latest#az-config-set)
+
+## 3. Gestión de Recursos Básicos
+
+### 3.1. Grupos de Recursos
+
+Los grupos de recursos organizan recursos de Azure de manera lógica.
 
 ```bash
-# Crear grupo de recursos
+# Crear un grupo de recursos
 az group create --name <resource-group-name> --location <location>
-# https://learn.microsoft.com/cli/azure/group#az-group-create
 
 # Listar grupos de recursos
 az group list --output table
-# https://learn.microsoft.com/cli/azure/group#az-group-list
 
-# Eliminar grupo de recursos
+# Eliminar un grupo de recursos
 az group delete --name <resource-group-name> --yes --no-wait
-# https://learn.microsoft.com/cli/azure/group#az-group-delete
 ```
 
-### Recursos Generales
+**Explicación**:
+
+1. `az group create`: Crea un grupo de recursos con un nombre (`--name`) y una región (`--location`, ej., `eastus`).
+2. `az group list`: Muestra todos los grupos de recursos en formato tabla.
+3. `az group delete`: Elimina un grupo. `--yes` omite la confirmación, y `--no-wait` ejecuta en segundo plano.
+
+**Documentación**:
+
+- [az group create](https://learn.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest#az-group-create)
+- [az group list](https://learn.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest#az-group-list)
+- [az group delete](https://learn.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest#az-group-delete)
+
+### 3.2. Recursos Generales
+
+Gestiona recursos individuales dentro de un grupo.
 
 ```bash
 # Listar todos los recursos en un grupo
-az resource list --resource-group <resource-group-name>
-# https://learn.microsoft.com/cli/azure/resource#az-resource-list
+az resource list --resource-group <resource-group-name> --output table
 
 # Mostrar detalles de un recurso específico
 az resource show --name <resource-name> --resource-group <resource-group-name> --resource-type <provider-namespace>/<resource-type>
@@ -104,69 +174,162 @@ az resource show --name <resource-name> --resource-group <resource-group-name> -
 az resource delete --name <resource-name> --resource-group <resource-group-name> --resource-type <provider-namespace>/<resource-type>
 ```
 
-## Azure AI Services
+**Explicación**:
 
-### Azure AI Foundry
+1. `az resource list`: Enumera todos los recursos en un grupo.
+2. `az resource show`: Muestra detalles de un recurso, especificando su nombre, grupo y tipo (ej., `Microsoft.CognitiveServices/accounts`).
+3. `az resource delete`: Elimina un recurso específico.
 
-#### Gestión de Proyectos
+**Documentación**:
+
+- [az resource list](https://learn.microsoft.com/en-us/cli/azure/resource?view=azure-cli-latest#az-resource-list)
+- [az resource show](https://learn.microsoft.com/en-us/cli/azure/resource?view=azure-cli-latest#az-resource-show)
+- [az resource delete](https://learn.microsoft.com/en-us/cli/azure/resource?view=azure-cli-latest#az-resource-delete)
+
+### 3.3. Azure AI Foundry
+
+Azure AI Foundry proporciona herramientas para gestionar proyectos de IA, incluyendo la creación de proyectos, despliegue de modelos y gestión de recursos.
+
+#### Listar modelos disponibles
+
+Antes de desplegar un modelo, es útil listar los modelos disponibles en tu cuenta de Cognitive Services:
 
 ```bash
-# Crear un nuevo proyecto de AI Foundry
-az resource create \
-  --resource-group mi-grupo-recursos \
-  --name mi-proyecto-ai \
-  --resource-type Microsoft.MachineLearningServices/workspaces \
-  --is-full-object \
-  --properties '{
-    "location": "eastus",
-    "properties": {
-      "friendlyName": "Mi Proyecto AI",
-      "description": "Proyecto para el laboratorio AI-102",
-      "keyVault": "/subscriptions/{subscription-id}/resourceGroups/mi-grupo-recursos/providers/Microsoft.KeyVault/vaults/mi-keyvault",
-      "applicationInsights": "/subscriptions/{subscription-id}/resourceGroups/mi-grupo-recursos/providers/microsoft.insights/components/mi-appinsights",
-      "containerRegistry": "/subscriptions/{subscription-id}/resourceGroups/mi-grupo-recursos/providers/Microsoft.ContainerRegistry/registries/mi-registro"
-    },
-    "identity": {
-      "type": "SystemAssigned"
-    }
+# Listar modelos disponibles con detalles relevantes (usando jq para formateo)
+az cognitiveservices account list-models \
+  -n <account-name> \
+  -g <resource-group-name> | \
+  jq '.[] | { 
+    name: .name, 
+    format: .format, 
+    version: .version, 
+    sku: .skus[0].name, 
+    capacity: .skus[0].capacity.default 
   }'
-
-# Listar proyectos existentes
-az resource list \
-  --resource-group mi-grupo-recursos \
-  --resource-type Microsoft.MachineLearningServices/workspaces
 ```
 
-#### Configuración de Agentes
+**Nota sobre jq**:
+
+- `jq` es una herramienta de línea de comandos para procesar JSON. Si no la tienes instalada, puedes instalarla con:
+  - **Linux**: `sudo apt-get install jq` (Debian/Ubuntu) o `sudo yum install jq` (RHEL/CentOS)
+  - **macOS**: `brew install jq`
+  - **Windows**: Usa Chocolatey: `choco install jq` o descárgala de [la página oficial de jq](https://stedolan.github.io/jq/)
+
+**Alternativa sin jq**:
 
 ```bash
-# Crear un agente de IA
-az ml online-endpoint create \
-  --name mi-agente-ia \
-  --resource-group mi-grupo-recursos \
-  --workspace-name mi-proyecto-ai \
-  --file endpoint.yml \
-  --set identity.type=SystemAssigned
-
-# Configurar el despliegue del agente
-az ml online-deployment create \
-  --name blue \
-  --endpoint-name mi-agente-ia \
-  --resource-group mi-grupo-recursos \
-  --workspace-name mi-proyecto-ai \
-  --file deployment.yml \
-  --all-traffic
+# Usando solo la CLI de Azure (sin jq)
+az cognitiveservices account list-models \
+  --name <account-name> \
+  --resource-group <resource-group-name> \
+  --query "[].{ 
+    name: name, 
+    format: format, 
+    version: version, 
+    sku: skus[0].name, 
+    capacity: skus[0].capacity.default 
+  }" \
+  --output json
 ```
 
-### Servicios de IA Individuales
+**Ejemplo de salida**:
 
-#### Azure AI Language
+```json
+{
+  "name": "Phi-3.5-vision-instruct",
+  "format": "Microsoft",
+  "version": "2",
+  "sku": "GlobalStandard",
+  "capacity": 1
+}
+```
+
+**Explicación de los campos**:
+
+- `name`: Nombre del modelo (ej. "Phi-3.5-vision-instruct")
+- `format`: Formato del modelo (generalmente "Microsoft" para modelos propietarios)
+- `version`: Versión del modelo
+- `sku`: SKU del modelo (ej. "GlobalStandard")
+- `capacity`: Capacidad predeterminada del modelo
+
+```bash
+# Crear un nuevo proyecto en AI Foundry
+az ai project create \
+  --name <project-name> \
+  --resource-group <resource-group-name> \
+  --location <location> \
+  --description "Descripción del proyecto"
+
+# Listar todos los proyectos en un grupo de recursos
+az ai project list \
+  --resource-group <resource-group-name> \
+  --output table
+
+# Obtener detalles de un proyecto específico
+az ai project show \
+  --name <project-name> \
+  --resource-group <resource-group-name>
+
+# Crear un despliegue de modelo
+az ai model deployment create \
+  --name <deployment-name> \
+  --project <project-name> \
+  --resource-group <resource-group-name> \
+  --model-id <model-id> \
+  --compute <compute-target> \
+  --instance-type <instance-type>
+
+# Listar despliegues en un proyecto
+az ai model deployment list \
+  --project <project-name> \
+  --resource-group <resource-group-name> \
+  --output table
+
+# Obtener claves de API y endpoints
+az ai project show-keys \
+  --name <project-name> \
+  --resource-group <resource-group-name>
+
+# Actualizar un proyecto
+az ai project update \
+  --name <project-name> \
+  --resource-group <resource-group-name> \
+  --set properties.description="Nueva descripción"
+
+# Eliminar un proyecto (y sus recursos asociados)
+az ai project delete \
+  --name <project-name> \
+  --resource-group <resource-group-name> \
+  --yes
+```
+
+**Explicación**:
+
+1. `az ai project create`: Crea un nuevo proyecto en AI Foundry con nombre, ubicación y descripción.
+2. `az ai project list`: Muestra todos los proyectos en un grupo de recursos.
+3. `az ai model deployment create`: Despliega un modelo en el proyecto especificado.
+4. `az ai project show-keys`: Muestra las claves de API y endpoints para acceder al proyecto.
+5. `az ai project update`: Actualiza las propiedades de un proyecto existente.
+6. `az ai project delete`: Elimina un proyecto y sus recursos asociados.
+
+**Documentación**:
+
+- [az ai project](https://learn.microsoft.com/en-us/cli/azure/ai/project?view=azure-cli-latest)
+- [az ai model deployment](https://learn.microsoft.com/en-us/cli/azure/ai/model/deployment?view=azure-cli-latest)
+
+## 4. Azure AI Services
+
+Los Azure AI Services ofrecen herramientas para visión, lenguaje, búsqueda y más, esenciales para AI-102.
+
+### 4.1. Azure AI Language
+
+Proporciona capacidades de análisis de texto, como detección de sentimientos y extracción de entidades.
 
 ```bash
 # Crear un recurso de Azure AI Language
 az cognitiveservices account create \
-  --name nombre-recurso-language \
-  --resource-group mi-grupo-recursos \
+  --name <language-resource-name> \
+  --resource-group <resource-group-name> \
   --kind TextAnalytics \
   --sku S \
   --location eastus \
@@ -174,17 +337,37 @@ az cognitiveservices account create \
 
 # Obtener las claves de acceso
 az cognitiveservices account keys list \
-  --name nombre-recurso-language \
-  --resource-group mi-grupo-recursos
+  --name <language-resource-name> \
+  --resource-group <resource-group-name>
+
+# Obtener el punto de conexión
+az cognitiveservices account show \
+  --name <language-resource-name> \
+  --resource-group <resource-group-name> \
+  --query "properties.endpoint"
 ```
 
-#### Azure AI Vision
+**Explicación**:
+
+1. `az cognitiveservices account create`: Crea un recurso de tipo `TextAnalytics`. `--sku S` selecciona el nivel estándar, y `--yes` omite confirmaciones.
+2. `az cognitiveservices account keys list`: Lista las claves API para autenticar solicitudes.
+3. `az cognitiveservices account show`: Obtiene el endpoint del recurso.
+
+**Documentación**:
+
+- [az cognitiveservices account create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-create)
+- [az cognitiveservices account keys list](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/keys?view=azure-cli-latest#az-cognitiveservices-account-keys-list)
+- [az cognitiveservices account show](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-show)
+
+### 4.2. Azure AI Vision
+
+Permite análisis de imágenes y OCR.
 
 ```bash
 # Crear un recurso de Azure AI Vision
 az cognitiveservices account create \
-  --name nombre-recurso-vision \
-  --resource-group mi-grupo-recursos \
+  --name <vision-resource-name> \
+  --resource-group <resource-group-name> \
   --kind ComputerVision \
   --sku S1 \
   --location eastus \
@@ -192,344 +375,516 @@ az cognitiveservices account create \
 
 # Obtener el punto de conexión
 az cognitiveservices account show \
-  --name nombre-recurso-vision \
-  --resource-group mi-grupo-recursos \
+  --name <vision-resource-name> \
+  --resource-group <resource-group-name> \
   --query "properties.endpoint"
 ```
 
-#### Azure OpenAI Service
+**Explicación**:
+
+1. `--kind ComputerVision`: Especifica el servicio de visión.
+2. `--sku S1`: Selecciona el nivel estándar para visión.
+
+**Documentación**:
+
+- [az cognitiveservices account create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-create)
+- [az cognitiveservices account show](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-show)
+
+### 4.3. Azure OpenAI Service
+
+Proporciona acceso a modelos de lenguaje avanzados, como GPT-4o.
 
 ```bash
-# Solicitar acceso a Azure OpenAI
+# Crear un recurso de Azure OpenAI
 az cognitiveservices account create \
-  --name nombre-recurso-openai \
-  --resource-group mi-grupo-recursos \
+  --name <openai-resource-name> \
+  --resource-group <resource-group-name> \
   --kind OpenAI \
-  --sku s0 \
+  --sku S0 \
   --location eastus \
-  --custom-domain nombre-recurso-openai \
+  --custom-domain <openai-resource-name> \
   --yes
 
 # Listar modelos disponibles
 az cognitiveservices account list-models \
-  --name nombre-recurso-openai \
-  --resource-group mi-grupo-recursos
+  --name <openai-resource-name> \
+  --resource-group <resource-group-name> \
+  --output table
+
+# Crear un deployment de modelo (ejemplo: GPT-4o)
+az cognitiveservices account deployment create \
+  --name <openai-resource-name> \
+  --resource-group <resource-group-name> \
+  --deployment-name gpt4o-deployment \
+  --model-name gpt-4o \
+  --model-version "2024-05-13" \
+  --model-format OpenAI \
+  --sku-name Standard \
+  --sku-capacity 1
+
+# Obtener las claves de acceso
+az cognitiveservices account keys list \
+  --name <openai-resource-name> \
+  --resource-group <resource-group-name>
+
+# Obtener el punto de conexión
+az cognitiveservices account show \
+  --name <openai-resource-name> \
+  --resource-group <resource-group-name> \
+  --query "properties.endpoint"
 ```
 
-#### Azure AI Search (anteriormente Cognitive Search)
+**Explicación**:
+
+1. `--kind OpenAI`: Especifica el servicio OpenAI.
+2. `--custom-domain`: Define un nombre personalizado para el endpoint.
+3. `az cognitiveservices account list-models`: Lista modelos disponibles para verificar versiones.
+4. `az cognitiveservices account deployment create`: Despliega un modelo. `--sku-capacity 1` es adecuado para pruebas.
+
+**Documentación**:
+
+- [az cognitiveservices account create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-create)
+- [az cognitiveservices account list-models](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-list-models)
+- [az cognitiveservices account deployment create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest#az-cognitiveservices-account-deployment-create)
+- [az cognitiveservices account keys list](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/keys?view=azure-cli-latest#az-cognitiveservices-account-keys-list)
+- [az cognitiveservices account show](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-show)
+
+### 4.4. Azure AI Search
+
+Soporta búsqueda semántica y minería de conocimiento, clave para RAG.
 
 ```bash
 # Crear un servicio de Azure AI Search
 az search service create \
-  --name nombre-busqueda \
-  --resource-group mi-grupo-recursos \
-  --sku standard \
+  --name <search-service-name> \
+  --resource-group <resource-group-name> \
+  --sku Standard \
   --partition-count 1 \
   --replica-count 1 \
   --location eastus
 
 # Crear un índice de búsqueda
 az search index create \
-  --name mi-indice \
-  --resource-group mi-grupo-recursos \
-  --service-name nombre-busqueda \
+  --name <index-name> \
+  --resource-group <resource-group-name> \
+  --service-name <search-service-name> \
   --fields \
     name=id type=Edm.String key=true \
     name=content type=Edm.String searchable=true
 ```
 
-#### Azure Bot Service
+**Explicación**:
+
+1. `--sku Standard`: Selecciona el nivel estándar para búsqueda.
+2. `az search index create`: Crea un índice con campos como `id` (clave primaria) y `content` (buscable).
+
+**Documentación**:
+
+- [az search service create](https://learn.microsoft.com/en-us/cli/azure/search/service?view=azure-cli-latest#az-search-service-create)
+- [az search index create](https://learn.microsoft.com/en-us/cli/azure/search/index?view=azure-cli-latest#az-search-index-create)
+
+### 4.5. Azure Bot Service
+
+Permite crear bots conversacionales integrados con Azure AI.
 
 ```bash
 # Crear un bot de Azure
 az bot create \
-  --resource-group mi-grupo-recursos \
-  --name mi-bot \
+  --resource-group <resource-group-name> \
+  --name <bot-name> \
   --kind registration \
   --appid "<app-id>" \
   --password "<app-password>" \
   --endpoint "https://<your-web-app>.azurewebsites.net/api/messages" \
   --sku F0
 
-# Publicar un bot
+# Publicar el bot
 az bot publish \
-  --name mi-bot \
-  --resource-group mi-grupo-recursos \
+  --name <bot-name> \
+  --resource-group <resource-group-name> \
   --code-dir .
 ```
 
-#### Azure Cognitive Services for Language
+**Explicación**:
+
+1. `--kind registration`: Registra un bot sin hosting en Azure.
+2. `--appid` y `--password`: Credenciales de Microsoft App Service.
+3. `az bot publish`: Publica el código del bot desde el directorio local.
+
+**Documentación**:
+
+- [az bot create](https://learn.microsoft.com/en-us/cli/azure/bot?view=azure-cli-latest#az-bot-create)
+- [az bot publish](https://learn.microsoft.com/en-us/cli/azure/bot?view=azure-cli-latest#az-bot-publish)
+
+## 5. Retrieval-Augmented Generation (RAG)
+
+RAG combina búsqueda semántica con generación de texto para respuestas contextualizadas, un tema clave en AI-102.
 
 ```bash
-# Crear un recurso de Language Understanding (LUIS)
-az cognitiveservices account create \
-  --name nombre-recurso-luis \
-  --resource-group mi-grupo-recursos \
-  --kind LUIS \
-  --sku S0 \
-  --location westus \
-  --yes
+# Crear un servicio de Azure AI Search
+az search service create \
+  --name <search-service-name> \
+  --resource-group <resource-group-name> \
+  --location eastus \
+  --sku Standard \
+  --partition-count 1 \
+  --replica-count 1
 
-# Crear un recurso de QnA Maker
-az cognitiveservices account create \
-  --name nombre-recurso-qna \
-  --resource-group mi-grupo-recursos \
-  --kind QnAMaker \
-  --sku S0 \
-  --location westus \
-  --yes
+# Crear un índice de búsqueda para RAG
+az search index create \
+  --name <index-name> \
+  --resource-group <resource-group-name> \
+  --service-name <search-service-name> \
+  --schema @schema.json
 ```
 
-### Modelos de IA
+**schema.json** (ejemplo):
 
-#### Desplegar un modelo
-
-```bash
-# Desplegar un modelo de OpenAI
-az cognitiveservices account deployment create \
-  --name nombre-recurso-openai \
-  --resource-group mi-grupo-recursos \
-  --deployment-name mi-modelo-gpt \
-  --model-name gpt-4 \
-  --model-version "0613" \
-  --model-format OpenAI \
-  --scale-settings-scale-type "Standard"
-
-# Listar despliegues existentes
-az cognitiveservices account deployment list \
-  --name nombre-recurso-openai \
-  --resource-group mi-grupo-recursos
+```json
+{
+  "name": "mi-indice",
+  "fields": [
+    { "name": "id", "type": "Edm.String", "key": true },
+    { "name": "content", "type": "Edm.String", "searchable": true, "retrievable": true },
+    { "name": "vector", "type": "Collection(Edm.Single)", "searchable": true, "retrievable": true }
+  ]
+}
 ```
 
-#### Gestionar cuotas y límites
-
 ```bash
-# Ver cuota de tokens
-az cognitiveservices account list-usages \
-  --name nombre-recurso-openai \
-  --resource-group mi-grupo-recursos
+# Crear una fuente de datos para RAG
+az search datasource create \
+  --name <data-source-name> \
+  --resource-group <resource-group-name> \
+  --service-name <search-service-name> \
+  --type azureblob \
+  --data-source-configuration '{"connectionString": "DefaultEndpointsProtocol=https;AccountName=<storage-account>;AccountKey=<storage-key>;EndpointSuffix=core.windows.net", "container": {"name": "<container-name>"}}'
 
-# Aumentar cuota (solicitud)
-az cognitiveservices account update \
-  --name nombre-recurso-openai \
-  --resource-group mi-grupo-recursos \
-  --custom-domain nombre-recurso-openai \
-  --sku-capacity 10
+# Crear un indexador para procesar datos
+az search indexer create \
+  --name <indexer-name> \
+  --resource-group <resource-group-name> \
+  --service-name <search-service-name> \
+  --data-source-name <data-source-name> \
+  --target-index-name <index-name>
 ```
 
-#### Monitoreo y análisis
+**Explicación**:
+
+1. `az search service create`: Configura un servicio de búsqueda estándar.
+2. `az search index create`: Crea un índice con un esquema JSON que define campos para búsqueda semántica.
+3. `az search datasource create`: Conecta el índice a un contenedor de Azure Blob Storage.
+4. `az search indexer create`: Procesa y carga datos en el índice.
+
+**Documentación**:
+
+- [az search service create](https://learn.microsoft.com/en-us/cli/azure/search/service?view=azure-cli-latest#az-search-service-create)
+- [az search index create](https://learn.microsoft.com/en-us/cli/azure/search/index?view=azure-cli-latest#az-search-index-create)
+- [az search datasource create](https://learn.microsoft.com/en-us/cli/azure/search/datasource?view=azure-cli-latest#az-search-datasource-create)
+- [az search indexer create](https://learn.microsoft.com/en-us/cli/azure/search/indexer?view=azure-cli-latest#az-search-indexer-create)
+
+## 6. Azure Machine Learning
+
+Azure Machine Learning (AML) permite entrenar, implementar y gestionar modelos de IA.
+
+### 6.1. Crear un Espacio de Trabajo
 
 ```bash
-# Ver métricas de uso
-az monitor metrics list \
-  --resource /subscriptions/{subscription-id}/resourceGroups/mi-grupo-recursos/providers/Microsoft.CognitiveServices/accounts/nombre-recurso-openai \
-  --metric "TotalCalls" \
-  --interval PT1H \
-  --output table
-
-# Configurar alertas
-az monitor metrics alert create \
-  --name "AltoUsoTokens" \
-  --resource-group mi-grupo-recursos \
-  --scopes /subscriptions/{subscription-id}/resourceGroups/mi-grupo-recursos/providers/Microsoft.CognitiveServices/accounts/nombre-recurso-openai \
-  --condition "avg TotalTokens > 1000" \
-  --description "Uso alto de tokens detectado"
-```
-
-## Azure Machine Learning
-
-```bash
-# Instalar extensión de ML
-az extension add -n ml
-
-# Crear un workspace de Azure ML
+# Crear un espacio de trabajo de AML
 az ml workspace create \
-    --name <workspace-name> \
-    --resource-group <resource-group-name> \
-    --location <location>
-# https://learn.microsoft.com/cli/azure/ml/workspace#az-ml-workspace-create
-
-# Crear un entorno de computación
-az ml compute create \
-    --name <compute-name> \
-    --resource-group <resource-group-name> \
-    --workspace-name <workspace-name> \
-    --type AmlCompute \
-    --min-instances 0 \
-    --max-instances 3 \
-    --size Standard_DS3_v2
-# https://learn.microsoft.com/cli/azure/ml/compute#az-ml-compute-create
-
-# Entrenar un modelo
-az ml job create \
-    --file train.yml \
-    --workspace-name <workspace-name> \
-    --resource-group <resource-group-name>
-# https://learn.microsoft.com/azure/machine-learning/how-to-train-cli
+  --name <workspace-name> \
+  --resource-group <resource-group-name> \
+  --location eastus
 ```
 
-## Bases de Datos
+**Explicación**:
 
-### Azure Cosmos DB
+1. `--name`: Nombre del espacio de trabajo.
+2. `--location`: Región donde se creará.
+
+**Documentación**: [az ml workspace create](https://learn.microsoft.com/en-us/cli/azure/ml/workspace?view=azure-cli-latest#az-ml-workspace-create)
+
+### 6.2. Desplegar un Modelo
+
+```bash
+# Crear un endpoint en línea
+az ml online-endpoint create \
+  --name <endpoint-name> \
+  --resource-group <resource-group-name> \
+  --workspace-name <workspace-name> \
+  --auth-mode key \
+  --identity-type SystemAssigned
+
+# Desplegar un modelo
+az ml online-deployment create \
+  --name <deployment-name> \
+  --endpoint-name <endpoint-name> \
+  --resource-group <resource-group-name> \
+  --workspace-name <workspace-name> \
+  --model <model-name>:1 \
+  --instance-type Standard_DS3_v2 \
+  --no-wait
+```
+
+**Explicación**:
+
+1. `az ml online-endpoint create`: Crea un endpoint para inferencia en tiempo real.
+2. `az ml online-deployment create`: Despliega un modelo en el endpoint.
+
+**Documentación**:
+
+- [az ml online-endpoint create](https://learn.microsoft.com/en-us/cli/azure/ml/online-endpoint?view=azure-cli-latest#az-ml-online-endpoint-create)
+- [az ml online-deployment create](https://learn.microsoft.com/en-us/cli/azure/ml/online-deployment?view=azure-cli-latest#az-ml-online-deployment-create)
+
+## 7. Bases de Datos para IA
+
+Las bases de datos son esenciales para almacenar datos de entrenamiento y resultados de modelos.
+
+### 7.1. Azure Cosmos DB
+
+Ideal para datos NoSQL escalables, compatible con RAG.
 
 ```bash
 # Crear una cuenta de Cosmos DB
 az cosmosdb create \
-  --name nombre-cuenta-cosmos \
-  --resource-group mi-grupo-recursos \
-  --locations regionName=eastus \
-  --capabilities EnableServerless
+  --name <cosmos-account-name> \
+  --resource-group <resource-group-name> \
+  --location eastus
 
-# Crear una base de datos y contenedor
+# Crear una base de datos SQL
 az cosmosdb sql database create \
-  --account-name nombre-cuenta-cosmos \
-  --name mi-base-datos \
-  --resource-group mi-grupo-recursos
+  --account-name <cosmos-account-name> \
+  --name <database-name> \
+  --resource-group <resource-group-name>
 
+# Crear un contenedor
 az cosmosdb sql container create \
-  --account-name nombre-cuenta-cosmos \
-  --database-name mi-base-datos \
-  --name mi-contenedor \
+  --account-name <cosmos-account-name> \
+  --database-name <database-name> \
+  --name <container-name> \
   --partition-key-path "/id" \
-  --resource-group mi-grupo-recursos
+  --resource-group <resource-group-name>
 ```
 
-### Azure Database for PostgreSQL
+**Explicación**:
+
+1. `az cosmosdb create`: Crea una cuenta de Cosmos DB.
+2. `az cosmosdb sql database create`: Crea una base de datos SQL.
+3. `az cosmosdb sql container create`: Crea un contenedor con una clave de partición.
+
+**Documentación**:
+
+- [az cosmosdb create](https://learn.microsoft.com/en-us/cli/azure/cosmosdb?view=azure-cli-latest#az-cosmosdb-create)
+- [az cosmosdb sql database create](https://learn.microsoft.com/en-us/cli/azure/cosmosdb/sql/database?view=azure-cli-latest#az-cosmosdb-sql-database-create)
+- [az cosmosdb sql container create](https://learn.microsoft.com/en-us/cli/azure/cosmosdb/sql/container?view=azure-cli-latest#az-cosmosdb-sql-container-create)
+
+### 7.2. Azure Database for PostgreSQL
+
+Soporta `pgvector` para embeddings de IA.
 
 ```bash
 # Crear un servidor PostgreSQL
-az postgres server create \
-  --name nombre-servidor-postgres \
-  --resource-group mi-grupo-recursos \
+az postgres flexible-server create \
+  --name <postgres-server-name> \
+  --resource-group <resource-group-name> \
   --location eastus \
-  --admin-user adminuser \
-  --admin-password P@ssw0rd! \
-  --sku-name GP_Gen5_2 \
-  --version 11
+  --admin-user <admin-user> \
+  --admin-password <admin-password> \
+  --sku-name Standard_D2s_v3 \
+  --version 15
 
-# Habilitar la extensión pgvector para IA
-az postgres server configuration set \
-  --resource-group mi-grupo-recursos \
-  --server-name nombre-servidor-postgres \
+# Habilitar la extensión pgvector
+az postgres flexible-server parameter set \
   --name azure.extensions \
-  --value vector
+  --value vector \
+  --resource-group <resource-group-name> \
+  --server-name <postgres-server-name>
 ```
 
-### Azure Database for MySQL
+**Explicación**:
+
+1. `az postgres flexible-server create`: Crea un servidor flexible de PostgreSQL.
+2. `az postgres flexible-server parameter set`: Activa `pgvector` para embeddings.
+
+**Documentación**:
+
+- [az postgres flexible-server create](https://learn.microsoft.com/en-us/cli/azure/postgres/flexible-server?view=azure-cli-latest#az-postgres-flexible-server-create)
+- [az postgres flexible-server parameter set](https://learn.microsoft.com/en-us/cli/azure/postgres/flexible-server/parameter?view=azure-cli-latest#az-postgres-flexible-server-parameter-set)
+
+### 7.3. Azure Database for MySQL
+
+Base de datos relacional para aplicaciones de IA.
 
 ```bash
 # Crear un servidor MySQL
-az mysql server create \
-  --name nombre-servidor-mysql \
-  --resource-group mi-grupo-recursos \
+az mysql flexible-server create \
+  --name <mysql-server-name> \
+  --resource-group <resource-group-name> \
   --location eastus \
-  --admin-user adminuser \
-  --admin-password P@ssw0rd! \
-  --sku-name GP_Gen5_2 \
+  --admin-user <admin-user> \
+  --admin-password <admin-password> \
+  --sku-name Standard_B1ms \
   --version 8.0
-
-# Configurar parámetros del servidor
-az mysql server configuration set \
-  --name slow_query_log \
-  --resource-group mi-grupo-recursos \
-  --server nombre-servidor-mysql \
-  --value ON
 ```
 
-### Azure SQL Database
+**Explicación**:
+
+1. `az mysql flexible-server create`: Crea un servidor flexible de MySQL.
+
+**Documentación**: [az mysql flexible-server create](https://learn.microsoft.com/en-us/cli/azure/mysql/flexible-server?view=azure-cli-latest#az-mysql-flexible-server-create)
+
+### 7.4. Azure SQL Database
+
+Base de datos relacional para datos estructurados.
 
 ```bash
 # Crear un servidor SQL lógico
 az sql server create \
-  --name nombre-servidor-sql \
-  --resource-group mi-grupo-recursos \
+  --name <sql-server-name> \
+  --resource-group <resource-group-name> \
   --location eastus \
-  --admin-user adminuser \
-  --admin-password P@ssw0rd!
+  --admin-user <admin-user> \
+  --admin-password <admin-password>
 
 # Crear una base de datos SQL
 az sql db create \
-  --name mi-base-datos-sql \
-  --resource-group mi-grupo-recursos \
-  --server nombre-servidor-sql \
-  --service-objective S0 \
-  --edition Standard
+  --name <database-name> \
+  --resource-group <resource-group-name> \
+  --server <sql-server-name> \
+  --edition Standard \
+  --service-objective S0
 ```
 
-### Azure Cache for Redis
+**Explicación**:
 
-```bash
-# Crear una instancia de Azure Cache for Redis
-az redis create \
-  --name nombre-cache-redis \
-  --resource-group mi-grupo-recursos \
-  --location eastus \
-  --sku Basic \
-  --vm-size c0 \
-  --enable-non-ssl-port
-```
+1. `az sql server create`: Crea un servidor lógico SQL.
+2. `az sql db create`: Crea una base de datos en el servidor.
 
-## RAG (Retrieval Augmented Generation)
+**Documentación**:
 
-### Configuración básica de RAG
+- [az sql server create](https://learn.microsoft.com/en-us/cli/azure/sql/server?view=azure-cli-latest#az-sql-server-create)
+- [az sql db create](https://learn.microsoft.com/en-us/cli/azure/sql/db?view=azure-cli-latest#az-sql-db-create)
 
-```bash
-# Crear un índice de búsqueda cognitiva (requerido para RAG)
-az search service create \
-    --name <search-service-name> \
-    --resource-group <resource-group-name> \
-    --location <location> \
-    --sku standard
-# https://learn.microsoft.com/azure/search/search-create-service-portal
+## 8. Redes y Seguridad
 
-# Crear un índice de búsqueda
-az search index create \
-    --name <index-name> \
-    --resource-group <resource-group-name> \
-    --service-name <search-service-name> \
-    --schema @schema.json
-# https://learn.microsoft.com/azure/search/search-import-data-portal
-
-# Indexar documentos
-az search indexer create \
-    --name <indexer-name> \
-    --data-source-name <data-source-name> \
-    --index-name <index-name> \
-    --resource-group <resource-group-name> \
-    --service-name <search-service-name>
-# https://learn.microsoft.com/azure/search/search-howto-indexing-azure-blob-storage
-```
-
-## Redes y Seguridad
-
-### Redes Virtuales
+### 8.1. Redes Virtuales
 
 ```bash
 # Crear una red virtual
 az network vnet create \
-    --name <vnet-name> \
-    --resource-group <resource-group-name> \
-    --location <location> \
-    --address-prefix 10.0.0.0/16 \
-    --subnet-name <subnet-name> \
-    --subnet-prefix 10.0.0.0/24
-# https://learn.microsoft.com/cli/azure/network/vnet#az-network-vnet-create
+  --name <vnet-name> \
+  --resource-group <resource-group-name> \
+  --location eastus \
+  --address-prefix 10.0.0.0/16 \
+  --subnet-name <subnet-name> \
+  --subnet-prefix 10.0.0.0/24
 
-# Configurar punto de conexión privado
+# Crear un punto de conexión privado
 az network private-endpoint create \
-    --name <private-endpoint-name> \
-    --resource-group <resource-group-name> \
-    --vnet-name <vnet-name> \
-    --subnet <subnet-name> \
-    --private-connection-resource-id <resource-id> \
-    --group-id <group-id> \
-    --connection-name <connection-name>
-# https://learn.microsoft.com/azure/private-link/create-private-endpoint-cli
+  --name <private-endpoint-name> \
+  --resource-group <resource-group-name> \
+  --vnet-name <vnet-name> \
+  --subnet <subnet-name> \
+  --private-connection-resource-id <resource-id> \
+  --group-id account \
+  --connection-name <connection-name>
 ```
 
-## Automatización y Scripts
+**Explicación**:
 
-### Script de Creación Completo
+1. `az network vnet create`: Crea una red virtual con un prefijo de dirección y una subred.
+2. `az network private-endpoint create`: Configura un endpoint privado para conectar recursos de forma segura.
+
+**Documentación**:
+
+- [az network vnet create](https://learn.microsoft.com/en-us/cli/azure/network/vnet?view=azure-cli-latest#az-network-vnet-create)
+- [az network private-endpoint create](https://learn.microsoft.com/en-us/cli/azure/network/private-endpoint?view=azure-cli-latest#az-network-private-endpoint-create)
+
+### 8.2. Identidades Administradas
+
+```bash
+# Asignar una identidad administrada
+az cognitiveservices account identity assign \
+  --name <openai-resource-name> \
+  --resource-group <resource-group-name> \
+  --identities '[system]'
+
+# Otorgar permisos a la identidad
+az role assignment create \
+  --assignee <object-id> \
+  --role "Storage Blob Data Reader" \
+  --scope /subscriptions/<subscription-id>/resourceGroups/<resource-group-name>/providers/Microsoft.Storage/storageAccounts/<storage-account-name>
+```
+
+**Explicación**:
+
+1. `az cognitiveservices account identity assign`: Asigna una identidad administrada al recurso.
+2. `az role assignment create`: Otorga permisos a la identidad para acceder a recursos, como blobs de almacenamiento.
+
+**Documentación**:
+
+- [az cognitiveservices account identity assign](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/identity?view=azure-cli-latest#az-cognitiveservices-account-identity-assign)
+- [az role assignment create](https://learn.microsoft.com/en-us/cli/azure/role/assignment?view=azure-cli-latest#az-role-assignment-create)
+
+### 8.3. Puntos de Conexión Privados
+
+```bash
+# Crear un punto de conexión privado para Azure OpenAI
+az network private-endpoint create \
+  --name <private-endpoint-name> \
+  --resource-group <resource-group-name> \
+  --vnet-name <vnet-name> \
+  --subnet <subnet-name> \
+  --private-connection-resource-id /subscriptions/<subscription-id>/resourceGroups/<resource-group-name>/providers/Microsoft.CognitiveServices/accounts/<openai-resource-name> \
+  --group-id account \
+  --connection-name <connection-name>
+```
+
+**Explicación**:
+
+1. `az network private-endpoint create`: Crea un endpoint privado para conectar de forma segura a Azure OpenAI.
+
+**Documentación**: [az network private-endpoint create](https://learn.microsoft.com/en-us/cli/azure/network/private-endpoint?view=azure-cli-latest#az-network-private-endpoint-create)
+
+## 9. Sistemas Multi-Agente
+
+Los sistemas multi-agente coordinan múltiples agentes de IA para tareas complejas.
+
+```bash
+# Crear un endpoint para un grupo de agentes
+az ml online-endpoint create \
+  --name <agent-group-name> \
+  --resource-group <resource-group-name> \
+  --workspace-name <workspace-name> \
+  --auth-mode key \
+  --identity-type SystemAssigned
+
+# Desplegar agentes especializados
+for agent in analyst researcher executor; do
+  az ml online-deployment create \
+    --name $agent \
+    --endpoint-name <agent-group-name> \
+    --resource-group <resource-group-name> \
+    --workspace-name <workspace-name> \
+    --model <model-name>:1 \
+    --instance-type Standard_DS3_v2 \
+    --no-wait
+done
+```
+
+**Explicación**:
+
+1. `az ml online-endpoint create`: Crea un endpoint para agentes.
+2. `az ml online-deployment create`: Despliega agentes especializados (analista, investigador, ejecutor).
+
+**Documentación**:
+
+- [az ml online-endpoint create](https://learn.microsoft.com/en-us/cli/azure/ml/online-endpoint?view=azure-cli-latest#az-ml-online-endpoint-create)
+- [az ml online-deployment create](https://learn.microsoft.com/en-us/cli/azure/ml/online-deployment?view=azure-cli-latest#az-ml-online-deployment-create)
+
+## 10. Automatización y Scripts
+
+Automatiza la creación de recursos con un script Bash.
 
 ```bash
 #!/bin/bash
@@ -538,549 +893,159 @@ az network private-endpoint create \
 RANDOM_SUFFIX=$((RANDOM % 10000))
 LOCATION="eastus"
 RESOURCE_GROUP_NAME="ai-lab-rg-$RANDOM_SUFFIX"
-AI_FOUNDRY_NAME="ai-foundry-$RANDOM_SUFFIX"
-STORAGE_ACCOUNT_NAME="aistorage${RANDOM_SUFFIX}"
-SEARCH_SERVICE_NAME="aisearch${RANDOM_SUFFIX}"
+OPENAI_NAME="openai-$RANDOM_SUFFIX"
+SEARCH_NAME="aisearch-$RANDOM_SUFFIX"
 
 # Crear grupo de recursos
 echo "Creando grupo de recursos $RESOURCE_GROUP_NAME..."
 az group create --name $RESOURCE_GROUP_NAME --location $LOCATION
 
-# Crear cuenta de almacenamiento
-echo "Creando cuenta de almacenamiento $STORAGE_ACCOUNT_NAME..."
-az storage account create \
-    --name $STORAGE_ACCOUNT_NAME \
-    --resource-group $RESOURCE_GROUP_NAME \
-    --location $LOCATION \
-    --sku Standard_LRS
-
-# Crear servicio de búsqueda
-echo "Creando servicio de búsqueda $SEARCH_SERVICE_NAME..."
-az search service create \
-    --name $SEARCH_SERVICE_NAME \
-    --resource-group $RESOURCE_GROUP_NAME \
-    --location $LOCATION \
-    --sku standard
-
-# Crear recurso de Azure AI Foundry
-echo "Creando recurso de Azure AI Foundry $AI_FOUNDRY_NAME..."
+# Crear recurso de Azure OpenAI
+echo "Creando recurso de Azure OpenAI $OPENAI_NAME..."
 az cognitiveservices account create \
-    --name $AI_FOUNDRY_NAME \
-    --resource-group $RESOURCE_GROUP_NAME \
-    --location $LOCATION \
-    --kind OpenAI \
-    --sku s0 \
-    --custom-domain $AI_FOUNDRY_NAME
-
-# Mostrar información de conexión
-echo "\nRecursos creados exitosamente:"
-echo "- Grupo de recursos: $RESOURCE_GROUP_NAME"
-echo "- Cuenta de almacenamiento: $STORAGE_ACCOUNT_NAME"
-echo "- Servicio de búsqueda: $SEARCH_SERVICE_NAME"
-echo "- Recurso AI Foundry: $AI_FOUNDRY_NAME"
-echo "\nPara eliminar estos recursos cuando termines, ejecuta:"
-echo "az group delete --name $RESOURCE_GROUP_NAME --yes --no-wait"
-```
-
-## Sistemas Multi-Agente
-
-### Configuración de un Sistema Multi-Agente
-
-```bash
-# Crear un grupo de agentes
-az ml online-endpoint create \
-  --name grupo-agentes \
-  --resource-group mi-grupo-recursos \
-  --workspace-name mi-proyecto-ai \
-  --auth-mode key \
-  --identity-type SystemAssigned
-
-# Desplegar múltiples agentes especializados
-for agent in agente-analista agente-investigador agente-ejecutor; do
-  az ml online-deployment create \
-    --name $agent \
-    --endpoint-name grupo-agentes \
-    --resource-group mi-grupo-recursos \
-    --workspace-name mi-proyecto-ai \
-    --file deployment-$agent.yml \
-    --all-traffic
-    --no-wait
-done
-```
-
-### Orquestación con Semantic Kernel
-
-```bash
-# Instalar el SDK de Semantic Kernel
-pip install semantic-kernel
-
-# Configurar la integración con Azure OpenAI
-export AZURE_OPENAI_ENDPOINT="https://tu-recurso.openai.azure.com/"
-export AZURE_OPENAI_API_KEY="tu-clave-api"
-
-# Crear un kernel de Semantic Kernel
-from semantic_kernel import Kernel
-from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
-
-kernel = Kernel()
-kernel.add_chat_service(
-    "gpt-4",
-    AzureChatCompletion(
-        "gpt-4",
-        AZURE_OPENAI_ENDPOINT,
-        AZURE_OPENAI_API_KEY
-    )
-)
-
-# Definir habilidades para los agentes
-agente_analista = kernel.import_semantic_skill_from_directory(
-    "skills", "analista"
-)
-
-agente_ejecutor = kernel.import_semantic_skill_from_directory(
-    "skills", "ejecutor"
-)
-
-# Orquestar la interacción entre agentes
-context = kernel.create_new_context()
-context["input"] = "Analizar el último informe trimestral"
-
-# El analista procesa la solicitud
-analisis = await agente_analista["analizar"].invoke_async(context=context)
-
-# El ejecutor actúa basado en el análisis
-context["analisis"] = analisis.result
-action = await agente_ejecutor["ejecutar"].invoke_async(context=context)
-```
-
-### Monitoreo de Sistemas Multi-Agente
-
-```bash
-# Configurar Application Insights para seguimiento distribuido
-az monitor app-insights component create \
-  --app monitoreo-agentes \
-  --location eastus \
-  --resource-group mi-grupo-recursos \
-  --application-type web \
-  --kind web
-
-# Consultar trazas distribuidas
-az monitor app-insights query \
-  --app monitoreo-agentes \
-  --resource-group mi-grupo-recursos \
-  --analytics-query "traces | where operation_Name == 'ProcesarTarea' | order by timestamp desc"
-```
-
-## Escenarios Avanzados
-
-### Entrenamiento Distribuido
-
-```bash
-# Configurar un clúster de entrenamiento distribuido
-az ml compute create \
-  --name cluster-entrenamiento \
-  --resource-group mi-grupo-recursos \
-  --workspace-name mi-proyecto-ai \
-  --type AmlCompute \
-  --size Standard_ND40rs_v2 \
-  --min-instances 0 \
-  --max-instances 4 \
-  --idle-time-before-scale-down 3600
-
-# Enviar trabajo de entrenamiento distribuido
-az ml job create \
-  --file distributed-training.yml \
-  --resource-group mi-grupo-recursos \
-  --workspace-name mi-proyecto-ai \
-  --set environment_variables.NUM_GPUS=4 \
-  --set resources.instance_count=4
-```
-
-### Inferencia de Baja Latencia
-
-```bash
-# Implementar con aceleración por hardware
-az ml model deploy \
-  --name modelo-acelerado \
-  --resource-group mi-grupo-recursos \
-  --workspace-name mi-proyecto-ai \
-  --model mi-modelo:1 \
-  --inference-config inference-config.yml \
-  --deployment-config deployment-config.yml \
-  --set environment_variables.INFERENCE_ACCELERATOR="FPGA" \
-  --set environment_variables.OPTIMIZATION_LEVEL=3
-```
-
-### Implementación Híbrida Nube-Borde
-
-```bash
-# Empaquetar modelo para implementación en el borde
-az ml model package \
-  --name modelo-para-borde \
-  --resource-group mi-grupo-recursos \
-  --workspace-name mi-proyecto-ai \
-  --model mi-modelo:1 \
-  --target-platform linux-arm64
-
-# Implementar en dispositivo IoT Edge
-az iot edge set-modules \
-  --device-id mi-dispositivo \
-  --hub-name mi-iot-hub \
-  --content deployment.arm64.json
-```
-
-### Escalado Automático Avanzado
-
-```bash
-# Configurar escalado basado en métricas personalizadas
-az monitor autoscale create \
-  --resource-group mi-grupo-recursos \
-  --resource mi-endpoint \
-  --resource-type Microsoft.MachineLearningServices/onlineEndpoints \
-  --name escalado-automatico-avanzado \
-  --min-count 1 \
-  --max-count 10 \
-  --count 2 \
-  --rules \
-    "[{\"metricTrigger\": {\"metricName\": \"RequestLatency\", \"metricResourceUri\": \"/subscriptions/{subscription-id}/resourceGroups/mi-grupo-recursos/providers/Microsoft.MachineLearningServices/workspaces/mi-proyecto-ai/onlineEndpoints/mi-endpoint\", \"timeGrain\": \"PT1M\", \"statistic\": \"Average\", \"timeWindow\": \"PT5M\", \"timeAggregation\": \"Average\", \"operator\": \"GreaterThan\", \"threshold\": 100}, \"scaleAction\": {\"direction\": \"Increase\", \"type\": \"ChangeCount\", \"value\": \"1\", \"cooldown\": \"PT5M\"}}]"
-```
-
-## Solución de Problemas
-
-### Comandos de diagnóstico
-
-```bash
-# Verificar estado de los servicios de Azure
-az resource list --query "[?type=='Microsoft.Resources/subscriptions/resourceGroups'].name" --output tsv | xargs -I {} az resource list --resource-group {}
-
-# Verificar cuotas de suscripción
-az vm list-usage --location <location> --output table
-
-# Verificar registros de actividad
-az monitor activity-log list --resource-group <resource-group-name> --offset 90d
-
-# Solución de problemas de conectividad
-az network watcher test-connectivity --source-resource <vm-id> --dest-port 443 --dest-address <destination-ip>
-```
-
-## Recursos Adicionales
-
-- [Documentación oficial de la CLI de Azure](https://learn.microsoft.com/cli/azure/)
-- [Ejemplos de la CLI de Azure](https://learn.microsoft.com/cli/azure/sample-azure-cli)
-- [Referencia de comandos de Azure CLI](https://learn.microsoft.com/cli/azure/reference-index)
-- [Plantillas de Azure Resource Manager](https://learn.microsoft.com/azure/azure-resource-manager/templates/)
-- [Azure Architecture Center](https://learn.microsoft.com/azure/architecture/)
-
-## Azure OpenAI
-
-### Gestión de Modelos
-
-```bash
-# Listar modelos disponibles
-az cognitiveservices account list-models \
-  --name nombre-recurso-openai \
-  --resource-group mi-grupo-recursos \
-  --query "sort_by([].{name:name, version:version, status:model.status}, &name)" \
-  --output table
-
-# Implementar un modelo personalizado
-az cognitiveservices account deployment create \
-  --name nombre-recurso-openai \
-  --resource-group mi-grupo-recursos \
-  --deployment-name mi-modelo-gpt \
-  --model-name gpt-4 \
-  --model-version "0613" \
-  --model-format OpenAI \
-  --scale-settings-scale-type "Standard" \
-  --scale-settings-capacity 10
-```
-
-### Configuración de RAG (Retrieval Augmented Generation)
-
-```bash
-# Crear un índice de búsqueda para RAG
-az search service create \
-  --name mi-busqueda-rag \
-  --resource-group mi-grupo-recursos \
-  --location eastus \
-  --sku standard \
-  --partition-count 1 \
-  --replica-count 1
-
-# Crear fuente de datos para RAG
-az search datasource create \
-  --name mi-fuente-datos \
-  --resource-group mi-grupo-recursos \
-  --service-name mi-busqueda-rag \
-  --type azureblob \
-  --data-source-configuration '{"connectionString": "DefaultEndpointsProtocol=https;AccountName=micuenta;AccountKey=mi-clave;EndpointSuffix=core.windows.net", "container": {"name": "mi-contenedor"}}' \
-  --data-deletion-detection-mode None
-```
-
-## Monitoreo y Análisis
-
-### Application Insights
-
-```bash
-# Crear recurso de Application Insights
-az monitor app-insights component create \
-  --app mi-aplicacion-ai \
-  --location eastus \
-  --resource-group mi-grupo-recursos \
-  --application-type web \
-  --kind web \
-  --retention-in-days 90
-
-# Obtener la clave de instrumentación
-az monitor app-insights component show \
-  --app mi-aplicacion-ai \
-  --resource-group mi-grupo-recursos \
-  --query "instrumentationKey" \
-  --output tsv
-```
-
-### Configuración de Alertas
-
-```bash
-# Crear una regla de alerta para uso de tokens
-az monitor metrics alert create \
-  --name "AltoUsoTokens" \
-  --resource-group mi-grupo-recursos \
-  --scopes /subscriptions/{subscription-id}/resourceGroups/mi-grupo-recursos/providers/Microsoft.CognitiveServices/accounts/nombre-recurso-openai \
-  --condition "avg TotalTokens > 1000" \
-  --description "Uso alto de tokens detectado" \
-  --evaluation-frequency 5m \
-  --window-size 15m \
-  --severity 2
-```
-
-## Seguridad y Control de Acceso
-
-### Identidades Administradas
-
-```bash
-# Asignar una identidad administrada a un recurso
-az cognitiveservices account identity assign \
-  --name nombre-recurso-openai \
-  --resource-group mi-grupo-recursos \
-  --identities '[system]'
-
-# Otorgar permisos a la identidad
-az role assignment create \
-  --assignee <object-id> \
-  --role "Storage Blob Data Reader" \
-  --scope /subscriptions/{subscription-id}/resourceGroups/mi-grupo-recursos/providers/Microsoft.Storage/storageAccounts/micuentastorage
-```
-
-### Puntos de Conexión Privados
-
-```bash
-# Crear un punto de conexión privado para Azure OpenAI
-az network private-endpoint create \
-  --name pe-openai \
-  --resource-group mi-grupo-recursos \
-  --vnet-name mi-vnet \
-  --subnet mi-subnet \
-  --private-connection-resource-id /subscriptions/{subscription-id}/resourceGroups/mi-grupo-recursos/providers/Microsoft.CognitiveServices/accounts/nombre-recurso-openai \
-  --group-account-id account \
-  --connection-name mi-conexion-privada
-```
-
-## Integración Continua/Despliegue Continuo (CI/CD)
-
-### Pipeline de Azure DevOps
-
-```yaml
-# azure-pipelines.yml
-trigger:
-- main
-
-pool:
-  vmImage: 'ubuntu-latest'
-
-steps:
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'Mi-Suscripcion-Azure'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      # Desplegar modelo
-      az cognitiveservices account deployment create \
-        --name nombre-recurso-openai \
-        --resource-group mi-grupo-recursos \
-        --deployment-name mi-modelo-gpt \
-        --model-name gpt-4 \
-        --model-version "0613"
-      
-      # Actualizar configuración
-      az cognitiveservices account update \
-        --name nombre-recurso-openai \
-        --resource-group mi-grupo-recursos \
-        --custom-domain mi-dominio-personalizado
-
-```
-
-## Computer Vision Solutions
-
-### Análisis de Imágenes Avanzado
-
-```bash
-# Configurar un recurso de Azure AI Vision
-az cognitiveservices account create \
-  --name mi-recurso-vision \
-  --resource-group mi-grupo-recursos \
-  --kind ComputerVision \
-  --sku S1 \
-  --location eastus \
+  --name $OPENAI_NAME \
+  --resource-group $RESOURCE_GROUP_NAME \
+  --kind OpenAI \
+  --sku S0 \
+  --location $LOCATION \
+  --custom-domain $OPENAI_NAME \
   --yes
 
-# Analizar una imagen
-az cognitiveservices vision analyze \
-  --name mi-recurso-vision \
-  --resource-group mi-grupo-recursos \
-  --image-url "https://example.com/image.jpg" \
-  --visual-features "Description,Tags,Categories,Color,Objects,Faces,Adult,Brands"
+# Crear servicio de búsqueda
+echo "Creando servicio de búsqueda $SEARCH_NAME..."
+az search service create \
+  --name $SEARCH_NAME \
+  --resource-group $RESOURCE_GROUP_NAME \
+  --sku Standard \
+  --location $LOCATION
 
-# Extraer texto de imágenes (OCR)
-az cognitiveservices vision ocr \
-  --name mi-recurso-vision \
-  --resource-group mi-grupo-recursos \
-  --image-url "https://example.com/document.jpg" \
-  --language en
+# Mostrar información
+echo "Recursos creados:"
+echo "- Grupo de recursos: $RESOURCE_GROUP_NAME"
+echo "- Azure OpenAI: $OPENAI_NAME"
+echo "- Azure AI Search: $SEARCH_NAME"
 ```
 
-### Modelos de Visión Personalizados
+**Explicación**:
+
+1. El script crea un grupo de recursos, un recurso de Azure OpenAI y un servicio de búsqueda.
+2. Usa un sufijo aleatorio para evitar conflictos de nombres.
+
+**Documentación**: [Scripting con Azure CLI](https://learn.microsoft.com/en-us/cli/azure/use-cli-effectively)
+
+## 11. Computer Vision Solutions
+
+### 11.1. Análisis de Imágenes
+
+```bash
+# Analizar una imagen
+az cognitiveservices vision analyze \
+  --name <vision-resource-name> \
+  --resource-group <resource-group-name> \
+  --image-url "https://example.com/image.jpg" \
+  --visual-features "Description,Tags,Categories"
+```
+
+**Explicación**:
+
+1. `az cognitiveservices vision analyze`: Analiza imágenes para obtener descripciones, etiquetas y categorías.
+
+**Documentación**: [az cognitiveservices vision analyze](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/vision?view=azure-cli-latest#az-cognitiveservices-vision-analyze)
+
+### 11.2. Modelos de Visión Personalizados
 
 ```bash
 # Crear un proyecto de Custom Vision
 az cognitiveservices account create \
-  --name mi-custom-vision \
-  --resource-group mi-grupo-recursos \
+  --name <custom-vision-name> \
+  --resource-group <resource-group-name> \
   --kind CustomVision.Training \
   --sku S0 \
   --location eastus \
   --yes
-
-# Entrenar un modelo de clasificación de imágenes
-az cognitiveservices custom-vision project create \
-  --name "Clasificador de Productos" \
-  --description "Clasificación de productos por categoría" \
-  --resource-group mi-grupo-recursos \
-  --workspace-name mi-espacio-trabajo \
-  --domain-id "ee85a74c-405e-4adc-bb47-ffa8ca0c9f31"  # General (compact)
-
-# Publicar el modelo entrenado
-az cognitiveservices custom-vision project publish \
-  --name "Clasificador de Productos" \
-  --resource-group mi-grupo-recursos \
-  --workspace-name mi-espacio-trabajo \
-  --prediction-resource-id /subscriptions/{subscription-id}/resourceGroups/mi-grupo-recursos/providers/Microsoft.CognitiveServices/accounts/mi-custom-vision-prediction \
-  --publish-name produccion \
-  --prediction-type Classification
 ```
 
-### Análisis de Video
+**Explicación**:
+
+1. `--kind CustomVision.Training`: Crea un recurso para entrenar modelos de visión personalizados.
+
+**Documentación**: [az cognitiveservices account create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-create)
+
+## 12. Procesamiento de Lenguaje Natural (NLP)
+
+### 12.1. Análisis de Texto
 
 ```bash
-# Configurar Azure Video Indexer
-az account set --subscription "mi-suscripcion-id"
-
-# Obtener token de acceso para Video Indexer
-az account get-access-token --resource "https://management.azure.com/"
-
-# Indexar un video
-curl -X POST "https://api.videoindexer.ai/{location}/Accounts/{accountId}/Videos?accessToken={accessToken}&name=mi-video&videoUrl={videoUrl}"
-
-# Obtener información del video indexado
-curl -X GET "https://api.videoindexer.ai/{location}/Accounts/{accountId}/Videos/{videoId}/Index?accessToken={accessToken}"
-```
-
-## Procesamiento de Lenguaje Natural (NLP)
-
-### Análisis de Texto
-
-```bash
-# Analizar sentimiento y frases clave
+# Analizar sentimiento
 az cognitiveservices language analyze-sentiment \
-  --resource-group mi-grupo-recursos \
-  --name mi-recurso-language \
-  --text "El servicio fue excelente, pero la entrega se retrasó" \
-  --query "[documents[0].sentiment,documents[0].confidenceScores]
+  --name <language-resource-name> \
+  --resource-group <resource-group-name> \
+  --text "El producto es excelente"
 
 # Extraer entidades
 az cognitiveservices language recognize-entities \
-  --resource-group mi-grupo-recursos \
-  --name mi-recurso-language \
+  --name <language-resource-name> \
+  --resource-group <resource-group-name> \
   --text "Microsoft fue fundada por Bill Gates en 1975"
-
-# Detectar idioma
-az cognitiveservices language detect-language \
-  --resource-group mi-grupo-recursos \
-  --name mi-recurso-language \
-  --text "Bonjour, comment ça va?"
 ```
 
-### Procesamiento de Voz
+**Explicación**:
+
+1. `az cognitiveservices language analyze-sentiment`: Analiza el sentimiento de un texto.
+2. `az cognitiveservices language recognize-entities`: Extrae entidades nombradas del texto.
+
+**Documentación**:
+
+- [az cognitiveservices language analyze-sentiment](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/language?view=azure-cli-latest#az-cognitiveservices-language-analyze-sentiment)
+- [az cognitiveservices language recognize-entities](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/language?view=azure-cli-latest#az-cognitiveservices-language-recognize-entities)
+
+### 12.2. Procesamiento de Voz
 
 ```bash
 # Configurar Azure Speech Service
 az cognitiveservices account create \
-  --name mi-recurso-speech \
-  --resource-group mi-grupo-recursos \
+  --name <speech-resource-name> \
+  --resource-group <resource-group-name> \
   --kind SpeechServices \
   --sku S0 \
   --location eastus \
   --yes
-
-# Convertir texto a voz (TTS)
-curl -X POST "https://{region}.tts.speech.microsoft.com/cognitiveservices/v1" \
-  -H "Ocp-Apim-Subscription-Key: {key}" \
-  -H "Content-Type: application/ssml+xml" \
-  -d "<speak version='1.0' xml:lang='es-ES'><voice name='es-ES-ElviraNeural'>Hola, esto es una prueba de texto a voz.</voice></speak>" \
-  --output speech.wav
-
-# Transcripción de voz a texto
-curl -X POST "https://{region}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=es-ES" \
-  -H "Ocp-Apim-Subscription-Key: {key}" \
-  -H "Content-Type: audio/wav" \
-  --data-binary @audio.wav
 ```
 
-### Modelos de Lenguaje Personalizados
+**Explicación**:
+
+1. `--kind SpeechServices`: Crea un recurso para servicios de voz (TTS y STT).
+
+**Documentación**: [az cognitiveservices account create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-create)
+
+### 12.3. Modelos de Lenguaje Personalizados
 
 ```bash
-# Crear un proyecto de Language Understanding (LUIS)
+# Crear un recurso de LUIS
 az cognitiveservices account create \
-  --name mi-recurso-luis \
-  --resource-group mi-grupo-recursos \
+  --name <luis-resource-name> \
+  --resource-group <resource-group-name> \
   --kind LUIS \
   --sku S0 \
   --location westus \
   --yes
-
-# Entrenar un modelo de LUIS
-az cognitiveservices luis train \
-  --app-id {app-id} \
-  --version-id "0.1" \
-  --wait
-
-# Publicar el modelo de LUIS
-az cognitiveservices luis app publish \
-  --app-id {app-id} \
-  --version-id "0.1" \
-  --staging
 ```
 
-## IA Responsable
+**Explicación**:
 
-### Moderación de Contenido
+1. `--kind LUIS`: Crea un recurso para Language Understanding.
+
+**Documentación**: [az cognitiveservices account create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-create)
+
+## 13. IA Responsable
+
+### 13.1. Moderación de Contenido
 
 ```bash
 # Configurar Azure Content Moderator
 az cognitiveservices account create \
-  --name mi-content-moderator \
-  --resource-group mi-grupo-recursos \
+  --name <content-moderator-name> \
+  --resource-group <resource-group-name> \
   --kind ContentModerator \
   --sku S0 \
   --location global \
@@ -1088,32 +1053,58 @@ az cognitiveservices account create \
 
 # Moderar texto
 az cognitiveservices contentmoderator text-moderation \
-  --resource-group mi-grupo-recursos \
-  --name mi-content-moderator \
-  --text "Este es un texto ofensivo que debe ser moderado"
-
-# Moderar imágenes
-az cognitiveservices contentmoderator image-moderation \
-  --resource-group mi-grupo-recursos \
-  --name mi-content-moderator \n  --image-url "https://example.com/image.jpg"
+  --name <content-moderator-name> \
+  --resource-group <resource-group-name> \
+  --text "Texto a moderar"
 ```
 
-### Configuración de IA Responsable
+**Explicación**:
+
+1. `az cognitiveservices contentmoderator text-moderation`: Modera contenido textual para detectar lenguaje inapropiado.
+
+**Documentación**:
+
+- [az cognitiveservices account create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-create)
+- [az cognitiveservices contentmoderator text-moderation](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/contentmoderator?view=azure-cli-latest#az-cognitiveservices-contentmoderator-text-moderation)
+
+### 13.2. Configuración de IA Responsable
 
 ```bash
 # Habilitar características de IA responsable en Azure OpenAI
 az cognitiveservices account update \
-  --name mi-recurso-openai \
-  --resource-group mi-grupo-recursos \
-  --custom-domain mi-dominio-personalizado \
-  --content-filter "{\"filterType\": \"BlockList\", \"blockList\": [\"contenido-peligroso\"]}" \
-  --safe-prompt "{\"enabled\": true}"
-
-# Configurar límites de seguridad
-az cognitiveservices account deployment update \
-  --name mi-recurso-openai \
-  --resource-group mi-grupo-recursos \
-  --deployment-name mi-modelo-gpt \
-  --content-filter-severity medium \
-  --content-filter-type SelfHarm|Hate|Sexual|Violence
+  --name <openai-resource-name> \
+  --resource-group <resource-group-name> \
+  --content-filter "{\"filterType\": \"BlockList\", \"blockList\": [\"contenido-peligroso\"]}"
 ```
+
+**Explicación**:
+
+1. `az cognitiveservices account update`: Configura filtros de contenido para Azure OpenAI.
+
+**Documentación**: [az cognitiveservices account update](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-update)
+
+## 14. Solución de Problemas
+
+```bash
+# Verificar estado de servicios
+az resource list --resource-group <resource-group-name> --output table
+
+# Verificar registros de actividad
+az monitor activity-log list --resource-group <resource-group-name> --offset 90d
+```
+
+**Explicación**:
+
+1. `az resource list`: Muestra el estado de los recursos.
+2. `az monitor activity-log list`: Consulta registros de actividad para diagnosticar problemas.
+
+**Documentación**:
+
+- [az resource list](https://learn.microsoft.com/en-us/cli/azure/resource?view=azure-cli-latest#az-resource-list)
+- [az monitor activity-log list](https://learn.microsoft.com/en-us/cli/azure/monitor/activity-log?view=azure-cli-latest#az-monitor-activity-log-list)
+
+## 15. Recursos Adicionales
+
+1. [Documentación oficial de Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)
+2. [Azure AI-102 Training](https://learn.microsoft.com/en-us/training/courses/ai-102t00)
+3. [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/)

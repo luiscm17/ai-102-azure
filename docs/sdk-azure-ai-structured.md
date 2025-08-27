@@ -255,8 +255,9 @@ El workspace es el recurso de nivel superior que contiene todos los artefactos d
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Workspace, IdentityConfiguration
 
-# Crear un workspace de Azure ML
-def create_ml_workspace(ml_client, group_name, workspace_name, location):
+
+# Crear un workspace de Azure ML (versión 2025+)
+def create_ml_workspace(ml_client, workspace_name, location, group_name, subscription_id):
     workspace = Workspace(
         name=workspace_name,
         location=location,
@@ -267,10 +268,8 @@ def create_ml_workspace(ml_client, group_name, workspace_name, location):
         application_insights=f"/subscriptions/{subscription_id}/resourceGroups/{group_name}/providers/microsoft.insights/components/ml-appinsights",
         container_registry=f"/subscriptions/{subscription_id}/resourceGroups/{group_name}/providers/Microsoft.ContainerRegistry/registries/ml-registry"
     )
-
-    ws = ml_client.workspaces.begin_create_or_update(
-        group_name, workspace_name, workspace
-    ).result()
+    # Usar el método recomendado: begin_create
+    ws = ml_client.workspaces.begin_create(workspace=workspace).result()
     print(f"Workspace creado: {ws.name}")
     return ws
 
@@ -337,6 +336,110 @@ def deploy_model(ml_client, endpoint_name, deployment_name, model_path):
 
 ### 4.1 Azure AI Foundry
 
+#### 4.1.1 Consumo de modelos de terceros en Azure AI Foundry
+
+**Flujo actualizado: desde la creación del grupo de recursos hasta el consumo de modelos (SDK 2025+)**
+
+1. **Crea un grupo de recursos en Azure:**
+
+    ```python
+    from azure.identity import DefaultAzureCredential
+    from azure.mgmt.resource import ResourceManagementClient
+    import os
+
+    credential = DefaultAzureCredential()
+    subscription_id = os.environ["AZURE_SUBSCRIPTION_ID"]
+    resource_client = ResourceManagementClient(credential, subscription_id)
+    group_name = "rg-foundry-demo"
+    location = "eastus"  # O la región que prefieras
+    resource_client.resource_groups.create_or_update(group_name, {"location": location})
+    print(f"Grupo de recursos '{group_name}' creado.")
+    ```
+
+2. **Crea un proyecto de Azure AI Foundry (tipo 'project') usando MLClient:**
+
+    > **Nota:** Desde 2025, la gestión de proyectos Foundry se realiza con el SDK de Azure Machine Learning (`azure-ai-ml`). No uses clases como `FoundryManagementClient`.
+
+    ```python
+    from azure.ai.ml import MLClient
+    from azure.identity import DefaultAzureCredential
+
+    credential = DefaultAzureCredential()
+    ml_client = MLClient(
+        credential=credential,
+        subscription_id=subscription_id,
+        resource_group_name=group_name
+    )
+
+    # Crea el proyecto Foundry (tipo 'project')
+    project_name = "foundry-proj-demo"
+    project = ml_client.workspaces.begin_create(
+        {
+            "name": project_name,
+            "location": location,
+            "kind": "project"
+        }
+    ).result()
+    print(f"Proyecto Foundry '{project_name}' creado.")
+    ```
+
+    > Puedes consultar el endpoint del proyecto en el portal de Azure o con:
+    >
+    > ```python
+    > project = ml_client.workspaces.get(project_name)
+    > print(project.workspace_id)  # O project.endpoint según versión
+    > ```
+
+3. **Obtén el endpoint del proyecto Foundry:**
+
+    El endpoint se encuentra en el portal de Azure, sección "Overview" del proyecto Foundry, o usando el SDK como arriba.
+
+4. **Consume modelos del catálogo Foundry usando el SDK de Foundry:**
+
+    ```python
+    from azure.identity import DefaultAzureCredential
+    from azure.ai.foundry import FoundryClient
+
+    credential = DefaultAzureCredential()
+    foundry_endpoint = "https://<tu-endpoint-foundry>"  # Copia el endpoint del portal
+    foundry_client = FoundryClient(credential=credential, endpoint=foundry_endpoint)
+
+    # Listar modelos disponibles
+    models = foundry_client.models.list()
+    for model in models:
+        print(f"Modelo: {model.name}, Proveedor: {model.provider}, Versión: {model.version}")
+
+    # Consumir un modelo específico
+    response = foundry_client.completions.create(
+        model="gemini-1.5-pro",
+        prompt="¿Cuál es el animal más rápido del mundo?"
+    )
+    print(response.choices[0].text)
+    ```
+
+**Resumen actualizado:**
+
+- Usa `MLClient` para crear y gestionar proyectos Foundry.
+- El endpoint del proyecto se obtiene desde el portal o con el SDK.
+- El consumo de modelos se realiza con el SDK de Foundry y el endpoint del proyecto.
+- No uses `FoundryManagementClient` ni `FoundryClient` para gestión de recursos.
+
+**Referencias oficiales:**
+
+- [Create a project for Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/create-projects#create-a-hub-based-project)
+- [Azure AI Foundry SDK client libraries (Python)](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/sdk-overview)
+
+> **Nota:** El SDK y la API de Foundry evolucionan rápidamente. Consulta siempre la documentación oficial para ejemplos actualizados y lista de modelos soportados.
+
+**Consideraciones importantes:**
+
+- No necesitas crear recursos individuales para cada modelo de terceros; el consumo es directo desde el catálogo.
+- Puede que algunos modelos requieran suscripción o permisos adicionales en el portal de Foundry.
+- La facturación y límites de uso se gestionan desde Foundry, no desde el proveedor original.
+- Consulta la documentación oficial de Foundry para detalles sobre autenticación, cuotas y soporte de modelos: <https://learn.microsoft.com/azure/ai-foundry/>
+
+> **Nota:** El SDK y la API de Foundry evolucionan rápidamente. Consulta siempre la documentación oficial para ejemplos actualizados y lista de modelos soportados.
+
 Azure AI Foundry es una plataforma integral de Microsoft diseñada para acelerar el desarrollo y despliegue de aplicaciones de inteligencia artificial. Este servicio unificado combina capacidades de IA generativa, aprendizaje automático y análisis de datos en un solo entorno, permitiendo a los equipos de desarrollo crear soluciones de IA de manera más rápida y eficiente. Ofrece herramientas para la gestión del ciclo de vida completo de modelos de IA, incluyendo desarrollo, entrenamiento, evaluación y despliegue, con un fuerte énfasis en la seguridad y el cumplimiento normativo. Con integración nativa con otros servicios de Azure, facilita la creación de aplicaciones empresariales escalables que pueden aprovechar modelos de IA preentrenados o personalizados. [Documentación oficial de Azure AI Foundry](https://learn.microsoft.com/es-mx/azure/ai-foundry/overview)
 
 ### 4.2 Azure Machine Learning
@@ -350,18 +453,21 @@ El workspace de Azure Machine Learning es el recurso fundamental para el servici
 ```python
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import AmlCompute, Workspace
+from azure.identity import DefaultAzureCredential
+from azure.core.exceptions import HttpResponseError
 
-# Conectar al workspace
-def connect_to_workspace(subscription_id, resource_group, workspace_name):
+# Mejor práctica 2025: especificar api_version explícitamente para evitar breaking changes
+def connect_to_workspace(subscription_id, resource_group, workspace_name, api_version="2024-04-01-preview"):
     ml_client = MLClient(
         credential=DefaultAzureCredential(),
         subscription_id=subscription_id,
         resource_group_name=resource_group,
-        workspace_name=workspace_name
+        workspace_name=workspace_name,
+        api_version=api_version  # Especificar versión explícita
     )
     return ml_client
 
-# Crear cluster de computación
+# Crear cluster de computación con manejo robusto de errores
 def create_compute_cluster(ml_client, compute_name, vm_size="Standard_DS3_v2"):
     compute = AmlCompute(
         name=compute_name,
@@ -370,25 +476,36 @@ def create_compute_cluster(ml_client, compute_name, vm_size="Standard_DS3_v2"):
         max_instances=3,
         idle_time_before_scale_down=120
     )
+    try:
+        compute_cluster = ml_client.compute.begin_create_or_update(compute).result()
+        return compute_cluster
+    except HttpResponseError as e:
+        print(f"Error al crear el cluster de cómputo: {e}")
+        raise
 
-    compute_cluster = ml_client.compute.begin_create_or_update(compute).result()
-    return compute_cluster
-
-# Enviar trabajo de entrenamiento
+# Enviar trabajo de entrenamiento con manejo de errores y mejores prácticas
 def submit_training_job(ml_client, job_config_path):
-    from azure.ai.ml import command
+    from azure.ai.ml import command, Input
+    from azure.ai.ml.constants import AssetTypes
+    try:
+        job = command(
+            code="./src",
+            command="python train.py --data ${{inputs.data}}",
+            inputs={"data": Input(type=AssetTypes.URI_FOLDER, path="azureml://datasets/mi-dataset/versions/1")},
+            environment="AzureML-sklearn-1.0-ubuntu20.04-py38-cpu",
+            compute="cpu-cluster",
+            display_name="entrenamiento-modelo-ia"
+        )
+        returned_job = ml_client.jobs.create_or_update(job)
+        return returned_job
+    except HttpResponseError as e:
+        print(f"Error al enviar el trabajo de entrenamiento: {e}")
+        raise
 
-    job = command(
-        code="./src",
-        command="python train.py --data ${{inputs.data}}",
-        inputs={"data": Input(type=AssetTypes.URI_FOLDER, path="azureml://datasets/mi-dataset/versions/1")},
-        environment="AzureML-sklearn-1.0-ubuntu20.04-py38-cpu",
-        compute="cpu-cluster",
-        display_name="entrenamiento-modelo-ia"
-    )
-
-    returned_job = ml_client.jobs.create_or_update(job)
-    return returned_job
+# Nota de mejores prácticas:
+# - Siempre especifica api_version en producción.
+# - Implementa manejo de errores para operaciones críticas.
+# - Usa nombres descriptivos y consistentes para recursos.
 ```
 
 #### 4.2.2 Experimentos y Seguimiento
@@ -398,27 +515,26 @@ Los experimentos en Azure Machine Learning son una forma de organizar y controla
 ```python
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Experiment
+from azure.core.exceptions import HttpResponseError
 
-# Crear y ejecutar experimento
+# Crear y ejecutar experimento con manejo de errores
 def run_experiment(ml_client, experiment_name, script_path):
-    # Configurar el trabajo
-    job = command(
-        code=script_path,
-        command="python main.py",
-        environment="AzureML-sklearn-1.0-ubuntu20.04-py38-cpu",
-        compute="cpu-cluster",
-        experiment_name=experiment_name
-    )
-
-    # Ejecutar el trabajo
-    returned_job = ml_client.jobs.create_or_update(job)
-
-    # Esperar a que termine
-    ml_client.jobs.stream(returned_job.name)
-
-    # Obtener métricas
-    metrics = ml_client.jobs.get_metrics(returned_job.name)
-    return metrics
+    from azure.ai.ml import command
+    try:
+        job = command(
+            code=script_path,
+            command="python main.py",
+            environment="AzureML-sklearn-1.0-ubuntu20.04-py38-cpu",
+            compute="cpu-cluster",
+            experiment_name=experiment_name
+        )
+        returned_job = ml_client.jobs.create_or_update(job)
+        ml_client.jobs.stream(returned_job.name)
+        metrics = ml_client.jobs.get_metrics(returned_job.name)
+        return metrics
+    except HttpResponseError as e:
+        print(f"Error al ejecutar el experimento: {e}")
+        return None
 
 # Listar experimentos
 def list_experiments(ml_client):
@@ -434,43 +550,58 @@ Azure Machine Learning proporciona varias formas de implementar modelos como ser
 ```python
 from azure.ai.ml.entities import Model, OnlineEndpoint, OnlineDeployment
 from azure.ai.ml.constants import AssetTypes
+from azure.core.exceptions import HttpResponseError
 
-# Registrar un modelo
+# Registrar un modelo con manejo de errores
 def register_model(ml_client, model_path, model_name):
-    model = Model(
-        path=model_path,
-        name=model_name,
-        type=AssetTypes.CUSTOM_MODEL,
-        description="Modelo para certificación AI-102"
-    )
-    registered_model = ml_client.models.create_or_update(model)
-    return registered_model
+    try:
+        model = Model(
+            path=model_path,
+            name=model_name,
+            type=AssetTypes.CUSTOM_MODEL,
+            description="Modelo para certificación AI-102"
+        )
+        registered_model = ml_client.models.create_or_update(model)
+        return registered_model
+    except HttpResponseError as e:
+        print(f"Error al registrar el modelo: {e}")
+        raise
 
-# Crear deployment de modelo
+# Crear deployment de modelo con manejo de errores
 def create_model_deployment(ml_client, endpoint_name, deployment_name, model_id):
-    deployment = OnlineDeployment(
-        name=deployment_name,
-        endpoint_name=endpoint_name,
-        model=model_id,
-        instance_type="Standard_DS3_v2",
-        instance_count=1,
-        environment="AzureML-sklearn-1.0-ubuntu20.04-py38-cpu"
-    )
+    try:
+        deployment = OnlineDeployment(
+            name=deployment_name,
+            endpoint_name=endpoint_name,
+            model=model_id,
+            instance_type="Standard_DS3_v2",
+            instance_count=1,
+            environment="AzureML-sklearn-1.0-ubuntu20.04-py38-cpu"
+        )
+        created_deployment = ml_client.online_deployments.begin_create_or_update(
+            deployment
+        ).result()
+        return created_deployment
+    except HttpResponseError as e:
+        print(f"Error al crear el deployment: {e}")
+        raise
 
-    created_deployment = ml_client.online_deployments.begin_create_or_update(
-        deployment
-    ).result()
-    return created_deployment
-
-# Monitorear uso del modelo
+# Monitorear uso del modelo con manejo de errores
 def monitor_model_usage(ml_client, endpoint_name):
-    endpoint = ml_client.online_endpoints.get(endpoint_name)
-    usage = ml_client.online_endpoints.get_usage(endpoint_name)
+    try:
+        endpoint = ml_client.online_endpoints.get(endpoint_name)
+        usage = ml_client.online_endpoints.get_usage(endpoint_name)
+        print(f"Endpoint: {endpoint.name}")
+        print(f"Estado: {endpoint.provisioning_state}")
+        print(f"Tráfico total: {usage.total_calls}")
+        print(f"Latencia promedio: {usage.average_latency_ms}ms")
+    except HttpResponseError as e:
+        print(f"Error al monitorear el uso del modelo: {e}")
 
-    print(f"Endpoint: {endpoint.name}")
-    print(f"Estado: {endpoint.provisioning_state}")
-    print(f"Tráfico total: {usage.total_calls}")
-    print(f"Latencia promedio: {usage.average_latency_ms}ms")
+# Mejores prácticas:
+# - Especifica api_version en MLClient para producción.
+# - Implementa manejo de errores en todas las operaciones críticas.
+# - Usa nombres y descripciones claras para modelos y endpoints.
 ```
 
 ### 4.3 Natural Language Processing (NLP)
@@ -641,60 +772,23 @@ async def train_model(conversation_client, project_name):
 Azure OpenAI Service proporciona acceso a modelos de lenguaje avanzados como GPT-4, permitiendo a las organizaciones crear aplicaciones de IA conversacional de nivel empresarial. Ofrece capacidades de generación de texto, resúmenes, traducción, análisis de código y más, todo ello con la seguridad y cumplimiento de Azure. Los desarrolladores pueden aprovechar estos modelos a través de API fáciles de usar, con opciones para ajuste fino que permiten personalizar el comportamiento del modelo para casos de uso específicos. El servicio incluye características de seguridad integradas y filtros de contenido para garantizar un uso responsable de la IA. [Documentación oficial de Azure OpenAI](https://learn.microsoft.com/es-mx/azure/ai-services/openai/overview)
 
 ```python
-from openai import AzureOpenAI
-from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+
+# OpenAI Python SDK 1.x+ (2025): Instanciación explícita y métodos actualizados
+import openai
 import os
 
-# Configurar cliente de Azure OpenAI con autenticación segura
 def create_azure_openai_client(api_key=None, endpoint=None, api_version="2024-02-01"):
     """
-    Crea un cliente de Azure OpenAI con autenticación segura.
-    
-    Args:
-        api_key: Clave API (opcional, se recomienda usar DefaultAzureCredential)
-        endpoint: URL del punto de conexión de Azure OpenAI
-        api_version: Versión de la API a utilizar
-        
-    Returns:
-        AzureOpenAI: Cliente configurado para interactuar con el servicio
+    Crea un cliente de Azure OpenAI compatible con la versión 1.x+ del SDK de OpenAI.
     """
-    # Preferir autenticación con Azure AD cuando sea posible
-    if api_key is None:
-        # Usar DefaultAzureCredential para autenticación sin manejar claves directamente
-        token_provider = get_bearer_token_provider(
-            DefaultAzureCredential(),
-            "https://cognitiveservices.azure.com/.default"
-        )
-        
-        client = AzureOpenAI(
-            azure_ad_token_provider=token_provider,
-            api_version=api_version,
-            azure_endpoint=endpoint or os.getenv("AZURE_OPENAI_ENDPOINT")
-        )
-    else:
-        # Usar clave de API (menos seguro)
-        client = AzureOpenAI(
-            api_key=api_key or os.getenv("AZURE_OPENAI_API_KEY"),
-            api_version=api_version,
-            azure_endpoint=endpoint or os.getenv("AZURE_OPENAI_ENDPOINT")
-        )
-    
+    api_key = api_key or os.getenv("AZURE_OPENAI_API_KEY")
+    endpoint = endpoint or os.getenv("AZURE_OPENAI_ENDPOINT")
+    client = openai.OpenAI(api_key=api_key, base_url=endpoint, default_headers={"api-version": api_version})
     return client
 
-# Generar texto con GPT
 def generate_text(openai_client, prompt, model="gpt-4", max_tokens=100, temperature=0.7):
     """
-    Genera texto utilizando un modelo de lenguaje de OpenAI
-    
-    Args:
-        openai_client: Cliente de Azure OpenAI
-        prompt: Texto de entrada para el modelo
-        model: Nombre del modelo o despliegue a utilizar
-        max_tokens: Número máximo de tokens a generar
-        temperature: Controla la aleatoriedad (0.0 a 1.0)
-        
-    Returns:
-        str: Texto generado por el modelo
+    Genera texto utilizando un modelo de lenguaje de OpenAI (SDK 1.x+)
     """
     try:
         response = openai_client.chat.completions.create(
@@ -708,9 +802,8 @@ def generate_text(openai_client, prompt, model="gpt-4", max_tokens=100, temperat
         print(f"Error al generar texto: {str(e)}")
         raise
 
-# Listar modelos disponibles
 def list_models(openai_client):
-    """Lista los modelos de OpenAI disponibles en la suscripción"""
+    """Lista los modelos de OpenAI disponibles en la suscripción (SDK 1.x+)"""
     try:
         models = openai_client.models.list()
         return [model.id for model in models.data]
@@ -718,24 +811,12 @@ def list_models(openai_client):
         print(f"Error al listar modelos: {str(e)}")
         return []
 
-# Ejemplo de uso seguro
 if __name__ == "__main__":
-    # Opción 1: Usando autenticación con Azure AD (recomendado)
-    client = create_azure_openai_client(
-        endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
-    )
-    
-    # Opción 2: Usando clave API (menos seguro)
-    # client = create_azure_openai_client(
-    #     api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-    #     endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
-    # )
-    
-    # Ejemplo de generación de texto
+    client = create_azure_openai_client()
     response = generate_text(
         client,
         prompt="Explica la importancia de la seguridad en IA en 3 puntos",
-        model="gpt-4"  # Nombre de tu despliegue en Azure
+        model="gpt-4"
     )
     print(response)
 ```
@@ -1470,6 +1551,7 @@ def create_search_index(client, index_name, vector_search_dimensions=None):
         )
     
     # Configuración de búsqueda semántica
+    # Usar semanticConfiguration (no searchFields) para semantic ranker (2025+)
     semantic_config = SemanticConfiguration(
         name="my-semantic-config",
         prioritized_fields=SemanticPrioritizedFields(
@@ -1478,7 +1560,6 @@ def create_search_index(client, index_name, vector_search_dimensions=None):
             keywords_fields=[SemanticField(field_name="category")]
         )
     )
-    
     semantic_search = SemanticSearch(configurations=[semantic_config])
     
     # Crear el índice

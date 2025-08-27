@@ -36,7 +36,6 @@ Las características de Azure AI Foundry que usaremos en este ejercicio requiere
     - **Region**: East US 2 o Sweden Central (_En caso de que se exceda un límite de cuota más adelante en el ejercicio, es posible que necesites crear otro recurso en una región diferente._)
 
     > **Nota**: Si estás trabajando en una suscripción de Azure donde se usan políticas para restringir nombres de recursos permitidos, es posible que necesites usar el enlace en la parte inferior del cuadro de diálogo **Create a new project** para crear el hub usando el portal de Azure.
-
     > **Consejo**: Si el botón **Create** sigue deshabilitado, asegúrate de renombrar tu hub con un valor alfanumérico único.
 
 1. Espera a que se cree tu proyecto y luego navega a tu proyecto.

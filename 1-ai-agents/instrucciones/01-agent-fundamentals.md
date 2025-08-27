@@ -1,5 +1,7 @@
 ---
-## lab: title: 'Explorar el desarrollo de agentes de IA' description: 'Da tus primeros pasos en el desarrollo de agentes de IA explorando el servicio Azure AI Agent en el portal de Azure AI Foundry.'
+lab: 
+  title: 'Explorar el desarrollo de agentes de IA' 
+  description: 'Da tus primeros pasos en el desarrollo de agentes de IA explorando el servicio Azure AI Agent en el portal de Azure AI Foundry.'
 ---
 
 # Explorar el desarrollo de agentes de IA

@@ -1,6 +1,7 @@
 ai-env
 
 **/.env
+.venv
 __pycache__/
 .vscode/
 *.pyc
