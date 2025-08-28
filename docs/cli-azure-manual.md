@@ -244,6 +244,52 @@ az cognitiveservices account list-models \
 }
 ```
 
+**Listar modelos disponibles con detalles relevantes (usando jq para formateo)**:
+
+```bash
+az cognitiveservices account list-models \
+  -n rag-openai-gpt41 \
+  -g rg-rag-sdk | \
+  jq '.[] | { 
+    name: .name, 
+    format: .format, 
+    version: .version, 
+    sku: .skus[0].name, 
+    capacity: .skus[0].capacity.default,
+    capabilities: .capabilities,
+    model_type: (.capabilities | if type == "array" then join(", ") else . end)
+  }'
+```
+
+**Si quieres ser más específico y categorizar los modelos basándose en sus capacidades, puedes usar esta versión más avanzada**:
+
+```bash
+az cognitiveservices account list-models \
+  -n rag-openai-gpt41 \
+  -g rg-rag-sdk | \
+  jq '.[] | { 
+    name: .name, 
+    format: .format, 
+    version: .version, 
+    sku: .skus[0].name, 
+    capacity: .skus[0].capacity.default,
+    capabilities: .capabilities,
+    model_category: (
+      if (.capabilities | type == "array") then
+        if (.capabilities | contains(["ChatCompletion"])) then "Chat"
+        elif (.capabilities | contains(["Embedding"])) then "Embeddings" 
+        elif (.capabilities | contains(["Completion"])) then "Text Completion"
+        elif (.capabilities | contains(["ImageGeneration"])) then "Image Generation"
+        elif (.capabilities | contains(["TextToSpeech"])) then "Text-to-Speech"
+        elif (.capabilities | contains(["SpeechToText"])) then "Speech-to-Text"
+        else (.capabilities | join(", "))
+        end
+      else .capabilities
+      end
+    )
+  }'
+```
+
 **Explicación de los campos**:
 
 - `name`: Nombre del modelo (ej. "Phi-3.5-vision-instruct")
@@ -251,6 +297,9 @@ az cognitiveservices account list-models \
 - `version`: Versión del modelo
 - `sku`: SKU del modelo (ej. "GlobalStandard")
 - `capacity`: Capacidad predeterminada del modelo
+- `capabilities`: Capacidad del modelo
+- `model_type`: Tipo del modelo
+- `model_category`: Categoría del modelo
 
 ```bash
 # Crear un nuevo proyecto en AI Foundry
@@ -345,6 +394,83 @@ az cognitiveservices account show \
   --name <language-resource-name> \
   --resource-group <resource-group-name> \
   --query "properties.endpoint"
+```
+
+**Buscar modelos que contengan "gpt" (insensible a mayúsculas)**:
+
+```bash
+az cognitiveservices account list-models \
+  -n rag-openai-gpt41 \
+  -g rg-rag-sdk | \
+  jq '.[] | select(.name | test("gpt"; "i")) | { 
+    name: .name, 
+    format: .format, 
+    version: .version, 
+    sku: .skus[0].name, 
+    capacity: .skus[0].capacity.default,
+    model_category: (
+      if (.capabilities | type == "array") then
+        if (.capabilities | contains(["ChatCompletion"])) then "Chat"
+        elif (.capabilities | contains(["Embedding"])) then "Embeddings" 
+        elif (.capabilities | contains(["Completion"])) then "Text Completion"
+        else (.capabilities | join(", "))
+        end
+      else .capabilities
+      end
+    )
+  }'
+```
+
+**Buscar modelos que contengan "ada" (insensible a mayúsculas)**:
+
+```bash
+az cognitiveservices account list-models \
+  -n rag-openai-gpt41 \
+  -g rg-rag-sdk | \
+  jq '.[] | select(.name | test("ada"; "i")) | { 
+    name: .name, 
+    format: .format, 
+    version: .version, 
+    capabilities: .capabilities
+  }'
+```
+
+**Buscar modelos que contengan "gpt", "ada" o "davinci" (insensible a mayúsculas)**:
+
+```bash
+az cognitiveservices account list-models \
+  -n rag-openai-gpt41 \
+  -g rg-rag-sdk | \
+  jq '.[] | select(.name | test("gpt|ada|davinci"; "i")) | { 
+    name: .name, 
+    format: .format, 
+    version: .version, 
+    model_category: (
+      if (.capabilities | type == "array") then
+        if (.capabilities | contains(["ChatCompletion"])) then "Chat"
+        elif (.capabilities | contains(["Embedding"])) then "Embeddings" 
+        elif (.capabilities | contains(["Completion"])) then "Text Completion"
+        else (.capabilities | join(", "))
+        end
+      else .capabilities
+      end
+    )
+  }'
+```
+
+**Buscar modelos que contengan un patrón específico (insensible a mayúsculas)**:
+
+```bash
+# Reemplaza "PATRON" con lo que quieras buscar
+az cognitiveservices account list-models \
+  -n rag-openai-gpt41 \
+  -g rg-rag-sdk | \
+  jq --arg pattern "PATRON" '.[] | select(.name | test($pattern; "i")) | { 
+    name: .name, 
+    format: .format, 
+    version: .version, 
+    capabilities: .capabilities
+  }'
 ```
 
 **Explicación**:
