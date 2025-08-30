@@ -14,9 +14,9 @@ In this exercise, you'll use Azure AI Foundry to integrate custom data into a ge
 
 While this exercise is based on the Azure OpenAI Python SDK, you can develop AI chat applications using multiple language-specific SDKs; including:
 
--   [OpenAI for Python](https://pypi.org/project/openai/)
--   [Azure Open AI for Microsoft .NET](https://www.nuget.org/packages/Azure.AI.OpenAI)
--   [Azure OpenAI for TypeScript](https://www.npmjs.com/package/@azure/openai)
+- [OpenAI for Python](https://pypi.org/project/openai/)
+- [Azure Open AI for Microsoft .NET](https://www.nuget.org/packages/Azure.AI.OpenAI)
+- [Azure OpenAI for TypeScript](https://www.npmjs.com/package/@azure/openai)
 
 This exercise takes approximately **45** minutes.
 
@@ -36,7 +36,6 @@ The features of Azure AI Foundry we're going to use in this exercise require a p
     - **Region**: East US 2 or Sweden Central (_In the event of a quota limit being exceeded later in the exercise, you may need to create another resource in a different region._)
 
     > **Note**: If you're working in an Azure subscription in which policies are used to restrict allowable resource names, you may need to use the link at the bottom of the **Create a new project** dialog box to create the hub using the Azure portal.
-
     > **Tip**: If the **Create** button is still disabled, be sure to rename your hub to a unique alphanumeric value.
 
 1. Wait for your project to be created, and then navigate to your project.
@@ -45,8 +44,8 @@ The features of Azure AI Foundry we're going to use in this exercise require a p
 
 You need two models to implement your solution:
 
--   An _embedding_ model to vectorize text data for efficient indexing and processing.
--   A model that can generate natural language responses to questions based on your data.
+- An _embedding_ model to vectorize text data for efficient indexing and processing.
+- A model that can generate natural language responses to questions based on your data.
 
 1. In the Azure AI Foundry portal, in your project, in the navigation pane on the left, under **My assets**, select the **Models + endpoints** page.
 1. Create a new deployment of the **text-embedding-ada-002** model with the following settings by selecting **Customize** in the Deploy model wizard:
@@ -150,7 +149,7 @@ Now that you have a working index, you can use the Azure OpenAI SDK to implement
 
 1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
 
-    ```
+    ```bash
     rm -r mslearn-ai-foundry -f
     git clone https://github.com/microsoftlearning/mslearn-ai-studio mslearn-ai-foundry
     ```
@@ -159,13 +158,13 @@ Now that you have a working index, you can use the Azure OpenAI SDK to implement
 
 1. After the repo has been cloned, navigate to the folder containing the chat application code files:
 
-    ```
+    ```bash
     cd mslearn-ai-foundry/labfiles/rag-app/python
     ```
 
 1. In the cloud shell command-line pane, enter the following command to install the OpenAI SDK library:
 
-    ```
+    ```bash
     python -m venv labenv
     ./labenv/bin/Activate.ps1
     pip install -r requirements.txt openai
@@ -173,7 +172,7 @@ Now that you have a working index, you can use the Azure OpenAI SDK to implement
 
 1. Enter the following command to edit the configuration file that has been provided:
 
-    ```
+    ```bash
     code .env
     ```
 
@@ -193,7 +192,7 @@ Now that you have a working index, you can use the Azure OpenAI SDK to implement
 
 1. Enter the following command to edit the code file that has been provided:
 
-    ```
+    ```bash
     code rag-app.py
     ```
 
@@ -215,7 +214,7 @@ Now that you have a working index, you can use the Azure OpenAI SDK to implement
 
 1. In the cloud shell command-line pane, enter the following command to run the app:
 
-    ```
+    ```bash
     python rag-app.py
     ```
 

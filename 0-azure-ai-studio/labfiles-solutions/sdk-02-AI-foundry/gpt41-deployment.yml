@@ -1,0 +1,6 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+name: gpt41-deployment
+endpoint_name: chat-app-hub-endpoint
+model: azureml:gpt-4.1:2025-04-14
+instance_type: Standard_DS3_v2
+instance_count: 1

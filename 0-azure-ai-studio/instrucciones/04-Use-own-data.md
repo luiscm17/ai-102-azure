@@ -14,9 +14,9 @@ En este ejercicio, usarás Azure AI Foundry para integrar datos personalizados e
 
 Aunque este ejercicio está basado en el SDK de Python para Azure OpenAI, puedes desarrollar aplicaciones de chat de IA usando múltiples SDKs específicos de lenguaje, incluyendo:
 
--   [OpenAI para Python](https://pypi.org/project/openai/)
--   [Azure Open AI para Microsoft .NET](https://www.nuget.org/packages/Azure.AI.OpenAI)
--   [Azure OpenAI para TypeScript](https://www.npmjs.com/package/@azure/openai)
+- [OpenAI para Python](https://pypi.org/project/openai/)
+- [Azure Open AI para Microsoft .NET](https://www.nuget.org/packages/Azure.AI.OpenAI)
+- [Azure OpenAI para TypeScript](https://www.npmjs.com/package/@azure/openai)
 
 Este ejercicio toma aproximadamente **45** minutos.
 
@@ -44,8 +44,8 @@ Las características de Azure AI Foundry que usaremos en este ejercicio requiere
 
 Necesitas dos modelos para implementar tu solución:
 
--   Un modelo de _embedding_ para vectorizar datos de texto para indexación y procesamiento eficiente.
--   Un modelo que pueda generar respuestas en lenguaje natural a preguntas basadas en tus datos.
+- Un modelo de _embedding_ para vectorizar datos de texto para indexación y procesamiento eficiente.
+- Un modelo que pueda generar respuestas en lenguaje natural a preguntas basadas en tus datos.
 
 1. En el portal de Azure AI Foundry, en tu proyecto, en el panel de navegación izquierdo, bajo **My assets**, selecciona la página **Models + endpoints**.
 1. Crea una nueva implementación del modelo **text-embedding-ada-002** con las siguientes configuraciones seleccionando **Customize** en el asistente Deploy model:

@@ -32,6 +32,7 @@ az cognitiveservices account create \
 ```
 
 **Explicación**:
+
 - `--kind Language`: Crea un recurso para análisis de lenguaje natural (e.g., análisis de sentimientos, NER, traducción).
 
 Obtener clave y endpoint:
@@ -50,10 +51,12 @@ az cognitiveservices account show \
 ```
 
 **Explicación**:
+
 - `az cognitiveservices account keys list`: Devuelve las claves de API para autenticar solicitudes.
 - `az cognitiveservices account show`: Obtiene el endpoint del recurso.
 
 **Documentación**:
+
 - [az cognitiveservices account create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-create)
 - [az cognitiveservices account keys list](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/keys?view=azure-cli-latest#az-cognitiveservices-account-keys-list)
 
@@ -72,6 +75,7 @@ az cognitiveservices account create \
 ```
 
 **Explicación**:
+
 - `--kind ComputerVision`: Crea un recurso para tareas de visión como OCR, análisis de imágenes y detección de objetos.
 
 Obtener clave y endpoint:
@@ -90,9 +94,11 @@ az cognitiveservices account show \
 ```
 
 **Explicación**:
+
 - Similar a Azure AI Language, estos comandos obtienen credenciales para interactuar con el servicio de visión.
 
 **Documentación**:
+
 - [az cognitiveservices account create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-create)
 - [az cognitiveservices account keys list](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/keys?view=azure-cli-latest#az-cognitiveservices-account-keys-list)
 
@@ -126,6 +132,7 @@ az cognitiveservices account deployment create \
 ```
 
 **Explicación**:
+
 - `--kind OpenAI`: Crea un recurso Azure OpenAI independiente.
 - `az cognitiveservices account deployment create`: Despliega el modelo `gpt-4o` con 50K TPM.
 
@@ -144,6 +151,7 @@ az ml connection create \
 ```
 
 **Explicación**:
+
 - `az ml connection create`: Conecta el recurso Azure AI Services (`ai102-aiservices`) al hub (`ai102-hub`) para usar modelos en proyectos basados en hub.
 
 #### 1.3.3. Gestión de Modelos, Endpoints y Claves
@@ -164,10 +172,17 @@ az cognitiveservices account show \
 ```
 
 **Explicación**:
+
 - `az cognitiveservices account keys list`: Devuelve las claves de API (key1 y key2) para autenticar solicitudes.
 - `az cognitiveservices account show --query properties.endpoint`: Obtiene el endpoint del recurso Azure AI Services.
 
 ##### Listar Modelos Disponibles
+
+Reemplazar `accountName` y `resourceGroupName` con los valores de su recurso Azure AI Services:
+
+```bash
+az cognitiveservices account list-models -n $accountName -g $resourceGroupName | jq '.[] | { name: .name, format: .format, version: .version, sku: .skus[0].name, capacity: .skus[0].capacity.default }'
+```
 
 Listar modelos que contengan "gpt" (insensible a mayúsculas):
 
@@ -247,11 +262,13 @@ az cognitiveservices account list-models \
 ```
 
 **Explicación**:
+
 - `az cognitiveservices account list-models`: Lista todos los modelos disponibles en el recurso Azure OpenAI.
 - `jq`: Filtra y formatea la salida JSON para mostrar modelos que coincidan con patrones como "gpt", "ada", "davinci", o un patrón personalizado, con detalles como nombre, versión, formato y capacidades (e.g., Chat, Embeddings, Text Completion).
 - Requiere `jq` instalado (ver **Parte 1**, Section 2.1).
 
 **Documentación**:
+
 - [az cognitiveservices account create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest#az-cognitiveservices-account-create)
 - [az cognitiveservices account deployment create](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest#az-cognitiveservices-account-deployment-create)
 - [az ml connection create](https://learn.microsoft.com/en-us/cli/azure/ml/connection?view=azure-cli-latest#az-ml-connection-create)
@@ -273,6 +290,7 @@ az search service create \
 ```
 
 **Explicación**:
+
 - `az search service create`: Crea un servicio de búsqueda para indexar datos y habilitar búsqueda semántica.
 
 Obtener clave y endpoint:
@@ -291,10 +309,12 @@ az search service show \
 ```
 
 **Explicación**:
+
 - `az search admin-key show`: Devuelve la clave para administrar el servicio de búsqueda.
 - `az search service show`: Obtiene el endpoint del servicio.
 
 **Documentación**:
+
 - [az search service create](https://learn.microsoft.com/en-us/cli/azure/search/service?view=azure-cli-latest#az-search-service-create)
 - [az search admin-key show](https://learn.microsoft.com/en-us/cli/azure/search/admin-key?view=azure-cli-latest#az-search-admin-key-show)
 
@@ -315,6 +335,7 @@ az bot create \
 ```
 
 **Explicación**:
+
 - `az bot create`: Crea un bot basado en una aplicación web.
 - Reemplace `<app-id>` y `<app-password>` con credenciales de una aplicación registrada en Azure AD.
 
@@ -350,6 +371,7 @@ az search index create \
 ```
 
 **Explicación**:
+
 - `rag-index.json`: Define un índice con campos para ID, contenido y metadatos.
 - `az search index create`: Crea el índice en el servicio Azure AI Search.
 
@@ -385,6 +407,7 @@ az search document create \
 ```
 
 **Explicación**:
+
 - `rag-data.json`: Contiene documentos de ejemplo para indexar.
 - `az search document create`: Carga los documentos al índice.
 
@@ -393,6 +416,7 @@ az search document create \
 Utilice el endpoint y la clave de Azure OpenAI (`ai102-aiservices`) desde **Parte 1** (Section 3.4.4) y el índice de Azure AI Search para implementar RAG. Un ejemplo de código Python se cubrirá en **Parte 3** (Automatización y Scripts).
 
 **Documentación**:
+
 - [az search index create](https://learn.microsoft.com/en-us/cli/azure/search/index?view=azure-cli-latest#az-search-index-create)
 - [az search document create](https://learn.microsoft.com/en-us/cli/azure/search/document?view=azure-cli-latest#az-search-document-create)
 
