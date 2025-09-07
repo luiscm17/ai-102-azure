@@ -48,11 +48,13 @@ choco install jq
 ```
 
 **Explicación**:
+
 - La extensión `ml` es necesaria para comandos como `az ml workspace`, `az ml online-endpoint`, y `az ml online-deployment`, usados en Azure AI Foundry y Azure Machine Learning.
 - `jq` es requerido para filtrar listas de modelos en Azure OpenAI (e.g., `az cognitiveservices account list-models`).
 - Verifique la instalación con `az --version` y `jq --version`.
 
-**Documentación**: 
+**Documentación**:
+
 - [Install Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
 - [az extension add](https://learn.microsoft.com/en-us/cli/azure/extension?view=azure-cli-latest#az-extension-add)
 - [jq Installation](https://stedolan.github.io/jq/download/)
@@ -72,10 +74,12 @@ az configure --defaults group=ai102-group location=eastus2
 ```
 
 **Explicación**:
+
 - `az login`: Autentica al usuario con credenciales de Azure.
 - `az configure`: Establece valores por defecto para el grupo de recursos y la región, simplificando comandos posteriores.
 
-**Documentación**: 
+**Documentación**:
+
 - [az login](https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest#az-login)
 - [az configure](https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest#az-configure)
 
@@ -91,6 +95,7 @@ Azure soporta varios tipos de recursos para aplicaciones de IA, cada uno con pro
 - **Azure AI Search**: Recurso para indexación y recuperación de datos, usado en aplicaciones de Retrieval-Augmented Generation (RAG) conectadas a Azure AI Foundry.
 
 **Cuándo usar cada recurso**:
+
 - **Standalone Azure OpenAI**: Para aplicaciones que solo requieren modelos de OpenAI sin las capacidades completas de Azure AI Foundry (e.g., aplicaciones simples de chat).
 - **Azure AI Foundry con Hub**: Para aplicaciones de IA generativa avanzadas que requieren agentes, modelos personalizados, ajuste fino, o integración con Azure Machine Learning.
 - **Azure AI Search**: Para aplicaciones que implementan RAG o búsqueda semántica.
@@ -112,10 +117,12 @@ az group delete --name ai102-group --yes --no-wait
 ```
 
 **Explicación**:
+
 - `az group create`: Crea un contenedor para todos los recursos de Azure.
 - `az group delete`: Elimina el grupo y todos los recursos asociados, útil para limpiar después de pruebas.
 
-**Documentación**: 
+**Documentación**:
+
 - [az group create](https://learn.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest#az-group-create)
 - [az group delete](https://learn.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest#az-group-delete)
 
@@ -133,6 +140,7 @@ az resource create \
 ```
 
 **Explicación**:
+
 - `az resource create`: Crea recursos genéricos especificando el tipo y propiedades, útil para recursos no cubiertos por comandos específicos.
 
 **Documentación**: [az resource create](https://learn.microsoft.com/en-us/cli/azure/resource?view=azure-cli-latest#az-resource-create)
@@ -166,6 +174,7 @@ az ml workspace create \
 ```
 
 **Explicación**:
+
 - `az ml workspace create --kind hub`: Crea un hub, que es un espacio de trabajo de Azure Machine Learning con capacidades adicionales para IA generativa, provisionando automáticamente un recurso Azure AI Foundry.
 - `az ml workspace create --kind project`: Crea un proyecto bajo el hub, usado para organizar cargas de trabajo de IA.
 - `--hub-id`: Vincula el proyecto al hub. Reemplace `$AZURE_SUBSCRIPTION_ID` con su ID de suscripción (obtenga con `az account show --query id -o tsv`).
@@ -183,6 +192,7 @@ az cognitiveservices account create \
 ```
 
 **Explicación**:
+
 - `--kind OpenAI`: Crea un recurso Azure AI Services para acceder a modelos como GPT-4o, integrable con Azure AI Foundry.
 
 #### 3.4.3. Desplegar un Modelo en Azure AI Foundry
@@ -215,6 +225,7 @@ az ml online-deployment create \
 ```
 
 **Explicación**:
+
 - `chat-deployment.yaml`: Define el despliegue del modelo `gpt-4o` con capacidad de 50K TPM (Tokens Per Minute).
 - `az ml online-endpoint create`: Crea un endpoint para el modelo.
 - `az ml online-deployment create`: Despliega el modelo en el endpoint.
@@ -238,11 +249,13 @@ EOF
 ```
 
 **Explicación**:
+
 - `az cognitiveservices account show`: Obtiene el endpoint del recurso Azure AI Services.
 - `az cognitiveservices account keys list`: Obtiene la clave de API.
 - Actualiza `.env` con los valores necesarios para aplicaciones de IA, como chatbots.
 
 **Documentación**:
+
 - [az ml workspace](https://learn.microsoft.com/en-us/cli/azure/ml/workspace?view=azure-cli-latest)
 - [az cognitiveservices account](https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest)
 - [az ml online-endpoint](https://learn.microsoft.com/en-us/cli/azure/ml/online-endpoint?view=azure-cli-latest)

@@ -81,7 +81,7 @@ While you wait for the fine-tuning job to complete, let's chat with a base GPT 4
 
 1. Update the system message in the setup pane with the following prompt:
 
-    ```
+    ```yml
     You are an AI assistant that helps people plan their travel.
     ```
 
@@ -92,7 +92,7 @@ While you wait for the fine-tuning job to complete, let's chat with a base GPT 4
 
 1. Update the system message again with a new prompt:
 
-    ```
+    ```yml
     You are an AI travel assistant that helps people plan their trips. Your objective is to offer support for travel-related inquiries, such as visa requirements, weather forecasts, local attractions, and cultural norms.
     You should not provide any hotel, flight, rental car or restaurant recommendations.
     Ask engaging questions to help someone plan their trip and think about what they want to do on their holiday.
@@ -160,7 +160,7 @@ Now that you deployed your fine-tuned model, you can test it like you tested you
 1. When the deployment is ready, navigate to the fine-tuned model and select **Open in playground**.
 1. Ensure the system message includes these instructions:
 
-    ```
+    ```yml
     You are an AI travel assistant that helps people plan their trips. Your objective is to offer support for travel-related inquiries, such as visa requirements, weather forecasts, local attractions, and cultural norms.
     You should not provide any hotel, flight, rental car or restaurant recommendations.
     Ask engaging questions to help someone plan their trip and think about what they want to do on their holiday.
@@ -184,8 +184,8 @@ Now that you deployed your fine-tuned model, you can test it like you tested you
 
 If you've finished exploring Azure AI Foundry, you should delete the resources you've created to avoid unnecessary Azure costs.
 
--   Navigate to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`.
--   In the Azure portal, on the **Home** page, select **Resource groups**.
--   Select the resource group that you created for this exercise.
--   At the top of the **Overview** page for your resource group, select **Delete resource group**.
--   Enter the resource group name to confirm you want to delete it, and select **Delete**.
+- Navigate to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`.
+- In the Azure portal, on the **Home** page, select **Resource groups**.
+- Select the resource group that you created for this exercise.
+- At the top of the **Overview** page for your resource group, select **Delete resource group**.
+- Enter the resource group name to confirm you want to delete it, and select **Delete**.
