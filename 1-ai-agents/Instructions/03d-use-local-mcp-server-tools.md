@@ -4,27 +4,29 @@ In this exercise, you'll create an agent that can connect to an MCP server and a
 
 You'll build a simple inventory assessment agent for a cosmetics retailer. Using the MCP server, the agent will be able to retrieve information about the inventory and make restock or clearance suggestions.
 
-> **Tip**: The code used in this exercise is based on the for Azure AI Foundry and MCP SDKs for Python. You can develop similar solutions using the SDKs for Microsoft .NET. Refer to [Azure AI Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) and [MCP C# SDK](https://modelcontextprotocol.github.io/csharp-sdk/api/ModelContextProtocol.html) for details.
+> **Tip**: The code used in this exercise is based on the for Microsoft Foundry and MCP SDKs for Python. You can develop similar solutions using the SDKs for Microsoft .NET. Refer to [Microsoft Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) and [MCP C# SDK](https://modelcontextprotocol.github.io/csharp-sdk/api/ModelContextProtocol.html) for details.
 
 This exercise should take approximately **30** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
-## Create an Azure AI Foundry project
+## Create a Foundry project
 
-Let's start by creating an Azure AI Foundry project.
+Let's start by creating a Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
+1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
-    ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
+    ![Screenshot of Foundry portal.](./Media/ai-foundry-home.png)
+
+    > **Important**: Make sure the **New Foundry** toggle is *Off* for this lab.
 
 1. In the home page, select **Create an agent**.
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
 1. Confirm the following settings for your project:
-    - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
+    - **Foundry resource**: *A valid name for your Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
-    - **Region**: *Select any **AI Services supported location***\*
+    - **Region**: *Select any **AI Foundry recommended***\*
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
@@ -37,9 +39,9 @@ Let's start by creating an Azure AI Foundry project.
 
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
 
-    ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
+    ![Screenshot of a Foundry project overview page.](./Media/ai-foundry-project.png)
 
-1. Copy the **Azure AI Foundry project endpoint** value to a notepad, as you'll use it to connect to your project in a client application.
+1. Copy the **Foundry project endpoint** value to a notepad, as you'll use it to connect to your project in a client application.
 
 ## Develop an agent that uses MCP function tools
 
@@ -47,7 +49,7 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 
 ### Clone the repo containing the application code
 
-1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
+1. Open a new browser tab (keeping the Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
 
     Close any welcome notifications to see the Azure portal home page.
 
@@ -63,7 +65,7 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 
 1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
 
-    ```bash
+    ```
    rm -r ai-agents -f
    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
@@ -72,21 +74,21 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
-    ```bash
+    ```
    cd ai-agents/Labfiles/03d-use-agent-tools-with-mcp/Python
    ls -a -l
     ```
 
-    The provided files include the client and server application code. The Model Context Protocal provides a standardized way to connect AI models to different data sources and tools. We separate `client.py` and `server.py` to keep the agent logic and tool definitions modular and simulate real-world architecture.
-
-    `server.py` defines the tools the agent can use, simulating backend services or business logic.
+    The provided files include the client and server application code. The Model Context Protocal provides a standardized way to connect AI models to different data sources and tools. We separate `client.py` and `server.py` to keep the agent logic and tool definitions modular and simulate real-world architecture. 
+    
+    `server.py` defines the tools the agent can use, simulating backend services or business logic. 
     `client.py` handles the AI agent setup, user prompts, and calling the tools when needed.
 
 ### Configure the application settings
 
 1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
-    ```bash
+    ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
    pip install -r requirements.txt azure-ai-projects mcp
@@ -96,13 +98,13 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 
 1. Enter the following command to edit the configuration file that has been provided:
 
-    ```bash
+    ```
    code .env
     ```
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Azure AI Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
+1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
 
 1. After you've replaced the placeholder, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
@@ -112,7 +114,7 @@ A Model Context Protocol (MCP) Server is a component that hosts callable tools. 
 
 1. Enter the following command to edit the code file that has been provided for your function code:
 
-    ```bash
+    ```
    code server.py
     ```
 
@@ -139,7 +141,7 @@ A Model Context Protocol (MCP) Server is a component that hosts callable tools. 
         }
     ```
 
-    This dictionary represents a sample inventory. The `@mcp.tool()` annotation will allow the LLM to discover your function.
+    This dictionary represents a sample inventory. The `@mcp.tool()` annotation will allow the LLM to discover your function. 
 
 1. Find the comment **Add a weekly sales tool** and add the following code:
 
@@ -170,7 +172,7 @@ An MCP client is the component that connects to the MCP server to discover and c
 
 1. Enter the following command to begin editing the client code.
 
-    ```bash
+    ```
    code client.py
     ```
 
@@ -354,25 +356,25 @@ In this task, you'll prepare the AI agent, accept user prompts, and invoke the f
 
 1. In the cloud shell command-line pane, enter the following command to sign into Azure.
 
-    ```bash
+    ```
    az login
     ```
 
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-
-1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+    
+1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry hub if prompted.
 
 1. After you have signed in, enter the following command to run the application:
 
-    ```bash
+    ```
    python client.py
     ```
 
 1. When prompted, enter a query such as:
 
-    ```bash
+    ```
    What are the current inventory levels?
     ```
 
@@ -380,7 +382,7 @@ In this task, you'll prepare the AI agent, accept user prompts, and invoke the f
 
     You should see some output similar to the folloiwng:
 
-    ```yml
+    ```
     MessageRole.AGENT:
     Here are the current inventory levels:
 
@@ -396,19 +398,19 @@ In this task, you'll prepare the AI agent, accept user prompts, and invoke the f
     - Dry Shampoo: 45
     ```
 
-1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response.
+1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. 
 
     Try entering prompts such as:
 
-    ```yml
+    ```
    Are there any products that should be restocked?
     ```
 
-    ```yml
+    ```
    Which products would you recommend for clearance?
     ```
 
-    ```yml
+    ```
    What are the best sellers this week?
     ```
 

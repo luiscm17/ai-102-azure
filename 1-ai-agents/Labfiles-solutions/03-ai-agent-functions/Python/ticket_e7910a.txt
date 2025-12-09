@@ -1,3 +1,0 @@
-Support ticket: e7910a
-Submitted by: luis@contoso.com
-Description: My computer won't start.

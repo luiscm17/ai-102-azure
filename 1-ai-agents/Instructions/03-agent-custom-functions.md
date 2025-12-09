@@ -8,35 +8,33 @@ lab:
 
 In this exercise you'll explore creating an agent that can use custom functions as a tool to complete tasks. You'll build a simple technical support agent that can collect details of a technical problem and generate a support ticket.
 
-> **Tip**: The code used in this exercise is based on the for Azure AI Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Azure AI Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
+> **Tip**: The code used in this exercise is based on the for Microsoft Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Microsoft Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
 
 This exercise should take approximately **30** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
-## Create an Azure AI Foundry project
+## Create a Foundry project
 
-Let's start by creating an Azure AI Foundry project.
+Let's start by creating a Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
+1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
-    ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
+    ![Screenshot of Foundry portal.](./Media/ai-foundry-home.png)
+
+    > **Important**: Make sure the **New Foundry** toggle is *Off* for this lab.
 
 1. In the home page, select **Create an agent**.
-
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
-
 1. Confirm the following settings for your project:
-
-    - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
+    - **Foundry resource**: *A valid name for your Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
-    - **Region**: *Select any **AI Services supported location***\*
+    - **Region**: *Select any **AI Foundry recommended***\*
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
-
 1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
     >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
@@ -45,9 +43,9 @@ Let's start by creating an Azure AI Foundry project.
 
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
 
-    ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
+    ![Screenshot of a Foundry project overview page.](./Media/ai-foundry-project.png)
 
-1. Copy the **Azure AI Foundry project endpoint** values to a notepad, as you'll use them to connect to your project in a client application.
+1. Copy the **Foundry project endpoint** values to a notepad, as you'll use them to connect to your project in a client application.
 
 ## Develop an agent that uses function tools
 
@@ -55,7 +53,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 ### Clone the repo containing the application code
 
-1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
+1. Open a new browser tab (keeping the Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
 
     Close any welcome notifications to see the Azure portal home page.
 
@@ -71,7 +69,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
 
-    ```bash
+    ```
    rm -r ai-agents -f
    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
@@ -80,7 +78,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
-    ```bash
+    ```
    cd ai-agents/Labfiles/03-ai-agent-functions/Python
    ls -a -l
     ```
@@ -91,31 +89,30 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
-    ```bash
+    ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-projects
+   pip install -r requirements.txt azure-ai-projects azure-ai-agents
     ```
 
     >**Note:** You can ignore any warning or error messages displayed during the library installation.
 
 1. Enter the following command to edit the configuration file that has been provided:
 
-    ```bash
+    ```
    code .env
     ```
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Azure AI Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
-
+1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
 1. After you've replaced the placeholder, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
 ### Define a custom function
 
 1. Enter the following command to edit the code file that has been provided for your function code:
 
-    ```bash
+    ```
    code user_functions.py
     ```
 
@@ -143,21 +140,19 @@ Now that you've created your project in AI Foundry, let's develop an app that im
         submit_support_ticket
     }
     ```
-
 1. Save the file (*CTRL+S*).
 
 ### Write code to implement an agent that can use your function
 
 1. Enter the following command to begin editing the agent code.
 
-    ```bash
+    ```
     code agent.py
     ```
 
     > **Tip**: As you add code to the code file, be sure to maintain the correct indentation.
 
 1. Review the existing code, which retrieves the application configuration settings and sets up a loop in which the user can enter prompts for the agent. The rest of the file includes comments where you'll add the necessary code to implement your technical support agent.
-
 1. Find the comment **Add references** and add the following code to import the classes you'll need to build an Azure AI agent that uses your function code as a tool:
 
     ```python
@@ -181,7 +176,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
             exclude_managed_identity_credential=True)
    )
     ```
-
+    
 1. Find the comment **Define an agent that can use the custom functions** section, and add the following code to add your function code to a toolset, and then create an agent that can use the toolset and a thread on which to run the chat session.
 
     ```python
@@ -206,6 +201,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
         thread = agent_client.threads.create()
         print(f"You're chatting with: {agent.name} ({agent.id})")
+
     ```
 
 1. Find the comment **Send a prompt to the agent** and add the following code to add the user's prompt as a message and run the thread.
@@ -263,7 +259,6 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     ```
 
 1. Review the code, using the comments to understand how it:
-
     - Adds your set of custom functions to a toolset
     - Creates an agent that uses the toolset.
     - Runs a thread with a prompt message from the user.
@@ -278,28 +273,27 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. In the cloud shell command-line pane, enter the following command to sign into Azure.
 
-    ```bash
+    ```
     az login
     ```
 
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-
-1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
-
+    
+1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry hub if prompted.
 1. After you have signed in, enter the following command to run the application:
 
-    ```bash
+    ```
    python agent.py
     ```
-
+    
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
 
 1. When prompted, enter a prompt such as:
 
-    ```yml
-    I have a technical problem
+    ```
+   I have a technical problem
     ```
 
     > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
@@ -309,14 +303,11 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     When it has enough information, the agent should choose to use your function as required.
 
 1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. Enter `quit` when you're done.
-
 1. Review the conversation messages that were retrieved from the thread, and the tickets that were generated.
-
 1. The tool should have saved support tickets in the app folder. You can use the `ls` command to check, and then use the `cat` command to view the file contents, like this:
 
-    ```bash
-    ls
-    cat ticket-<ticket_num>.txt
+    ```
+   cat ticket-<ticket_num>.txt
     ```
 
 ## Clean up
